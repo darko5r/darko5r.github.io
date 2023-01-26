@@ -99,3 +99,14 @@ nav ul li a {
   color: #cd595a;
 }
 
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Navigation Links */
+header nav {
+  float: right;
+}
