@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Hi, world</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-  </head>
-  <body>  
+<head>
+  <title>My Website</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+</head>
+<body>
   <header>
-    <div class="search-box">
-     <input type="text" class="search-input" placeholder="Start Looking For Something!">
-     <a class="search-btn" href="#">
-       <i class="fas fa-search"></i>
-     </a>
-    </div>
-    <nav>
-     <ul>
-       <li><a href="#">Home</a></li>
-       <li><a href="#">About</a></li>
-       <li><a href="#">Contact</a></li>
-     </ul>
-    </nav>
-  </header>
-    <div class="sidebar">
+    <div class="container">
       <div class="logo">
         <img src="logo.png" alt="Logo">
       </div>
-      <form>
-        <input type="text" placeholder="Search...">
-        <button type="submit">Search</button>
-      </form>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" placeholder="Start Looking For Something!">
+        <a class="search-btn" href="#">
+          <!-- Seach Icon -->
+          <i class="fas fa-search"></i>
+        </a>
+      </div>
     </div>
-    <div class="content">
-      <!-- main content goes here -->
-    </div>
-    <footer>
-      Copyright ©2023 Hi, world
-    </footer>
-  </body>
+  </header>
+  <div class="sidebar">
+    <h3>Sidebar</h3>
+    <p>This is the sidebar for the website.</p>
+  </div>
+  <div class="main-content">
+    <h1>Welcome to My Website</h1>
+    <p>This is the main content of the website.</p>
+  </div>
+  <footer>
+    <p>Copyright &copy; 2021 My Website</p>
+  </footer>
+</body>
 </html>
+
