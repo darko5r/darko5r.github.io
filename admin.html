@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Github Pages Website - Admin</title>
+  </head>
+  <body>
+    <h1>Add a Link</h1>
+    <form id="add-link-form">
+      <div>
+        <label for="link-name">Link Name:</label>
+        <input type="text" id="link-name">
+      </div>
+      <div>
+        <label for="link-url">Link URL:</label>
+        <input type="text" id="link-url">
+      </div>
+      <div>
+        <button type="submit">Add</button>
+      </div>
+    </form>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+        };
+      firebase.initializeApp(firebaseConfig);
+
+      // Reference to the links in the Firebase Database
+      var linksRef = firebase.database().ref("links");
+
+      // Get the form and add a submit event listener
+      $("#add-link-form").submit(function(event) {
+        // Prevent the form from submitting
+        event.preventDefault();
+
+        // Get the link name and URL
+        var linkName = $("#link-name").val();
+        var linkURL = $("#link-url").val();
+
+        // Add the link to the Firebase Database
+        linksRef.child(linkName).set({
+          url: linkURL
+        });
+      });
+    </script>
+  </body>
+</html>
