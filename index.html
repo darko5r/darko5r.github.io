@@ -1,2 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Github Pages Website</title>
+  </head>
+  <body>
+    <h1>My Links</h1>
+    <ul id="links-list"></ul>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c"
+      };
+      firebase.initializeApp(firebaseConfig);
+
+      // Reference to the links in the Firebase Database
+      var linksRef = firebase.database().ref("links");
+
+      // Read the links from the Firebase Database
+      linksRef.on("value", function(snapshot) {
+        // Get the links data
+        var links = snapshot.val();
+
+        // Loop through the links and add them to the list
+        $.each(links, function(key, link) {
+          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+        });
+      });
+    </script>
+  </body>
+</html>
 
 
