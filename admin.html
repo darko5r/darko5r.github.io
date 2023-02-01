@@ -44,43 +44,17 @@
         // Prevent the form from submitting
         event.preventDefault();
 
-        // Get the link name and URL
+        // Get the link name, URL, and ID
+        var linkID = linksRef.push().key;
         var linkName = $("#link-name").val();
         var linkURL = $("#link-url").val();
 
         // Add the link to the Firebase Database
-        linksRef.child(linkName).set({
+        linksRef.child(linkID).set({
+          name: linkName,
           url: linkURL
         });
       });
-    </script>
-    
-    <ul id="links-list">
-  <!-- Loop through the links and display them in a list -->
-  <li><a href='URL' id='link-name'>Link Name</a><button class='delete-button'>Delete</button></li>
-</ul>
-
-<script>
-  // Reference to the links in the Firebase Database
-  var linksRef = firebase.database().ref("links");
-
-  // Read the links from the Firebase Database
-  linksRef.on("value", function(snapshot) {
-    // Get the links data
-    var links = snapshot.val();
-
-    // Loop through the links and add them to the list
-    $.each(links, function(key, link) {
-      $("#links-list").append("<li><a href='" + link.url + "' id='" + key + "'>" + key + "</a><button class='delete-button'>Delete</button></li>");
-    });
-  });
-
-  // Delete a link from the Firebase Database
-  $(document).on("click", ".delete-button", function() {
-    var linkName = $(this).prev().attr("id");
-    linksRef.child(linkName).remove();
-  });
-</script>
-
+    </script> 
   </body>
 </html>
