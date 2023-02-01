@@ -2,22 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Admin Page</title>
+    <title>My Github Pages Website</title>
   </head>
   <body>
-    <h1>Links Admin Page</h1>
-    <form>
-      <div>
-        <label for="link-key">Link Key:</label>
-        <input type="text" id="link-key">
-      </div>
-      <div>
-        <label for="link-url">Link URL:</label>
-        <input type="text" id="link-url">
-      </div>
-      <button id="add-link-button">Add Link</button>
-      <button id="update-link-button">Update Link</button>
-      <button id="delete-link-button">Delete Link</button>
+    <h1>My Links</h1>
+    <ul id="links-list"></ul>
+    <h2>Add a Link</h2>
+    <form id="add-link-form">
+      <input type="text" id="link-name" placeholder="Link Name">
+      <input type="text" id="link-url" placeholder="Link URL">
+      <button type="submit">Add Link</button>
     </form>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
@@ -25,41 +19,48 @@
     <script>
       // Initialize Firebase
       var firebaseConfig = {
-        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-        authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "blog-25253",
-        storageBucket: "blog-25253.appspot.com",
-        messagingSenderId: "906101390805",
-        appId: "1:906101390805:web:871c51f2486921f443115c",
-        measurementId: "G-MY3P2TWN4L"
-        };
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
       firebase.initializeApp(firebaseConfig);
 
       // Reference to the links in the Firebase Database
       var linksRef = firebase.database().ref("links");
 
-      // Get the link key and link url from the form
-      var linkKey = $("#link-key").val();
-      var linkUrl = $("#link-url").val();
+      // Read the links from the Firebase Database
+      linksRef.on("value", function(snapshot) {
+        // Get the links data
+        var links = snapshot.val();
 
-      // Add the link to the Firebase Database
-      $("#add-link-button").click(function() {
-        linksRef.child(linkKey).set({
-          url: linkUrl
+        // Loop through the links and add them to the list
+        $("#links-list").empty();
+        $.each(links, function(key, link) {
+          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
         });
       });
 
-      // Update the link in the Firebase Database
-      $("#update-link-button").click(function() {
-        linksRef.child(linkKey).update({
+      // Handle the form submission
+      $("#add-link-form").submit(function(event) {
+        // Prevent the form from reloading the page
+        event.preventDefault();
+
+        // Get the values from the form inputs
+        var linkName = $("#link-name").val();
+        var linkUrl = $("#link-url").val();
+
+        // Add the link to the Firebase Database
+        linksRef.child(linkName).set({
           url: linkUrl
         });
-      });
 
-      // Delete the link from the Firebase Database
-      $("#delete-link-button").click(function() {
-        linksRef.child(linkKey).remove();
+        // Clear the form inputs
+        $("#link-name").val("");
+        $("#link-url").val("");
       });
     </script>
   </body>
