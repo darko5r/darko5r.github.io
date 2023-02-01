@@ -2,11 +2,23 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Github Pages Website</title>
+    <title>Admin Page</title>
   </head>
   <body>
-    <h1>My Links</h1>
-    <ul id="links-list"></ul>
+    <h1>Links Admin Page</h1>
+    <form>
+      <div>
+        <label for="link-key">Link Key:</label>
+        <input type="text" id="link-key">
+      </div>
+      <div>
+        <label for="link-url">Link URL:</label>
+        <input type="text" id="link-url">
+      </div>
+      <button id="add-link-button">Add Link</button>
+      <button id="update-link-button">Update Link</button>
+      <button id="delete-link-button">Delete Link</button>
+    </form>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -22,24 +34,33 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
         };
-
       firebase.initializeApp(firebaseConfig);
 
       // Reference to the links in the Firebase Database
       var linksRef = firebase.database().ref("links");
 
-      // Read the links from the Firebase Database
-      linksRef.on("value", function(snapshot) {
-        // Get the links data
-        var links = snapshot.val();
+      // Get the link key and link url from the form
+      var linkKey = $("#link-key").val();
+      var linkUrl = $("#link-url").val();
 
-        // Loop through the links and add them to the list
-        $.each(links, function(key, link) {
-          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+      // Add the link to the Firebase Database
+      $("#add-link-button").click(function() {
+        linksRef.child(linkKey).set({
+          url: linkUrl
         });
+      });
+
+      // Update the link in the Firebase Database
+      $("#update-link-button").click(function() {
+        linksRef.child(linkKey).update({
+          url: linkUrl
+        });
+      });
+
+      // Delete the link from the Firebase Database
+      $("#delete-link-button").click(function() {
+        linksRef.child(linkKey).remove();
       });
     </script>
   </body>
 </html>
-
-
