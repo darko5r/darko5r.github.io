@@ -37,24 +37,24 @@
       firebase.initializeApp(firebaseConfig);
 
       // Reference to the links in the Firebase Database
-      var linksRef = firebase.database().ref("links");
+var linksRef = firebase.database().ref("links");
 
-      // Get the form and add a submit event listener
-      $("#add-link-form").submit(function(event) {
-        // Prevent the form from submitting
-        event.preventDefault();
+// Get the form and add a submit event listener
+$("#add-link-form").submit(function(event) {
+  // Prevent the form from submitting
+  event.preventDefault();
 
-        // Get the link name, URL, and ID
-        var linkID = linksRef.push().key;
-        var linkName = $("#link-name").val();
-        var linkURL = $("#link-url").val();
+  // Get the link name, URL, and ID
+  var linkID = linksRef.push().key;
+  var linkName = $("#link-name").val();
+  var linkURL = $("#link-url").val();
 
-        // Add the link to the Firebase Database
-        linksRef.child(linkID).set({
-          name: linkName,
-          url: linkURL
-        });
-      });
+  // Add the link to the Firebase Database
+  linksRef.child(linkID).set({
+    name: linkName,
+    url: linkURL
+  });
+});
     </script> 
   </body>
 </html>
