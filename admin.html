@@ -1,29 +1,9 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>My Github Pages Website - Admin</title>
-  </head>
-  <body>
-    <h1>Add a Link</h1>
-    <form id="add-link-form">
-      <div>
-        <label for="link-name">Link Name:</label>
-        <input type="text" id="link-name">
-      </div>
-      <div>
-        <label for="link-url">Link URL:</label>
-        <input type="text" id="link-url">
-      </div>
-      <div>
-        <button type="submit">Add</button>
-      </div>
-    </form>
-    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-      // Initialize Firebase
+    // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -35,25 +15,26 @@
         measurementId: "G-MY3P2TWN4L"
       };
       firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
 
-      // Reference to the links in the Firebase Database
-      var linksRef = firebase.database().ref("links");
-
-      // Get the form and add a submit event listener
-     $("#add-link-form").submit(function(event) {
-  // Prevent the form from submitting
-  event.preventDefault();
-
-  // Get the link name and URL
-  var linkName = $("#link-name").val();
-  var linkURL = $("#link-url").val();
-
-  // Add the link to the Firebase Database
-  linksRef.child(linkName).set({
-    id: linksRef.push().key,
-    url: linkURL
-  });
-});
-    </script> 
+      function submitLink() {
+        var linkName = document.getElementById("linkName").value;
+        var linkUrl = document.getElementById("linkUrl").value;
+        var linksRef = database.ref("links");
+        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+          var newId = (snapshot.val() && snapshot.val().id) || 0;
+          linksRef.push({
+            name: linkName,
+            id: ++newId,
+            url: linkUrl
+          });
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <input type="text" id="linkName" placeholder="Link Name">
+    <input type="text" id="linkUrl" placeholder="Link URL">
+    <button onclick="submitLink()">Submit</button>
   </body>
 </html>
