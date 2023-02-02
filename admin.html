@@ -33,7 +33,7 @@
         messagingSenderId: "906101390805",
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
-        };
+      };
       firebase.initializeApp(firebaseConfig);
 
       // Reference to the links in the Firebase Database
@@ -44,7 +44,7 @@
         // Prevent the form from submitting
         event.preventDefault();
 
-        // Get the link name and URL
+        // Get the link name, URL, and ID
         var linkID = linksRef.push().key;
         var linkName = $("#link-name").val();
         var linkURL = $("#link-url").val();
