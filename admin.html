@@ -1,11 +1,9 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-        // Initialize Firebase
+    // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -19,34 +17,26 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      function addLink() {
-        var name = document.getElementById("linkName").value;
-        var url = document.getElementById("linkUrl").value;
-        var linksRef = firebase.database().ref('links');
-
-        // Get the highest ID value and increment by 1
-        linksRef.orderByChild('id').limitToLast(1).once('value', function(snapshot) {
-          var id = 1;
-          if (snapshot.exists()) {
-            var lastId = snapshot.val();
-            id = Object.values(lastId)[0].id + 1;
-          }
-          
-          linksRef.push({
-            name: name,
-            id: id,
-            url: url
-          });
-        });
-        document.getElementById("linkName").value = "";
-        document.getElementById("linkUrl").value = "";
-      }
+      function submitLink() {
+    var linkName = document.getElementById("linkName").value;
+    var linkUrl = document.getElementById("linkUrl").value;
+    var linksRef = database.ref("links");
+    linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+      var lastId = (snapshot.val() && snapshot.val().id) || 0;
+      var newId = lastId + 1;
+      linksRef.push({
+        name: linkName,
+        id: newId,
+        url: linkUrl,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
+    });
+  }
     </script>
   </head>
   <body>
-    <h1>Add Link</h1>
-    Link Name:<input type="text" id="linkName"><br><br>
-    Link URL:<input type="text" id="linkUrl"><br><br>
-    <button onclick="addLink()">Add Link</button>
+    <input type="text" id="linkName" placeholder="Link Name">
+    <input type="text" id="linkUrl" placeholder="Link URL">
+    <button onclick="submitLink()">Submit</button>
   </body>
 </html>
