@@ -18,20 +18,24 @@
       var database = firebase.database();
 
       function submitLink() {
-    var linkName = document.getElementById("linkName").value;
-    var linkUrl = document.getElementById("linkUrl").value;
-    var linksRef = database.ref("links");
-    linksRef.once("value", function(snapshot) {
-      var lastId = snapshot.numChildren();
-      var newId = lastId + 1;
-      linksRef.child(newId.toString()).set({
-        name: linkName,
-        id: newId,
-        url: linkUrl,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      });
-    });
-  }
+        var linkName = document.getElementById("linkName").value;
+        var linkUrl = document.getElementById("linkUrl").value;
+        var linksRef = database.ref("links");
+
+        if (!linkName || !linkUrl) {
+          alert("Please enter both the link name and URL");
+          return;
+        }
+
+        linksRef.once("value", function(snapshot) {
+          var newId = (snapshot.numChildren() + 1);
+          linksRef.child(linkName).set({
+            id: newId,
+            url: linkUrl,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        });
+      }
     </script>
   </head>
   <body>
