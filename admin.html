@@ -18,35 +18,43 @@
       var database = firebase.database();
 
       function submitLink() {
-  const linkName = document.getElementById("linkName").value;
-  const linkUrl = document.getElementById("linkUrl").value;
-  const errorMessage = document.getElementById("errorMessage");
+  const linkNameInput = document.querySelector('#link-name');
+const linkUrlInput = document.querySelector('#link-url');
+const errorMessage = document.querySelector('#error-message');
+
+linkNameInput.addEventListener('focus', function () {
+  errorMessage.style.display = 'none';
+});
+
+linkUrlInput.addEventListener('focus', function () {
+  errorMessage.style.display = 'none';
+});
+
+document.querySelector('#submit-link').addEventListener('click', function (event) {
+  event.preventDefault();
+
+  const linkName = linkNameInput.value;
+  const linkUrl = linkUrlInput.value;
 
   if (!linkName || !linkUrl) {
-    errorMessage.innerText = "Both Link Name and URL are required.";
-    errorMessage.style.display = "block";
-  } else {
-    errorMessage.style.display = "none";
-    const linksRef = firebase.database().ref("links");
-    linksRef.child(linkName).set({
-      id: ++newId,
-      url: linkUrl,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
+    errorMessage.style.display = 'block';
+    return;
   }
-}
 
-const linkNameInput = document.getElementById("linkName");
-const linkUrlInput = document.getElementById("linkUrl");
-const errorMessage = document.getElementById("errorMessage");
+  const linksRef = firebase.database().ref('links');
+  const newId = linksRef.push().key;
 
-linkNameInput.addEventListener("focus", () => {
-  errorMessage.style.display = "none";
+  linksRef.child(linkName).set({
+    id: newId,
+    url: linkUrl,
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+
+  linkNameInput.value = '';
+  linkUrlInput.value = '';
 });
 
-linkUrlInput.addEventListener("focus", () => {
-  errorMessage.style.display = "none";
-});
+
     </script>
   </head>
   <body>
