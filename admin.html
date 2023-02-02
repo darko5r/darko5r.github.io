@@ -44,14 +44,13 @@
         // Prevent the form from submitting
         event.preventDefault();
 
-        // Get the link name, URL, and ID
-        var linkID = linksRef.push().key;
+        // Get the link name and URL
         var linkName = $("#link-name").val();
         var linkURL = $("#link-url").val();
 
-        // Add the link to the Firebase Database
-        linksRef.child(linkID).set({
-          name: linkName,
+        // Get the link ID and add the link to the Firebase Database
+        var linkID = linksRef.child(linkName).push().key;
+        linksRef.child(linkName).child(linkID).set({
           url: linkURL
         });
       });
