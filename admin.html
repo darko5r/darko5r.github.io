@@ -24,8 +24,7 @@
     linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
       var lastId = (snapshot.val() && snapshot.val().id) || 0;
       var newId = lastId + 1;
-      linksRef.push({
-        name: linkName,
+      linksRef.child(linkName).set({
         id: newId,
         url: linkUrl,
         timestamp: firebase.database.ServerValue.TIMESTAMP
