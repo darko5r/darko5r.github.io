@@ -3,7 +3,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-    // Initialize Firebase
+      // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -20,15 +20,13 @@
       function submitLink() {
         var linkName = document.getElementById("linkName").value;
         var linkUrl = document.getElementById("linkUrl").value;
-        var linksRef = database.ref("links");
-
         if (!linkName || !linkUrl) {
-          alert("Please enter both the link name and URL");
+          alert("Please enter both link name and URL.");
           return;
         }
-
+        var linksRef = database.ref("links");
         linksRef.once("value", function(snapshot) {
-          var newId = (snapshot.numChildren() + 1);
+          var newId = (snapshot.numChildren() + 1).toString();
           linksRef.child(linkName).set({
             id: newId,
             url: linkUrl,
