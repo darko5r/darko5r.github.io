@@ -40,20 +40,20 @@
       var linksRef = firebase.database().ref("links");
 
       // Get the form and add a submit event listener
-      $("#add-link-form").submit(function(event) {
-        // Prevent the form from submitting
-        event.preventDefault();
+     $("#add-link-form").submit(function(event) {
+  // Prevent the form from submitting
+  event.preventDefault();
 
-        // Get the link name and URL
-        var linkName = $("#link-name").val();
-        var linkURL = $("#link-url").val();
+  // Get the link name and URL
+  var linkName = $("#link-name").val();
+  var linkURL = $("#link-url").val();
 
-        // Get the link ID and add the link to the Firebase Database
-        var linkID = linksRef.child(linkName).push().key;
-        linksRef.child(linkName).child(linkID).set({
-          url: linkURL
-        });
-      });
+  // Add the link to the Firebase Database
+  linksRef.child(linkName).set({
+    id: linksRef.push().key,
+    url: linkURL
+  });
+});
     </script> 
   </body>
 </html>
