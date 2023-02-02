@@ -21,10 +21,11 @@
     var linkName = document.getElementById("linkName").value;
     var linkUrl = document.getElementById("linkUrl").value;
     var linksRef = database.ref("links");
-    linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-      var lastId = (snapshot.val() && Object.values(snapshot.val())[0].id) || 0;
+    linksRef.once("value", function(snapshot) {
+      var lastId = snapshot.numChildren();
       var newId = lastId + 1;
-      linksRef.child(linkName).set({
+      linksRef.child(newId.toString()).set({
+        name: linkName,
         id: newId,
         url: linkUrl,
         timestamp: firebase.database.ServerValue.TIMESTAMP
