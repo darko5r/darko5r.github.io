@@ -22,7 +22,7 @@
     var linkUrl = document.getElementById("linkUrl").value;
     var linksRef = database.ref("links");
     linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-      var lastId = (snapshot.val() && snapshot.val().id) || 0;
+      var lastId = (snapshot.val() && Object.values(snapshot.val())[0].id) || 0;
       var newId = lastId + 1;
       linksRef.child(linkName).set({
         id: newId,
