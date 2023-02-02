@@ -45,12 +45,12 @@
   }
 }
 
-document.querySelector("input[name='linkName']").addEventListener("focus", function() {
-  document.getElementById("error").innerHTML = "";
+document.querySelector("#link-name").addEventListener("focus", function() {
+  document.querySelector("#error-message").innerHTML = "";
 });
 
-document.querySelector("input[name='linkUrl']").addEventListener("focus", function() {
-  document.getElementById("error").innerHTML = "";
+document.querySelector("#link-url").addEventListener("focus", function() {
+  document.querySelector("#error-message").innerHTML = "";
 });
     </script>
   </head>
