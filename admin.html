@@ -20,15 +20,18 @@
       function submitLink() {
         var linkName = document.getElementById("linkName").value;
         var linkUrl = document.getElementById("linkUrl").value;
+
         if (!linkName || !linkUrl) {
-          alert("Please enter both link name and URL.");
+          document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
           return;
         }
+
+        document.getElementById("errorMessage").innerHTML = "";
         var linksRef = database.ref("links");
-        linksRef.once("value", function(snapshot) {
-          var newId = (snapshot.numChildren() + 1).toString();
+        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+          var newId = (snapshot.val() && snapshot.val().id) || 0;
           linksRef.child(linkName).set({
-            id: newId,
+            id: ++newId,
             url: linkUrl,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
@@ -39,6 +42,7 @@
   <body>
     <input type="text" id="linkName" placeholder="Link Name">
     <input type="text" id="linkUrl" placeholder="Link URL">
+    <div id="errorMessage" style="color: red;"></div>
     <button onclick="submitLink()">Submit</button>
   </body>
 </html>
