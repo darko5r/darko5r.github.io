@@ -17,32 +17,47 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      //Add link function
-function addLink() {
-  var linkName = document.getElementById("linkName").value;
-  var linkUrl = document.getElementById("linkUrl").value;
+     // Variables to store the link name and URL
+let linkName;
+let linkUrl;
 
+// Reference to the Firebase database
+const database = firebase.database();
+const linksRef = database.ref('/links');
+
+// Function to submit the link to the database
+function submitLink() {
+  // Get the values of the link name and URL from the input fields
+  linkName = document.getElementById('link-name').value;
+  linkUrl = document.getElementById('link-url').value;
+
+  // Validate the input fields to ensure that both the link name and URL are not empty
   if (!linkName || !linkUrl) {
-    document.getElementById("error").innerHTML = "Both Link Name and URL are required.";
+    document.getElementById('error-message').innerHTML = "Both Link Name and URL are required.";
   } else {
-    document.getElementById("error").innerHTML = "";
-    var linksRef = firebase.database().ref("links");
-    var newId = linksRef.push().key;
+    // Add the link to the database
     linksRef.child(linkName).set({
-      id: ++newId,
+      id: firebase.database.ServerValue.TIMESTAMP,
       url: linkUrl,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     });
+
+    // Clear the input fields
+    document.getElementById('link-name').value = '';
+    document.getElementById('link-url').value = '';
+    document.getElementById('error-message').innerHTML = '';
   }
 }
 
-//Remove error message when input fields are clicked
-document.getElementById("linkName").addEventListener("click", function() {
-  document.getElementById("error").innerHTML = "";
-});
+// Listen for clicks on the submit button
+document.getElementById('submit-button').addEventListener('click', submitLink);
 
-document.getElementById("linkUrl").addEventListener("click", function() {
-  document.getElementById("error").innerHTML = "";
+// Listen for clicks on the input fields
+document.getElementById('link-name').addEventListener('click', function () {
+  document.getElementById('error-message').innerHTML = '';
+});
+document.getElementById('link-url').addEventListener('click', function () {
+  document.getElementById('error-message').innerHTML = '';
 });
 
 
