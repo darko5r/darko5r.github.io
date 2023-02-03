@@ -17,41 +17,32 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      function submitLink() {
-  const linkNameInput = document.querySelector('#link-name');
-const linkUrlInput = document.querySelector('#link-url');
-const errorMessage = document.querySelector('#error-message');
-
-linkNameInput.addEventListener('focus', function () {
-  errorMessage.style.display = 'none';
-});
-
-linkUrlInput.addEventListener('focus', function () {
-  errorMessage.style.display = 'none';
-});
-
-document.querySelector('#submit-link').addEventListener('click', function (event) {
-  event.preventDefault();
-
-  const linkName = linkNameInput.value;
-  const linkUrl = linkUrlInput.value;
+      //Add link function
+function addLink() {
+  var linkName = document.getElementById("linkName").value;
+  var linkUrl = document.getElementById("linkUrl").value;
 
   if (!linkName || !linkUrl) {
-    errorMessage.style.display = 'block';
-    return;
+    document.getElementById("error").innerHTML = "Both Link Name and URL are required.";
+  } else {
+    document.getElementById("error").innerHTML = "";
+    var linksRef = firebase.database().ref("links");
+    var newId = linksRef.push().key;
+    linksRef.child(linkName).set({
+      id: ++newId,
+      url: linkUrl,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
   }
+}
 
-  const linksRef = firebase.database().ref('links');
-  const newId = linksRef.push().key;
+//Remove error message when input fields are clicked
+document.getElementById("linkName").addEventListener("click", function() {
+  document.getElementById("error").innerHTML = "";
+});
 
-  linksRef.child(linkName).set({
-    id: newId,
-    url: linkUrl,
-    timestamp: firebase.database.ServerValue.TIMESTAMP
-  });
-
-  linkNameInput.value = '';
-  linkUrlInput.value = '';
+document.getElementById("linkUrl").addEventListener("click", function() {
+  document.getElementById("error").innerHTML = "";
 });
 
 
