@@ -32,18 +32,22 @@
   var idRef = database.ref("lastId");
 
   idRef.transaction(function(currentId) {
-    var newId = (currentId || 0) + 1;
-    idRef.set(newId);
-    linksRef.child(linkName).set({
-      id: newId,
-      url: linkUrl,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
+    return (currentId || 0) + 1;
+  }, function(error, committed, snapshot) {
+    if (error) {
+      console.error(error);
+    } else if (committed) {
+      var newId = snapshot.val();
+      linksRef.child(linkName).set({
+        id: newId,
+        url: linkUrl,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
 
-    document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-    document.getElementById("linkName").value = "";
-    document.getElementById("linkUrl").value = "";
-    return newId;
+      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+      document.getElementById("linkName").value = "";
+      document.getElementById("linkUrl").value = "";
+    }
   });
 }
       function clearForm() {
