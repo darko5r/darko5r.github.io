@@ -31,10 +31,9 @@
   var linksRef = database.ref("links");
   var idRef = database.ref("lastId");
 
-  linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-    var newId = (snapshot.val() && snapshot.val().id) || 0;
-    idRef.set({ id: newId + 1 });
-
+  idRef.transaction(function(currentId) {
+    var newId = (currentId || 0) + 1;
+    idRef.set(newId);
     linksRef.child(linkName).set({
       id: newId,
       url: linkUrl,
@@ -44,6 +43,7 @@
     document.getElementById("successMessage").innerHTML = "Link submitted successfully";
     document.getElementById("linkName").value = "";
     document.getElementById("linkUrl").value = "";
+    return newId;
   });
 }
       function clearForm() {
