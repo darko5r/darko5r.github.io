@@ -3,7 +3,6 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-      // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -14,6 +13,7 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
+
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
@@ -28,6 +28,7 @@
 
         document.getElementById("errorMessage").innerHTML = "";
         var linksRef = database.ref("links");
+
         linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
           var newId = (snapshot.val() && snapshot.val().id) || 0;
           linksRef.child(linkName).set({
@@ -37,21 +38,16 @@
           });
         });
       }
-      
-      <input type="text" id="linkName" placeholder="Link Name" onfocus="clearErrorMessage()">
-      <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearErrorMessage()">
 
-
-    function clearErrorMessage() {
-      document.getElementById("errorMessage").innerHTML = "";
-       } 
-
+      function clearErrorMessage() {
+        document.getElementById("errorMessage").innerHTML = "";
+      }
     </script>
   </head>
   <body>
-    <input type="text" id="linkName" placeholder="Link Name">
-    <input type="text" id="linkUrl" placeholder="Link URL">
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearErrorMessage()">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearErrorMessage()">
     <div id="errorMessage" style="color: red;"></div>
     <button onclick="submitLink()">Submit</button>
   </body>
-</html> 
+</html>
