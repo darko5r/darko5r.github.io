@@ -16,30 +16,7 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-      
-      
-       var linkNameInput = document.getElementById("linkName");
-if (linkNameInput) {
-  linkNameInput.addEventListener("keypress", function(event) {
-    console.log("linkName keypress event listener executed");
-    if (event.key === "Enter") {
-      event.preventDefault();
-      document.getElementById("linkUrl").focus();
-    }
-  });
-}
-
-var linkUrlInput = document.getElementById("linkUrl");
-if (linkUrlInput) {
-  linkUrlInput.addEventListener("keypress", function(event) {
-    console.log("linkUrl keypress event listener executed");
-    if (event.key === "Enter") {
-      event.preventDefault();
-      submitLink();
-    }
-  });
-}
-      
+                  
       
       function submitLink() {
       var linkName = document.getElementById("linkName").value;
@@ -95,6 +72,6 @@ if (linkUrlInput) {
     <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
-    <!-- <button onclick="submitLink()">Submit</button> -->
+    <button onclick="submitLink()">Submit</button>
   </body>
 </html>
