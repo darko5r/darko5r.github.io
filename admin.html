@@ -59,8 +59,8 @@
     </script>
   </head>
   <body>
-    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm()" onfocus="clearName()">
-    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm()" onfocus="clearUrl()">
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
     <button onclick="submitLink()">Submit</button>
