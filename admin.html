@@ -18,21 +18,27 @@
       var database = firebase.database();
       
       
-       document.getElementById("linkName").addEventListener("keypress", function(event) {
-  console.log("linkName keypress event listener executed");
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("linkUrl").focus();
-  }
-});
+       var linkNameInput = document.getElementById("linkName");
+if (linkNameInput) {
+  linkNameInput.addEventListener("keypress", function(event) {
+    console.log("linkName keypress event listener executed");
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("linkUrl").focus();
+    }
+  });
+}
 
-document.getElementById("linkUrl").addEventListener("keypress", function(event) {
-  console.log("linkUrl keypress event listener executed");
-  if (event.key === "Enter") {
-    event.preventDefault();
-    submitLink();
-  }
-});
+var linkUrlInput = document.getElementById("linkUrl");
+if (linkUrlInput) {
+  linkUrlInput.addEventListener("keypress", function(event) {
+    console.log("linkUrl keypress event listener executed");
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitLink();
+    }
+  });
+}
       
       
       function submitLink() {
