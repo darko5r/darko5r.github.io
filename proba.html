@@ -1,22 +1,85 @@
-<!DOCTYPE html>
 <html>
-<body>
+  <head>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
 
-<h3>Trigger Button Click on Enter</h3>
-<p>Press the "Enter" key inside the input field to trigger the button.</p>
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
+                  
+      
+      function submitLink() {
+      var linkName = document.getElementById("linkName").value;
+      var linkUrl = document.getElementById("linkUrl").value;
 
-<input id="myInput" value="Some text..">
-<button id="myBtn" onclick="javascript:alert('Hello World!')">Button</button>
+      if (!linkName || !linkUrl) {
+        document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+        return;
+      }
 
-<script>
-var input = document.getElementById("myInput");
+      document.getElementById("errorMessage").innerHTML = "";
+      document.getElementById("successMessage").innerHTML = "";
+      var linksRef = database.ref("links");
+
+      linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+         var newId = 0;
+         snapshot.forEach(function(childSnapshot) {
+         var childData = childSnapshot.val();
+         if (childData.id > newId) {
+           newId = childData.id;
+        }
+      });
+       newId++;
+
+       linksRef.child(linkName).set({
+           id: newId,
+           url: linkUrl,
+           timestamp: firebase.database.ServerValue.TIMESTAMP
+       });
+
+      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+      document.getElementById("linkName").value = "";
+      document.getElementById("linkUrl").value = "";
+       });
+      }
+      
+      function clearForm() {
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
+      }
+      
+       function clearName() {
+        document.getElementById("linkName").value = "";
+      }
+
+      function clearUrl() {
+        document.getElementById("linkUrl").value = "";
+      }
+      
+      var input = document.getElementById("linkName");
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     document.getElementById("myBtn").click();
   }
 });
-</script>
-
-</body>
+    </script>
+  </head>
+  <body>
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
+    <div id="errorMessage" style="color: red;"></div>
+    <div id="successMessage" style="color: green;"></div>
+    <button id="myBtn" onclick="submitLink()">Submit</button>
+  </body>
 </html>
