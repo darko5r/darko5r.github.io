@@ -44,18 +44,17 @@
         });
       }
 
-      function clearName() {
+      function clearForm() {
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
         document.getElementById("linkName").value = "";
-      }
-
-      function clearUrl() {
         document.getElementById("linkUrl").value = "";
       }
     </script>
   </head>
   <body>
-    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearName()">
-    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearUrl()">
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm()">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm()">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
     <button onclick="submitLink()">Submit</button>
