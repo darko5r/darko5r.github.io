@@ -3,42 +3,45 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
    
+    
+  </head>
+  <body>
     <form id="myForm">
-  <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
-  <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
-  <div id="errorMessage" style="color: red;"></div>
-  <div id="successMessage" style="color: green;"></div>
-  <button id="myBtn" onclick="submitLink()">Submit</button>
-</form>
+      <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+      <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
+      <div id="errorMessage" style="color: red;"></div>
+      <div id="successMessage" style="color: green;"></div>
+      <button id="myBtn" onclick="submitLink()">Submit</button>
+    </form>
 
-<script>
-  var firebaseConfig = {
-    apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-    authDomain: "blog-25253.firebaseapp.com",
-    databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "blog-25253",
-    storageBucket: "blog-25253.appspot.com",
-    messagingSenderId: "906101390805",
-    appId: "1:906101390805:web:871c51f2486921f443115c",
-    measurementId: "G-MY3P2TWN4L"
-  };
+    <script>
+      var firebaseConfig = {
+      apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+      authDomain: "blog-25253.firebaseapp.com",
+      databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "blog-25253",
+      storageBucket: "blog-25253.appspot.com",
+      messagingSenderId: "906101390805",
+      appId: "1:906101390805:web:871c51f2486921f443115c",
+      measurementId: "G-MY3P2TWN4L"
+     };
 
-  firebase.initializeApp(firebaseConfig);
-  var database = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
 
-  document.getElementById("myForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    submitLink();
-  });
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      submitLink();
+     });
 
-  function submitLink() {
-    var linkName = document.getElementById("linkName").value;
-    var linkUrl = document.getElementById("linkUrl").value;
+    function submitLink() {
+       var linkName = encodeURIComponent(document.getElementById("linkName").value);
+       var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
 
     if (!linkName || !linkUrl) {
-      document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-      return;
-    }
+       document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+       return;
+     }
 
     document.getElementById("errorMessage").innerHTML = "";
     document.getElementById("successMessage").innerHTML = "";
@@ -76,12 +79,6 @@
   function clearUrl() {
     document.getElementById("linkUrl").value = "";
   }
-</script>
-    
-    
-    
-  </head>
-  <body>
-
+  </script>    
   </body>
 </html>
