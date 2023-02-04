@@ -16,8 +16,16 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-                  
       
+      var input = document.getElementById("linkName");
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    var form = input.closest("form");
+    form.submit();
+  }
+});
+                       
       function submitLink() {
       var linkName = document.getElementById("linkName").value;
       var linkUrl = document.getElementById("linkUrl").value;
@@ -66,15 +74,7 @@
         document.getElementById("linkUrl").value = "";
       }
       
-      var input = document.getElementById("linkName");
-input.addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    var btn = document.getElementById("myBtn");
-    var clickEvent = new Event("click");
-    btn.dispatchEvent(clickEvent);
-  }
-});
+      
     </script>
   </head>
   <body>
