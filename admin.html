@@ -29,11 +29,14 @@
   document.getElementById("errorMessage").innerHTML = "";
   document.getElementById("successMessage").innerHTML = "";
   var linksRef = database.ref("links");
+  var idRef = database.ref("lastId");
 
-  linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+  idRef.once("value", function(snapshot) {
     var newId = (snapshot.val() && snapshot.val().id) || 0;
+    idRef.set({ id: newId + 1 });
+
     linksRef.child(linkName).set({
-      id: ++newId,
+      id: newId,
       url: linkUrl,
       timestamp: firebase.database.ServerValue.TIMESTAMP
     });
@@ -43,7 +46,6 @@
     document.getElementById("linkUrl").value = "";
   });
 }
-
       function clearForm() {
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("successMessage").innerHTML = "";
