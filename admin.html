@@ -37,18 +37,20 @@
             url: linkUrl,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
-          document.getElementById("successMessage").innerHTML = "&#x2714; Link added successfully";
+
+          document.getElementById("successMessage").innerHTML = "Link submitted successfully";
         });
       }
 
-      function clearErrorMessage() {
+      function clearMessages() {
         document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
       }
     </script>
   </head>
   <body>
-    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearErrorMessage()">
-    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearErrorMessage()">
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearMessages()">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearMessages()">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
     <button onclick="submitLink()">Submit</button>
