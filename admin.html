@@ -17,21 +17,7 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
       
-      document.getElementById("linkName").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("submitButton").click();
-  }
-});
-
-document.getElementById("linkUrl").addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("submitButton").click();
-  }
-});
       
-
       function submitLink() {
       var linkName = document.getElementById("linkName").value;
       var linkUrl = document.getElementById("linkUrl").value;
@@ -79,6 +65,20 @@ document.getElementById("linkUrl").addEventListener("keypress", function(event) 
       function clearUrl() {
         document.getElementById("linkUrl").value = "";
       }
+      
+      document.getElementById("linkName").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("linkUrl").focus();
+  }
+});
+
+document.getElementById("linkUrl").addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitLink();
+  }
+});
     </script>
   </head>
   <body>
@@ -86,6 +86,6 @@ document.getElementById("linkUrl").addEventListener("keypress", function(event) 
     <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
-    <button onclick="submitLink()">Submit</button>
+    <!-- <button onclick="submitLink()">Submit</button> -->
   </body>
 </html>
