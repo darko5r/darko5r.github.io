@@ -27,6 +27,7 @@
         }
 
         document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
         var linksRef = database.ref("links");
 
         linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
@@ -36,6 +37,7 @@
             url: linkUrl,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
+          document.getElementById("successMessage").innerHTML = "&#x2714; Link added successfully";
         });
       }
 
@@ -48,6 +50,7 @@
     <input type="text" id="linkName" placeholder="Link Name" onfocus="clearErrorMessage()">
     <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearErrorMessage()">
     <div id="errorMessage" style="color: red;"></div>
+    <div id="successMessage" style="color: green;"></div>
     <button onclick="submitLink()">Submit</button>
   </body>
 </html>
