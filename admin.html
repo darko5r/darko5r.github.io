@@ -17,50 +17,26 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-     // Variables to store the link name and URL
-let linkName;
-let linkUrl;
+      function submitLink() {
+        var linkName = document.getElementById("linkName").value;
+        var linkUrl = document.getElementById("linkUrl").value;
 
-// Reference to the Firebase database
-const database = firebase.database();
-const linksRef = database.ref('/links');
+        if (!linkName || !linkUrl) {
+          document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+          return;
+        }
 
-// Function to submit the link to the database
-function submitLink() {
-  // Get the values of the link name and URL from the input fields
-  linkName = document.getElementById('link-name').value;
-  linkUrl = document.getElementById('link-url').value;
-
-  // Validate the input fields to ensure that both the link name and URL are not empty
-  if (!linkName || !linkUrl) {
-    document.getElementById('error-message').innerHTML = "Both Link Name and URL are required.";
-  } else {
-    // Add the link to the database
-    linksRef.child(linkName).set({
-      id: firebase.database.ServerValue.TIMESTAMP,
-      url: linkUrl,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
-
-    // Clear the input fields
-    document.getElementById('link-name').value = '';
-    document.getElementById('link-url').value = '';
-    document.getElementById('error-message').innerHTML = '';
-  }
-}
-
-// Listen for clicks on the submit button
-document.getElementById('submit-button').addEventListener('click', submitLink);
-
-// Listen for clicks on the input fields
-document.getElementById('link-name').addEventListener('click', function () {
-  document.getElementById('error-message').innerHTML = '';
-});
-document.getElementById('link-url').addEventListener('click', function () {
-  document.getElementById('error-message').innerHTML = '';
-});
-
-
+        document.getElementById("errorMessage").innerHTML = "";
+        var linksRef = database.ref("links");
+        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+          var newId = (snapshot.val() && snapshot.val().id) || 0;
+          linksRef.child(linkName).set({
+            id: ++newId,
+            url: linkUrl,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+        });
+      }
     </script>
   </head>
   <body>
@@ -69,4 +45,4 @@ document.getElementById('link-url').addEventListener('click', function () {
     <div id="errorMessage" style="color: red;"></div>
     <button onclick="submitLink()">Submit</button>
   </body>
-</html>
+</html> 
