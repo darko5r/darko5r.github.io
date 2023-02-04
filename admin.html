@@ -31,7 +31,7 @@
   var linksRef = database.ref("links");
 
   linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-    var newId = (snapshot.val() && snapshot.val().id) + 1 || 0;
+    var newId = (snapshot.val() && snapshot.val().id + 1) || 0;
     linksRef.child(linkName).set({
       id: newId,
       url: linkUrl,
