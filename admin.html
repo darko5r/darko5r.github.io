@@ -18,34 +18,34 @@
       var database = firebase.database();
 
       function submitLink() {
-  var linkName = document.getElementById("linkName").value;
-  var linkUrl = document.getElementById("linkUrl").value;
+      var linkName = document.getElementById("linkName").value;
+      var linkUrl = document.getElementById("linkUrl").value;
 
-  if (!linkName || !linkUrl) {
-    document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-    return;
-  }
+      if (!linkName || !linkUrl) {
+         document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+      return;
+      }
 
-  document.getElementById("errorMessage").innerHTML = "";
-  document.getElementById("successMessage").innerHTML = "";
-  var linksRef = database.ref("links");
-  var idRef = database.ref("lastId");
+      document.getElementById("errorMessage").innerHTML = "";
+      document.getElementById("successMessage").innerHTML = "";
+      var linksRef = database.ref("links");
+      var idRef = database.ref("lastId");
 
-  idRef.once("value", function(snapshot) {
-    var newId = (snapshot.val() && snapshot.val().id) || 0;
-    idRef.set({ id: newId + 1 });
+      linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+        var newId = (snapshot.val() && snapshot.val().id) || 0;
+        idRef.set({ id: newId + 1 });
 
-    linksRef.child(linkName).set({
-      id: newId,
-      url: linkUrl,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
+      linksRef.child(linkName).set({
+        id: newId,
+        url: linkUrl,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
 
-    document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-    document.getElementById("linkName").value = "";
-    document.getElementById("linkUrl").value = "";
-  });
-}
+       document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+       document.getElementById("linkName").value = "";
+       document.getElementById("linkUrl").value = "";
+     });
+   }
       function clearForm() {
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("successMessage").innerHTML = "";
