@@ -1,14 +1,8 @@
 <html>
   <head>
-    <script>import * as dotenv from 'dotenv'; dotenv.config();  
-      console.log(process.env);</script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-    <script>
-      var firebaseConfig = JSON.parse('{{ secrets.FIREBASE_CONFIG }}');
-      firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();
-    </script>
+    
    
     
   </head>
@@ -22,6 +16,10 @@
     </form>
 
     <script>
+      
+      var firebaseConfig = JSON.parse('{{ secrets.FIREBASE_CONFIG }}');
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
       
                     
     document.getElementById("myForm").addEventListener("submit", function(event) {
