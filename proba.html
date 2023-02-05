@@ -30,8 +30,15 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
+      
+      
+var firebaseConfig = JSON.parse('{{ secrets.FIREBASE_CONFIG }}');
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
          
-      firebase.initializeApp(firebaseConfig);
+     
       var database = firebase.database();
       
      
