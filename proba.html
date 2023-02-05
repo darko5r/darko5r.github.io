@@ -23,7 +23,7 @@
         apiKey: '{{ secrets.APIKEY }}',
         authDomain: "blog-25253.firebaseapp.com",  
         projectId: '{{ secrets.PROJECTID }}',
-        databaseURL: "https://${{ env.DATABASEURL }}.firebaseio.com",
+        databaseURL: "https://${{ env.DATABASEURL.replace('$', '%24') }}.firebaseio.com",
         storageBucket: '{{ secrets.STORAGEBUCKET }}', 
         messagingSenderId: '{{ secrets.MESSAGINGSENDERID }}',
         appId: '{{ secrets.APPID }}',
