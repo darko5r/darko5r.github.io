@@ -1,3 +1,3 @@
 var apiKey = process.env.API_KEY;
-var authDomain = firebaseConfig.authDomain;
+var authDomain = process.env.AUTHDOMAIN;
 
