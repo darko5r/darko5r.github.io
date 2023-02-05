@@ -1,4 +1,4 @@
-export var firebaseConfig = {
+var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
         databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
