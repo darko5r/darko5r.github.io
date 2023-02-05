@@ -1,5 +1,5 @@
 var firebaseConfig = {
-        apiKey: process.env.FIREBASE_API_KEY,
+        apiKey: "process.env.FIREBASE_API_KEY",
         authDomain: "blog-25253.firebaseapp.com",
         databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
         projectId: "blog-25253",
