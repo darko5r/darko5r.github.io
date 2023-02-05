@@ -20,11 +20,10 @@
      <script>      
       var firebaseConfig = JSON.parse('{{ secrets.FIREBASE_CONFIG }}');
       firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();</script>
+      var database = firebase.database();
 
     
-     
-    <script>  
+   
                     
     document.getElementById("myForm").addEventListener("submit", function(event) {
       event.preventDefault();
