@@ -1,5 +1,7 @@
 <html>
   <head>
+    <script>import * as dotenv from 'dotenv'; dotenv.config();  
+      console.log(process.env);</script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
    
@@ -16,10 +18,6 @@
 
     <script>
       
-    import dotenv from 'dotenv';
-    dotenv.config({ path: path.join(__dirname, '.env') });
-
-    console.log(process.env);
       
     var firebaseConfig = {
   apiKey: process.env.API_KEY,
