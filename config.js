@@ -1,3 +1,4 @@
 var firebaseConfig = {
-        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg"
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com"
       };
