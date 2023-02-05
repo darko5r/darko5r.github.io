@@ -22,12 +22,12 @@
       var firebaseConfig = {
         apiKey: '{{ secrets.APIKEY }}',
         authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "blog-25253",
-        storageBucket: "blog-25253.appspot.com",
+        databaseURL: '{{ secrets.DATABASEURL }}',
+        projectId: '{{ secrets.PROJECTID }}',
+        storageBucket: '{{ secrets.STORAGEBUCKET }}', 
         messagingSenderId: '{{ secrets.MESSAGINGSENDERID }}',
         appId: '{{ secrets.APPID }}',
-        measurementId: "G-MY3P2TWN4L"
+        measurementId: '{{ secrets.MEASUREMENTID }}'
       }; 
        
       
