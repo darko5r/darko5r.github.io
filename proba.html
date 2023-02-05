@@ -2,11 +2,8 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-   
-    
-    
-   
-    
+    <script src="config.js"></script>
+       
   </head>
   <body>
     <form id="myForm">
@@ -18,24 +15,16 @@
     </form>
     
      <script>      
-       
-      var firebaseConfig = {
-        apiKey: '{{ secrets.APIKEY }}',
-        authDomain: "blog-25253.firebaseapp.com",  
-        projectId: '{{ secrets.PROJECTID }}',
-        databaseURL: "https://${{ env.DATABASEURL.replace('.', '%2E').replace('$', '%24') }}.firebaseio.com",
-        storageBucket: '{{ secrets.STORAGEBUCKET }}', 
-        messagingSenderId: '{{ secrets.MESSAGINGSENDERID }}',
-        appId: '{{ secrets.APPID }}',
-        measurementId: '{{ secrets.MEASUREMENTID }}'
-      }; 
-       
-      
+          
+      <script type="module">
+      // Your web app's Firebase configuration
+      import { firebaseConfig } from './firebase-config.js';
+      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
+      firebase.analytics(); 
+      
+      // firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-
-    
-   
                     
     document.getElementById("myForm").addEventListener("submit", function(event) {
       event.preventDefault();
