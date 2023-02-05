@@ -22,12 +22,12 @@
       var firebaseConfig = {
         apiKey: '{{ secrets.APIKEY }}',
         authDomain: "blog-25253.firebaseapp.com",  
-        databaseURL: ${{ env.DATABASEURL }},
         projectId: '{{ secrets.PROJECTID }}',
         storageBucket: '{{ secrets.STORAGEBUCKET }}', 
         messagingSenderId: '{{ secrets.MESSAGINGSENDERID }}',
         appId: '{{ secrets.APPID }}',
-        measurementId: '{{ secrets.MEASUREMENTID }}'
+        measurementId: '{{ secrets.MEASUREMENTID }}',
+        databaseURL: ${{ env.DATABASEURL }};
       }; 
        
       
