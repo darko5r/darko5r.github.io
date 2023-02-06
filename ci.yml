@@ -1,4 +1,4 @@
-name: CI
+name: Test secrets
 
 on:
   push:
@@ -7,12 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: Manjaro
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set environment variables
-      run: |
-        echo "::set-env name=FIREBASE_API_KEY::${{ secrets.FIREBASE_API_KEY }}"
+    - name: Print secret
+      run: echo "The secret value is: ${{ secrets.SECRET_NAME }}"
