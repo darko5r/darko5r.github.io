@@ -1,7 +1,7 @@
 var firebaseConfig = {
         apiKey: 'process.env.FIREBASE_API_KEY',
         authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        databaseURL: 'process.env.FIREBASE_DB_URL',
         projectId: "blog-25253",
         storageBucket: "blog-25253.appspot.com",
         messagingSenderId: "906101390805",
