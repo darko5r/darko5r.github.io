@@ -16,3 +16,4 @@ jobs:
     - name: Set environment variables
       run: |
         echo "::set-env name=FIREBASE_API_KEY::${{ secrets.FIREBASE_API_KEY }}"
+        echo "::set-env name=FIREBASE_DB_URL::https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app"
