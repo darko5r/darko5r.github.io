@@ -51,13 +51,14 @@
           });
           newId++;
           linksRef.child(linkName).set({
-            id: newId,
-            url: linkUrl,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-          });
-          document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-          document.getElementById("linkName").value = "";
-          document.getElementById("linkUrl").value = "";
+  id: newId,
+  url: linkUrl,
+  timestamp: firebase.database.ServerValue.TIMESTAMP
+});
+document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+document.getElementById("linkName").value = "";
+document.getElementById("linkUrl").value = "";
+retrieveLinks();
           
           // Function to retrieve links from Firebase database
 function retrieveLinks() {
