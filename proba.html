@@ -110,15 +110,19 @@ function getLinks() {
     });
   });
 }
-
+      
 function deleteSelectedLinks() {
-  var linkList = document.getElementById("linkList");
-  var checkboxes = linkList.getElementsByTagName("input");
-  var linksRef = database.ref("links");
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      linksRef.child(checkboxes[i].nextSibling.textContent.split(": ")[0]).remove();
-    }
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+  var selectedLinks = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+  selectedLinks.forEach(link => {
+    firebase.database().ref("links").child(link).remove();
+  });
+
+  document.getElementById("toggleMenu").style.display = "none";
+}      
+
+
   }
 }
  
