@@ -2,9 +2,9 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-   
-    
+    <script type='text/javascript' src='config.js'></script>      
   </head>
+
   <body>
     <form id="myForm">
       <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
@@ -13,25 +13,18 @@
       <div id="successMessage" style="color: green;"></div>
       <button id="myBtn" onclick="submitLink()">Submit</button>
     </form>
-
-    <script>
       
+      <script>          
+      // <script type="module">
+      // Your web app's Firebase configuration
+      // import { firebaseConfig } from 'config.js';
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // firebase.analytics(); 
       
-    var firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID
-};
-
-firebase.initializeApp(firebaseConfig);
-var database = firebase.database();
-      
-     
+      // firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
+                    
     document.getElementById("myForm").addEventListener("submit", function(event) {
       event.preventDefault();
       submitLink();
@@ -82,7 +75,8 @@ var database = firebase.database();
   function clearUrl() {
     document.getElementById("linkUrl").value = "";
   }
+        
+  
   </script>    
   </body>
 </html> 
-
