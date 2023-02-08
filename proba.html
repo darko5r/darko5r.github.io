@@ -2,6 +2,8 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+   
+    
   </head>
   <body>
     <form id="myForm">
@@ -9,114 +11,78 @@
       <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
       <div id="errorMessage" style="color: red;"></div>
       <div id="successMessage" style="color: green;"></div>
-      <button id="submitBtn" onclick="submitLink()">Submit</button>
-      <button id="deleteBtn" onclick="deleteLinks()">Delete</button>
+      <button id="myBtn" onclick="submitLink()">Submit</button>
     </form>
 
-    <div>
-      <select multiple id="linkList">
-      </select>
-    </div>
-
     <script>
-      var firebaseConfig = {
-        apiKey: process.env.API_KEY,
-        authDomain: process.env.AUTH_DOMAIN,
-        databaseURL: process.env.DATABASE_URL,
-        projectId: process.env.PROJECT_ID,
-        storageBucket: process.env.STORAGE_BUCKET,
-        messagingSenderId: process.env.MESSAGING_SENDER_ID,
-        appId: process.env.APP_ID,
-        measurementId: process.env.MEASUREMENT_ID
-      };
-      firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();
-      var linksRef = database.ref("links");
+      
+      
+    var firebaseConfig = {
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASUREMENT_ID
+};
 
-      linksRef.on("value", function(snapshot) {
-        var options = "";
-        snapshot.forEach(function(childSnapshot) {
-          var childData = childSnapshot.val();
-          options += "<option value='" + childSnapshot.key + "'>" + childData.url + "</option>";
-        });
-        document.getElementById("linkList").innerHTML = options;
-      });
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
+      
+     
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      submitLink();
+     });
 
-      document.getElementById("myForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitLink();
-      });
+    function submitLink() {
+       var linkName = encodeURIComponent(document.getElementById("linkName").value);
+       var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
 
-      function submitLink() {
-        var linkName = encodeURIComponent(document.getElementById("linkName").value);
-        var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
+    if (!linkName || !linkUrl) {
+       document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+       return;
+     }
 
-        if (!linkName || !linkUrl) {
-          document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-          return;
+    document.getElementById("errorMessage").innerHTML = "";
+    document.getElementById("successMessage").innerHTML = "";
+    var linksRef = database.ref("links");
+
+    linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+      var newId = 0;
+      snapshot.forEach(function(childSnapshot) {
+        var childData = childSnapshot.val();
+        if (childData.id > newId) {
+          newId = childData.id;
         }
-
-        document.getElementById("errorMessage").innerHTML = "";
-        document.getElementById("successMessage").innerHTML = "";
-        
-        linksRef.child(linkName).set({
-  id: newId,
-  url: linkUrl,
-  timestamp: firebase.database.ServerValue.TIMESTAMP
-});
-
-document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-document.getElementById("linkName").value = "";
-document.getElementById("linkUrl").value = "";
-});
-}
-
-function clearForm() {
-document.getElementById("errorMessage").innerHTML = "";
-document.getElementById("successMessage").innerHTML = "";
-}
-
-function clearName() {
-document.getElementById("linkName").value = "";
-}
-
-function clearUrl() {
-document.getElementById("linkUrl").value = "";
-}
-
-// Function to delete links
-function deleteLinks() {
-  var linksRef = firebase.database().ref("links");
-  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  var checkedLinks = [];
-  
-  // Loop through all the checkboxes and collect the ones that are checked
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      checkedLinks.push(checkboxes[i].value);
-    }
+      });
+      newId++;
+      linksRef.child(linkName).set({
+        id: newId,
+        url: linkUrl,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      });
+      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+      document.getElementById("linkName").value = "";
+      document.getElementById("linkUrl").value = "";
+    });
   }
-  
-  // Loop through the selected links and delete each one
-  for (var i = 0; i < checkedLinks.length; i++) {
-    linksRef.child(checkedLinks[i]).remove();
+
+  function clearForm() {
+    document.getElementById("errorMessage").innerHTML = "";
+    document.getElementById("successMessage").innerHTML = "";
   }
-}
-</script>
 
-</head>
-<body>
-<form id="myForm">
-  <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
-  <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
-  <div id="errorMessage" style="color: red;"></div>
-  <div id="successMessage" style="color: green;"></div>
-  <button id="submitBtn" onclick="submitLink()">Submit</button>
-  <button id="deleteBtn" onclick="deleteLinks()">Delete</button>
-</form>
+  function clearName() {
+    document.getElementById("linkName").value = "";
+  }
 
-<select id="linksList">
-</select>
+  function clearUrl() {
+    document.getElementById("linkUrl").value = "";
+  }
+  </script>    
+  </body>
+</html> 
 
-</body>
-</html>
