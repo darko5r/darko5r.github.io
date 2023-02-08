@@ -76,39 +76,7 @@
     document.getElementById("linkUrl").value = "";
   }
         
-  // Retrieve links from Firebase database
-var linksRef = firebase.database.ref("links");
-linksRef.on("value", function(snapshot) {
-  snapshot.forEach(function(childSnapshot) {
-    // Display each link in the toggle down menu
-    var linkName = childSnapshot.val().name;
-    var linkUrl = childSnapshot.val().url;
-    document.getElementById("linkList").innerHTML += "<option value='"+linkUrl+"'>"+linkName+"</option>";
-  }); 
-});
-
-// Add checkbox beside each link
-document.getElementById("linkList").innerHTML += "<input type='checkbox' name='link[]' value='"+linkUrl+"'>";
-
-// Add delete button
-document.getElementById("deleteButton").innerHTML += "<button onclick='deleteLink()'>Delete</button>";
-
-// Delete link function
-function deleteLink() {
-  // Loop through all the checkboxes
-  var checkboxes = document.getElementsByName("link[]");
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      // Delete the associated link  
-      // Delete link function 
-function deleteLink() { 
-  // Get the link URL from the checkbox 
-  var linkUrl = document.querySelector('input[name="link[]"]:checked').value; 
-
-  // Delete the link from the Firebase database 
-  var linksRef = firebase.database().ref("links"); 
-  linksRef.child(linkUrl).remove(); 
-}
+  
   </script>    
   </body>
 </html>
