@@ -2,9 +2,8 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-    <script type='text/javascript' src='config.js'></script>      
+    <script type='text/javascript' src='config.js'></script>
   </head>
-
   <body>
     <form id="myForm">
       <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
@@ -13,69 +12,94 @@
       <div id="successMessage" style="color: green;"></div>
       <button id="myBtn" onclick="submitLink()">Submit</button>
     </form>
-      
-      <script>          
-      // <script type="module">
-      // Your web app's Firebase configuration
-      // import { firebaseConfig } from 'config.js';
-      // Initialize Firebase
+    <br><br>
+    <form id="deleteForm">
+      <select id="deleteSelect">
+        <option value="" disabled selected>Select a link to delete</option>
+      </select>
+      <br><br>
+      <div id="deleteErrorMessage" style="color: red;"></div>
+      <div id="deleteSuccessMessage" style="color: green;"></div>
+      <button id="deleteBtn" onclick="deleteLink()">Delete</button>
+    </form>
+    <script>
       firebase.initializeApp(firebaseConfig);
-      // firebase.analytics(); 
-      
-      // firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-                    
-    document.getElementById("myForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      submitLink();
-     });
 
-    function submitLink() {
-       var linkName = encodeURIComponent(document.getElementById("linkName").value);
-       var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
+      document.getElementById("myForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitLink();
+      });
 
-    if (!linkName || !linkUrl) {
-       document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-       return;
-     }
-
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("successMessage").innerHTML = "";
-    var linksRef = database.ref("links");
-
-    linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-      var newId = 0;
-      snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
-        if (childData.id > newId) {
-          newId = childData.id;
+      function submitLink() {
+        var linkName = encodeURIComponent(document.getElementById("linkName").value);
+        var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
+        if (!linkName || !linkUrl) {
+          document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+          return;
         }
-      });
-      newId++;
-      linksRef.child(linkName).set({
-        id: newId,
-        url: linkUrl,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      });
-      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-      document.getElementById("linkName").value = "";
-      document.getElementById("linkUrl").value = "";
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
+        var linksRef = database.ref("links");
+        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+          var newId = 0;
+          snapshot.forEach(function(childSnapshot) {
+            var childData = childSnapshot.val();
+            if (childData.id > newId) {
+              newId = childData.id;
+            }
+          });
+          newId++;
+          linksRef.child(linkName).set({
+            id: newId,
+            url: linkUrl,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          });
+          document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+          document.getElementById("linkName").value = "";
+          document.getElementById("linkUrl").value = "";
+          
+          // Function to retrieve links from Firebase database
+function retrieveLinks() {
+  var linksRef = firebase.database().ref("links");
+  linksRef.once("value", function(snapshot) {
+    var links = snapshot.val();
+    var linkKeys = Object.keys(links);
+    var select = document.getElementById("linkSelect");
+    select.innerHTML = "";
+    linkKeys.forEach(function(key) {
+      var option = document.createElement("option");
+      option.value = key;
+      option.text = key + " - " + links[key].url;
+      select.appendChild(option);
     });
-  }
+  });
+}
 
-  function clearForm() {
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("successMessage").innerHTML = "";
+// Function to delete selected links
+function deleteLinks() {
+  var select = document.getElementById("linkSelect");
+  var linksRef = firebase.database().ref("links");
+  for (var i = 0; i < select.length; i++) {
+    if (select.options[i].selected) {
+      linksRef.child(select.options[i].value).remove();
+    }
   }
+  retrieveLinks();
+}
 
-  function clearName() {
-    document.getElementById("linkName").value = "";
-  }
-
-  function clearUrl() {
-    document.getElementById("linkUrl").value = "";
-  }
-        
+// Call retrieveLinks function when the page loads
+window.onload = function() {
+  retrieveLinks();
+};
+ 
+ <br><br>
+<div>
+  <select id="linkSelect" multiple>
+  </select>
+</div>
+<br>
+<button id="deleteBtn" onclick="deleteLinks()">Delete</button>         
   
   </script>    
   </body>
