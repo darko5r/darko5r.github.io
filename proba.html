@@ -12,9 +12,11 @@
       <button id="submitBtn" onclick="submitLink()">Submit</button>
       <button id="deleteBtn" onclick="deleteLinks()">Delete</button>
     </form>
-    <br>
-    <select id="linkList" size="10">
-    </select>
+
+    <div>
+      <select multiple id="linkList">
+      </select>
+    </div>
 
     <script>
       var firebaseConfig = {
@@ -29,7 +31,17 @@
       };
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-      
+      var linksRef = database.ref("links");
+
+      linksRef.on("value", function(snapshot) {
+        var options = "";
+        snapshot.forEach(function(childSnapshot) {
+          var childData = childSnapshot.val();
+          options += "<option value='" + childSnapshot.key + "'>" + childData.url + "</option>";
+        });
+        document.getElementById("linkList").innerHTML = options;
+      });
+
       document.getElementById("myForm").addEventListener("submit", function(event) {
         event.preventDefault();
         submitLink();
@@ -46,65 +58,65 @@
 
         document.getElementById("errorMessage").innerHTML = "";
         document.getElementById("successMessage").innerHTML = "";
-        var linksRef = database.ref("links");
+        
+        linksRef.child(linkName).set({
+  id: newId,
+  url: linkUrl,
+  timestamp: firebase.database.ServerValue.TIMESTAMP
+});
 
-        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-          var newId = 0;
-          snapshot.forEach(function(childSnapshot) {
-            var childData = childSnapshot.val();
-            if (childData.id > newId) {
-              newId = childData.id;
-            }
-          });
-          newId++;
-       linksRef.child(linkName).set({
-        id: newId,
-        name: linkName,
-        url: linkUrl,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-      });
-      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-      document.getElementById("linkName").value = "";
-      document.getElementById("linkUrl").value = "";
-      renderLinks();
-    });
-  }
+document.getElementById("successMessage").innerHTML = "Link submitted successfully";
+document.getElementById("linkName").value = "";
+document.getElementById("linkUrl").value = "";
+});
+}
+
+function clearForm() {
+document.getElementById("errorMessage").innerHTML = "";
+document.getElementById("successMessage").innerHTML = "";
+}
+
+function clearName() {
+document.getElementById("linkName").value = "";
+}
+
+function clearUrl() {
+document.getElementById("linkUrl").value = "";
+}
+
+// Function to delete links
+function deleteLinks() {
+  var linksRef = firebase.database().ref("links");
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  var checkedLinks = [];
   
-  function renderLinks() {
-    linksRef.once("value", function(snapshot) {
-      document.getElementById("linkList").innerHTML = "";
-      snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
-        document.getElementById("linkList").innerHTML += '<li><input type="checkbox" name="link" value="' + childSnapshot.key + '">' + childData.name + ' - ' + childData.url + '</li>';
-      });
-    });
-  }
-
-  function deleteLinks() {
-    var selectedLinks = document.getElementsByName("link");
-    for (var i = 0; i < selectedLinks.length; i++) {
-      if (selectedLinks[i].checked) {
-        linksRef.child(selectedLinks[i].value).remove();
-      }
+  // Loop through all the checkboxes and collect the ones that are checked
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      checkedLinks.push(checkboxes[i].value);
     }
-    renderLinks();
-  }
-
-  function clearForm() {
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("successMessage").innerHTML = "";
-  }
-
-  function clearName() {
-    document.getElementById("linkName").value = "";
-  }
-
-  function clearUrl() {
-    document.getElementById("linkUrl").value = "";
   }
   
-  renderLinks();
-  </script>    
-  </body>
-</html> 
+  // Loop through the selected links and delete each one
+  for (var i = 0; i < checkedLinks.length; i++) {
+    linksRef.child(checkedLinks[i]).remove();
+  }
+}
+</script>
 
+</head>
+<body>
+<form id="myForm">
+  <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+  <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
+  <div id="errorMessage" style="color: red;"></div>
+  <div id="successMessage" style="color: green;"></div>
+  <button id="submitBtn" onclick="submitLink()">Submit</button>
+  <button id="deleteBtn" onclick="deleteLinks()">Delete</button>
+</form>
+
+<select id="linksList">
+</select>
+
+</body>
+</html>
