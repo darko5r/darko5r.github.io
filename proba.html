@@ -111,21 +111,17 @@ function getLinks() {
   });
 }
       
-function deleteSelectedLinks() {
+      function deleteSelectedLinks() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
   var linksRef = database.ref("links");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      linksRef.child(checkboxes[i].nextSibling.textContent.split(": ")[0]).remove().then(function() {
-  console.log("Link removed successfully");
-}).catch(function(error) {
-  console.error("Error removing link: ", error);
-});
-      
+      var key = encodeURIComponent(checkboxes[i].nextSibling.textContent.split(": ")[0]);
+      linksRef.child(key).remove();
     }
   }
-}
+}      
  
  </script>
   </head>
