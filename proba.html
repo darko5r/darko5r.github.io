@@ -117,7 +117,12 @@ function deleteSelectedLinks() {
   var linksRef = database.ref("links");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      linksRef.child(checkboxes[i].nextSibling.textContent.split(": ")[0]).remove();
+      linksRef.child(checkboxes[i].nextSibling.textContent.split(": ")[0]).remove().then(function() {
+  console.log("Link removed successfully");
+}).catch(function(error) {
+  console.error("Error removing link: ", error);
+});
+      
     }
   }
 }
