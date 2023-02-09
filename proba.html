@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-    <script>
-      var firebaseConfig = {
+<head>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
         databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
@@ -16,146 +18,46 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-                  
-      
-      function submitLink() {
-      var linkName = document.getElementById("linkName").value;
-      var linkUrl = document.getElementById("linkUrl").value;
+  </script>
+</head>
+<body>
+  <h1>Links</h1>
+  <div id="linksContainer"></div>
+  <br><br>
+  <button id="deleteBtn">Delete</button>
+  <script>
+    // Get a reference to the links container
+    var linksContainer = document.getElementById("linksContainer");
 
-      if (!linkName || !linkUrl) {
-        document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-        return;
-      }
+    // Fetch the links from the database and populate the container
+    function fetchLinks() {
+      firebase.database().ref("links").on("value", function(snapshot) {
+        linksContainer.innerHTML = "";
+        snapshot.forEach(function(childSnapshot) {
+          var key = childSnapshot.key;
+          var childData = childSnapshot.val();
+          var link = childData.link;
+          linksContainer.innerHTML += `
+            <div>
+              <input type="checkbox" id="${key}">
+              <a href="${link}" target="_blank">${link}</a>
+            </div>
+          `;
+        });
+      });
+    }
 
-      document.getElementById("errorMessage").innerHTML = "";
-      document.getElementById("successMessage").innerHTML = "";
-      var linksRef = database.ref("links");
-
-      linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-         var newId = 0;
-         snapshot.forEach(function(childSnapshot) {
-         var childData = childSnapshot.val();
-         if (childData.id > newId) {
-           newId = childData.id;
+    // Delete the selected links from the database
+    document.getElementById("deleteBtn").addEventListener("click", function() {
+      var checkboxes = document.querySelectorAll("input[type=checkbox]");
+      checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+          firebase.database().ref("links").child(checkbox.id).remove();
         }
       });
-       newId++;
-
-       linksRef.child(linkName).set({
-           id: newId,
-           url: linkUrl,
-           timestamp: firebase.database.ServerValue.TIMESTAMP
-       });
-
-      document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-      document.getElementById("linkName").value = "";
-      document.getElementById("linkUrl").value = "";
-      fetchLinks();
-       });
-      }
-      
-      function clearForm() {
-        document.getElementById("errorMessage").innerHTML = "";
-        document.getElementById("successMessage").innerHTML = "";
-      }
-      
-      function clearName() {
-        document.getElementById("linkName").value = "";
-      }
-
-      function clearUrl() {
-        document.getElementById("linkUrl").value = "";
-      }
-      
-      function fetchLinks() {
-  var linksRef = database.ref("links");
-  linksRef.orderByChild("timestamp").once("value", function(snapshot) {
-    var links = snapshot.val();
-    var linksArray = [];
-    snapshot.forEach(function(childSnapshot) {
-      linksArray.push(childSnapshot.val());
     });
 
-    linksArray.sort(function(a, b) {
-      return b.timestamp - a.timestamp;
-    });
-
-    var linksContainer = document.getElementById("linksContainer");
-    linksContainer.innerHTML = "";
-
-    for (var i = 0; i < linksArray.length; i++) {
-      var link = linksArray[i];
-
-      var linkDiv = document.createElement("div");
-      linkDiv.setAttribute("id", link.id);
-      linkDiv.setAttribute("class", "link");
-
-      var checkbox = document.createElement("input");
-      checkbox.setAttribute("type", "checkbox");
-      checkbox.setAttribute("class", "linkCheckbox");
-      checkbox.setAttribute("value", link.id);
-      linkDiv.appendChild(checkbox);
-
-      var linkName = document.createElement("span");
-      linkName.setAttribute("class", "linkName");
-      linkName.innerHTML = link.url;
-      linkDiv.appendChild(linkName);
-
-      linksContainer.appendChild(linkDiv);
-    }
-  });
-}
-
-function deleteLinks() {
-  var linkCheckboxes = document.getElementsByClassName("linkCheckbox");
-  for (var i = 0; i < linkCheckboxes.length; i++) {
-    var linkCheckbox = linkCheckboxes[i];
-    if (linkCheckbox.checked) {
-      var linkId = linkCheckbox.value;
-      var linkRef = database.ref("links").child(linkId);
-      linkRef.remove();
-    }
-  }
-
-  fetchLinks();
-}
-
-var toggleBtn = document.createElement("button");
-toggleBtn.innerHTML = "Toggle links";
-toggleBtn.setAttribute("onclick", "toggleLinks()");
-document.body.appendChild(toggleBtn);
-
-var linksContainer = document.createElement("div");
-linksContainer.setAttribute("id", "linksContainer");
-linksContainer.setAttribute("style", "display: none;");
-document.body.appendChild(linksContainer);
-
-var deleteBtn = document.createElement("button");
-deleteBtn.innerHTML = "Delete selected links";
-deleteBtn.setAttribute("onclick", "deleteLinks()");
-document.body.appendChild(deleteBtn);
-
-fetchLinks();
-
-      
- </script>
-  </head>
-  <body>
-    <body>
-  <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
-  <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
-  <div id="errorMessage" style="color: red;"></div>
-  <div id="successMessage" style="color: green;"></div>
-  <button onclick="submitLink()">Submit</button>
-
-  <div>
-    <button onclick="fetchLinks()">Toggle Link List</button>
-    <div id="linkList" style="display:none">
-      <div id="checkboxContainer">
-      </div>
-      <button id="deleteButton" onclick="deleteSelectedLinks()">Delete</button>
-    </div>
-  </div>
+    fetchLinks();
+  </script>
 </body>
-
 </html>
