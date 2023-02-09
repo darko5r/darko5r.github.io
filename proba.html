@@ -111,33 +111,30 @@ function getLinks() {
     });
   });
 }
+      
+function deleteSelectedLinks() {
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  var selectedLinks = [];
 
-firebase.database().ref().once('value', function() {
-  function deleteSelectedLinks() {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    var selectedLinks = [];
-
-    for (var i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        var link = checkboxes[i].parentNode.textContent;
-        var linkData = link.split(":");
-        var name = linkData[0].trim();
-        var encodedName = encodeURIComponent(name);
-        selectedLinks.push(encodedName);
-      }
-    }
-
-    for (var i = 0; i < selectedLinks.length; i++) {
-      firebase.database().ref().child(selectedLinks[i]).remove();
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      var link = checkboxes[i].parentNode.textContent;
+      var linkData = link.split(":");
+      var name = linkData[0].trim();
+      var encodedName = encodeURIComponent(name);
+      selectedLinks.push(encodedName);
     }
   }
+
+  for (var i = 0; i < selectedLinks.length; i++) {
+    firebase.database().ref().child(selectedLinks[i]).remove();
+  }
+}
+
 
   document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
 });
 
-window.onload = function() {
-  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
-};
       
  </script>
   </head>
