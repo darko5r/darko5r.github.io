@@ -111,24 +111,21 @@ function getLinks() {
   });
 }
       
-      function deleteSelectedLinks() {
+      window.onload = function() {
+  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
+}
+
+function deleteSelectedLinks() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
   var linksRef = firebase.database().ref("links");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var key = checkboxes[i].nextSibling.textContent.split(": ")[0];
-      linksRef.child(key).remove();
+      linksRef.child(checkboxes[i].nextSibling.textContent.split(": ")[0]).remove();
     }
   }
 }
-      
-      document.addEventListener("DOMContentLoaded", function () {
-  if (document.getElementById("deleteSelectedBtn")) {
-    document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
-  }
-});
- 
+           
  </script>
   </head>
   <body>
