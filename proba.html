@@ -115,14 +115,14 @@ function getLinks() {
       function deleteSelectedLinks() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
-  var linksRef = database.ref("links");
+  var linksRef = firebase.database().ref("links");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var key = encodeURIComponent(checkboxes[i].nextSibling.textContent.split(": ")[0]);
+      var key = checkboxes[i].nextSibling.textContent.split(": ")[0];
       linksRef.child(key).remove();
     }
   }
-}      
+}
  
  </script>
   </head>
