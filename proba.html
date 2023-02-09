@@ -121,9 +121,9 @@ function deleteSelectedLinks() {
   var linksRef = database.ref("links");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var linkKey = checkboxes[i].nextSibling.textContent.split(": ")[0];
-      if (linkKey.length > 0 && !/[.#\$\[\]]/.test(linkKey)) {
-        linksRef.child(linkKey).remove();
+      var textContent = checkboxes[i].nextSibling.textContent.split(": ")[0];
+      if (textContent) {
+        linksRef.child(textContent).remove();
       }
     }
   }
