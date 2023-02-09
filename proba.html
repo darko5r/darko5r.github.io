@@ -112,7 +112,7 @@ function getLinks() {
 }
       
       window.onload = function() {
-  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
+  console.log(document.getElementById("deleteSelectedBtn")).addEventListener("click", deleteSelectedLinks);
 }
 
 function deleteSelectedLinks() {
@@ -121,15 +121,15 @@ function deleteSelectedLinks() {
 
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var link = checkboxes[i].parentNode.textContent;
+      var link = console.log(checkboxes)[i].parentNode.textContent;
       var linkData = link.split(":");
-      var name = linkData[0].trim();
+      var name = console.log(linkData)[0].trim();
       selectedLinks.push(name);
     }
   }
 
   for (var i = 0; i < selectedLinks.length; i++) {
-    firebase.database().ref(selectedLinks[i]).remove();
+    console.log(firebase.database().ref().child(selectedLinks[i]));
 }
 }
            
