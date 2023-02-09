@@ -1,63 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-  <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-        authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "blog-25253",
-        storageBucket: "blog-25253.appspot.com",
-        messagingSenderId: "906101390805",
-        appId: "1:906101390805:web:871c51f2486921f443115c",
-        measurementId: "G-MY3P2TWN4L"
+  <head>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCQqPOxrDQKJYKX9-NgWAWaLclJnN1_zcU",
+        databaseURL: "https://testing-1e9ed.firebaseio.com/",
       };
-
+      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();
-  </script>
-</head>
-<body>
-  <h1>Links</h1>
-  <div id="linksContainer"></div>
-  <br><br>
-  <button id="deleteBtn">Delete</button>
-  <script>
-    // Get a reference to the links container
-    var linksContainer = document.getElementById("linksContainer");
+    </script>
+  </head>
+  <body>
+    <div id="linksContainer"></div>
+    <script>
+      const linksContainer = document.getElementById("linksContainer");
+      const database = firebase.database();
+      const linksRef = database.ref("links");
 
-    // Fetch the links from the database and populate the container
-    function fetchLinks() {
-      firebase.database().ref("links").on("value", function(snapshot) {
-        linksContainer.innerHTML = "";
-        snapshot.forEach(function(childSnapshot) {
-          var key = childSnapshot.key;
-          var childData = childSnapshot.val();
-          var link = childData.link;
-          linksContainer.innerHTML += `
-            <div>
-              <input type="checkbox" id="${key}">
-              <a href="${link}" target="_blank">${link}</a>
-            </div>
-          `;
+      function fetchLinks() {
+        linksRef.on("value", (snapshot) => {
+          const links = snapshot.val();
+          let linksHTML = "";
+          for (let id in links) {
+            const link = links[id].link;
+            linksHTML += `
+              <div>
+                <input type="checkbox" id="link-${id}" />
+                <label for="link-${id}">${link}</label>
+              </div>
+            `;
+          }
+          linksContainer.innerHTML = linksHTML;
         });
-      });
-    }
+      }
 
-    // Delete the selected links from the database
-    document.getElementById("deleteBtn").addEventListener("click", function() {
-      var checkboxes = document.querySelectorAll("input[type=checkbox]");
-      checkboxes.forEach(function(checkbox) {
-        if (checkbox.checked) {
-          firebase.database().ref("links").child(checkbox.id).remove();
-        }
-      });
-    });
-
-    fetchLinks();
-  </script>
-</body>
+      fetchLinks();
+    </script>
+  </body>
 </html>
