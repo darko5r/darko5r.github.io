@@ -111,11 +111,6 @@ function getLinks() {
     });
   });
 }
-      
-
-window.onload = function() {
-  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks); 
-};
 
 firebase.database().ref().once('value', function() {
   function deleteSelectedLinks() {
@@ -136,7 +131,13 @@ firebase.database().ref().once('value', function() {
       firebase.database().ref().child(selectedLinks[i]).remove();
     }
   }
+
+  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
 });
+
+window.onload = function() {
+  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
+};
       
  </script>
   </head>
