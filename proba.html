@@ -124,7 +124,7 @@ firebase.database().ref().once('value', function() {
         var linkData = link.split(":");
         var name = linkData[0].trim();
         var encodedName = encodeURIComponent(name);
-        selectedLinks.push(encodedName);
+        console.log(selectedLinks).push(encodedName);
       }
     }
 
