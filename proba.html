@@ -102,11 +102,11 @@ function getLinks() {
     var linkList = document.getElementById("linkList");
     linkList.innerHTML = "";
     snapshot.forEach(function(childSnapshot) {
-      var childData = childSnapshot.val();
+      var linkName = childSnapshot.key;
       linkList.innerHTML += `
         <div>
-          <input type="checkbox" id="${childData.id}" />
-          <label for="${childData.id}">${childSnapshot.key}: ${childData.url}</label>
+          <input type="checkbox" id="${linkName}" />
+          <label for="${linkName}">${linkName}</label>
         </div>
       `;
     });
