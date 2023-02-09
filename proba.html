@@ -129,8 +129,8 @@ function deleteSelectedLinks() {
   }
 
   for (var i = 0; i < selectedLinks.length; i++) {
-    firebase.database().ref().child(console.log(selectedLinks[i])).remove();
-  }
+    firebase.database().ref(selectedLinks[i]).remove();
+}
 }
            
  </script>
