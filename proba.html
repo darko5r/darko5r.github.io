@@ -4,10 +4,6 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
       
-      window.onload = function() {
-      console.log(document.getElementById("deleteSelectedBtn")).addEventListener("click", deleteSelectedLinks);
-      }
-      
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -116,6 +112,11 @@ function getLinks() {
   });
 }
       
+
+window.onload = function() {
+  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
+}      
+          
 
 function deleteSelectedLinks() {
   var checkboxes = document.querySelectorAll('input[type="checkbox"]');
