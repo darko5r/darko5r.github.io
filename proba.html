@@ -114,7 +114,7 @@ function getLinks() {
       
 
 window.onload = function() {
-  document.getElementById("deleteSelectedBtn").onClicked = deleteSelectedLinks;
+  document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks); 
 };
 
 firebase.database().ref().once('value', function() {
