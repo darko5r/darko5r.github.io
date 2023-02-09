@@ -110,7 +110,6 @@ function getLinks() {
     });
   });
 }
-      document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
       
       function deleteSelectedLinks() {
   var linkList = document.getElementById("linkList");
@@ -123,6 +122,12 @@ function getLinks() {
     }
   }
 }
+      
+      document.addEventListener("DOMContentLoaded", function () {
+  if (document.getElementById("deleteSelectedBtn")) {
+    document.getElementById("deleteSelectedBtn").addEventListener("click", deleteSelectedLinks);
+  }
+});
  
  </script>
   </head>
