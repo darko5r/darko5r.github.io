@@ -23,6 +23,17 @@
         transition: max-height 0.2s ease-in;
       }
     </style>
+  </head>
+  <body>
+    <div class="toggle-menu">
+      <div class="menu-header">
+        Toggle Menu
+      </div>
+      <div class="menu-body">
+        <!-- menu links will be added here -->
+      </div>
+    </div>
+
     <script>
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
@@ -58,27 +69,41 @@
   }
 
   var toggleMenu = document.getElementById("toggle-menu");
+        
   toggleMenu.innerHTML = "";
 
-  for (var link in links) {
-    var linkName = links[link].linkName;
-    var linkURL = links[link].linkURL;
-    var listItem = document.createElement("div");
-    var checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.style.marginRight = "5px";
-    var label = document.createElement("label");
-    label.style.fontSize = maxLength === linkName.length ? "20px" : "15px";
-    label.innerHTML = linkName + " (" + linkURL + ")";
-    listItem.appendChild(checkbox);
-    listItem.appendChild(label);
-    toggleMenu.appendChild(listItem);
-  }
+for (var link in links) {
+var linkName = links[link].linkName;
+var linkURL = links[link].linkURL;
+var listItem = document.createElement("div");
+var checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.style.marginRight = "5px";
+var label = document.createElement("label");
+label.style.fontSize = maxLength === linkName.length ? "20px" : "15px";
+label.innerHTML = linkName + " (" + linkURL + ")";
+listItem.appendChild(checkbox);
+listItem.appendChild(label);
+toggleMenu.appendChild(listItem);
+}
+        
+        deleteSelectedLinksButton.innerHTML = "Delete Selected Links";
+toggleMenu.appendChild(deleteSelectedLinksButton);
 
-  var deleteSelectedLinksButton = document.createElement("button");
-  deleteSelectedLinksButton.innerHTML = "Delete Selected Links";
-  toggleMenu.appendChild(deleteSelectedLinksButton);
+deleteSelectedLinksButton.addEventListener("click", function () {
+  var checkboxes = toggleMenu.querySelectorAll("input[type=checkbox]");
+  var selectedLinks = [];
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      selectedLinks.push(i);
+    }
+  }
+  selectedLinks.reverse().forEach(function (index) {
+    var linkName = links[index].linkName;
+    database.ref("links").child(linkName).remove();
+  });
 });
+
     </script>
-    </head?
-    </html>
+    </head>
+</html>
