@@ -5,6 +5,14 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
   </head>
   <body>
+
+     <div class="toggle-menu-button" onclick="toggleMenu()">Toggle Menu</div>
+    <div id="toggle-menu" class="toggle-menu">
+      <div id="link-list"></div>
+      <button id="delete-selected-links">Delete Selected</button>
+    </div>
+    <script>
+      // your firebase configuration and setup
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -18,14 +26,6 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-
-     <div class="toggle-menu-button" onclick="toggleMenu()">Toggle Menu</div>
-    <div id="toggle-menu" class="toggle-menu">
-      <div id="link-list"></div>
-      <button id="delete-selected-links">Delete Selected</button>
-    </div>
-    <script>
-      // your firebase configuration and setup
       
       function toggleMenu() {
         var toggleMenu = document.getElementById("toggle-menu");
