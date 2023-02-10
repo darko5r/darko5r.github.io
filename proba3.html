@@ -6,7 +6,7 @@
   </head>
   <body>
 
-     <div class="toggle-menu-button" onclick="toggleMenu()">Toggle Menu</div>
+    <button id="toggle-button">+</button>
     <div id="toggle-menu" class="toggle-menu">
       <div id="link-list"></div>
       <button id="delete-selected-links">Delete Selected</button>
@@ -28,17 +28,25 @@
       var database = firebase.database();
       
       
-      function toggleMenu() {
-  var toggleMenu = document.getElementById("toggle-menu");
-  if (toggleMenu.style.display === "block") {
-    toggleMenu.style.display = "none";
-  } else {
-    toggleMenu.style.display = "block";
-  }
-}
+      var menuExpanded = false;
 
-// Add the following line to start the menu as not expanded
-document.getElementById("toggle-menu").style.display = "none";
+  function toggleMenu() {
+    var toggleMenu = document.getElementById("toggle-menu");
+    var toggleButton = document.getElementById("toggle-button");
+
+    if (menuExpanded) {
+      toggleMenu.style.display = "none";
+      toggleButton.textContent = "+";
+    } else {
+      toggleMenu.style.display = "block";
+      toggleButton.textContent = "-";
+    }
+
+    menuExpanded = !menuExpanded;
+  }
+
+  document.getElementById("toggle-button").addEventListener("click", toggleMenu);
+  document.getElementById("toggle-menu").style.display = "none";
 
       // your firebase event listener
       
