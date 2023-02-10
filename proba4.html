@@ -9,9 +9,11 @@
     <form id="myForm">
       <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
       <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
+      <input type="hidden" id="linkId">
       <div id="errorMessage" style="color: red;"></div>
       <div id="successMessage" style="color: green;"></div>
-      <button id="myBtn" onclick="submitLink()">Submit</button>
+      <button id="submitBtn" onclick="submitLink()">Submit</button>
+      <button id="updateBtn" onclick="updateLink()" style="display:none">Update</button>
     </form>
       
       <script>          
@@ -59,22 +61,82 @@
       });
       document.getElementById("successMessage").innerHTML = "Link submitted successfully";
       document.getElementById("linkName").value = "";
-      document.getElementById("linkUrl").value = "";
+      
+      document.getElementById("linkName").value = "";
+document.getElementById("linkUrl").value = "";
+
+var linkId;
+
+// Add the update button
+var updateButton = document.createElement("button");
+updateButton.innerHTML = "Update";
+updateButton.id = "updateBtn";
+updateButton.style.display = "none";
+updateButton.onclick = function() {
+  updateLink();
+};
+document.getElementById("myForm").appendChild(updateButton);
+
+// Add the cancel button
+var cancelButton = document.createElement("button");
+cancelButton.innerHTML = "Cancel";
+cancelButton.id = "cancelBtn";
+cancelButton.style.display = "none";
+cancelButton.onclick = function() {
+  cancelUpdate();
+};
+document.getElementById("myForm").appendChild(cancelButton);
+
+// Function to update a link
+function updateLink() {
+  var linkName = encodeURIComponent(document.getElementById("linkName").value);
+  var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
+
+  if (!linkName || !linkUrl) {
+    document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+    return;
+  }
+
+  document.getElementById("errorMessage").innerHTML = "";
+  document.getElementById("successMessage").innerHTML = "";
+  var linksRef = database.ref("links");
+  linksRef.child(linkName).update({
+    id: linkId,
+    url: linkUrl,
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+  document.getElementById("successMessage").innerHTML = "Link updated successfully";
+  document.getElementById("linkName").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("myBtn").style.display = "inline-block";
+  document.getElementById("updateBtn").style.display = "none";
+  document.getElementById("cancelBtn").style.display = "none";
+}
+
+// Function to cancel the update
+function cancelUpdate() {
+  document.getElementById("linkName").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("myBtn").style.display = "inline-block";
+  document.getElementById("updateBtn").style.display = "none";
+  document.getElementById("cancelBtn").style.display = "none";
+}
+
+      // Function to edit a link
+function editLink(id, name, url) {
+  linkId = id;
+  document.getElementById("linkName").value = decodeURIComponent(name);
+  document.getElementById("linkUrl").value = decodeURIComponent(url);
+  document.getElementById("myBtn").style.display = "none";
+  document.getElementById("updateBtn").style.display = "inline-block";
+  document.getElementById("cancelBtn").style.display = "inline-block";
+}
+      
+       linksRef.child(name).update({
+        id: id,
+        url: url,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
     });
-  }
-
-  function clearForm() {
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("successMessage").innerHTML = "";
-  }
-
-  function clearName() {
-    document.getElementById("linkName").value = "";
-  }
-
-  function clearUrl() {
-    document.getElementById("linkUrl").value = "";
-  }
         
   
   </script>    
