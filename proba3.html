@@ -6,7 +6,7 @@
   </head>
   <body>
 
-    <button id="toggle-button">+</button>
+    <button id="toggle-button" style="display: none;">+</button>
     <div id="toggle-menu" class="toggle-menu" style="display: none;">
       <div id="link-list"></div>
       <button id="delete-selected-links">Delete Selected</button>
@@ -38,7 +38,7 @@
       toggleMenu.style.display = "none";
       toggleButton.textContent = "+";
     } else {
-      toggleMenu.style.display = "block";
+      toggleMenu.style.display = "none";
       toggleButton.textContent = "-";
     }
 
