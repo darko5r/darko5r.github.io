@@ -27,14 +27,18 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
       
+      
       function toggleMenu() {
-        var toggleMenu = document.getElementById("toggle-menu");
-        if (toggleMenu.style.display === "none") {
-          toggleMenu.style.display = "block";
-        } else {
-          toggleMenu.style.display = "none";
-        }
-      }
+  var toggleMenu = document.getElementById("toggle-menu");
+  if (toggleMenu.style.display === "block") {
+    toggleMenu.style.display = "none";
+  } else {
+    toggleMenu.style.display = "block";
+  }
+}
+
+// Add the following line to start the menu as not expanded
+document.getElementById("toggle-menu").style.display = "none";
 
       // your firebase event listener
       
