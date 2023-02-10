@@ -3,6 +3,26 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+    <style>
+      .menu-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        user-select: none;
+      }
+      .menu-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+      }
+      .menu-body.open {
+        max-height: 500px;
+        transition: max-height 0.2s ease-in;
+      }
+    </style>
     <script>
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
@@ -14,35 +34,51 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
-
+      
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      database.ref("links").on("value", function(snapshot) {
-        var links = snapshot.val();
+      var toggleMenu = document.querySelector(".toggle-menu");
+      var menuHeader = document.querySelector(".menu-header");
+      var menuBody = document.querySelector(".menu-body");
+      var deleteSelectedLinksBtn = document.querySelector(".delete-selected-links");
 
-        document.getElementById("toggle-list").innerHTML = Object.keys(links).map(function(link) {
-          return `<li class="toggle-item">
-            <input type="checkbox" id="${link}" name="link">
-            <label for="${link}">${link} (${links[link].url})</label>
-          </li>`;
-        }).join('');
-
-        // get all toggle items
-        var toggleItems = document.querySelectorAll('.toggle-item');
-
-        // set the height of each toggle item
-        toggleItems.forEach(function(item) {
-          item.style.height = item.offsetHeight + 'px';
-        });
+      toggleMenu.addEventListener("click", function () {
+        menuBody.classList.toggle("open");
       });
+      
+      database.ref("links").on("value", function (snapshot) {
+  var links = snapshot.val();
+  var maxLength = 0;
+
+  for (var link in links) {
+    var linkName = links[link].linkName;
+    var linkURL = links[link].linkURL;
+    maxLength = Math.max(maxLength, linkName.length);
+  }
+
+  var toggleMenu = document.getElementById("toggle-menu");
+  toggleMenu.innerHTML = "";
+
+  for (var link in links) {
+    var linkName = links[link].linkName;
+    var linkURL = links[link].linkURL;
+    var listItem = document.createElement("div");
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.style.marginRight = "5px";
+    var label = document.createElement("label");
+    label.style.fontSize = maxLength === linkName.length ? "20px" : "15px";
+    label.innerHTML = linkName + " (" + linkURL + ")";
+    listItem.appendChild(checkbox);
+    listItem.appendChild(label);
+    toggleMenu.appendChild(listItem);
+  }
+
+  var deleteSelectedLinksButton = document.createElement("button");
+  deleteSelectedLinksButton.innerHTML = "Delete Selected Links";
+  toggleMenu.appendChild(deleteSelectedLinksButton);
+});
     </script>
-  </head>
-  <body>
-    <div id="toggle-menu">
-      <input type="checkbox" id="toggle-checkbox">
-      <label for="toggle-checkbox">Toggle Menu</label>
-      <ul id="toggle-list"></ul>
-    </div>
-  </body>
-</html>
+    </head?
+    </html>
