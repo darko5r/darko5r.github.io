@@ -2,8 +2,6 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-   
-    
   </head>
   <body>
     <form id="myForm">
@@ -11,63 +9,85 @@
       <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
       <div id="errorMessage" style="color: red;"></div>
       <div id="successMessage" style="color: green;"></div>
-      <button id="myBtn" onclick="submitLink()">Submit</button>
+      <button id="submitBtn" onclick="submitLink()">Submit</button>
+      <button id="deleteBtn" onclick="deleteLinks()">Delete</button>
     </form>
+    <br>
+    <select id="linkList" size="10">
+    </select>
 
     <script>
+      var firebaseConfig = {
+        apiKey: process.env.API_KEY,
+        authDomain: process.env.AUTH_DOMAIN,
+        databaseURL: process.env.DATABASE_URL,
+        projectId: process.env.PROJECT_ID,
+        storageBucket: process.env.STORAGE_BUCKET,
+        messagingSenderId: process.env.MESSAGING_SENDER_ID,
+        appId: process.env.APP_ID,
+        measurementId: process.env.MEASUREMENT_ID
+      };
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
       
-      
-    var firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID
-};
-
-firebase.initializeApp(firebaseConfig);
-var database = firebase.database();
-      
-     
-    document.getElementById("myForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      submitLink();
-     });
-
-    function submitLink() {
-       var linkName = encodeURIComponent(document.getElementById("linkName").value);
-       var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
-
-    if (!linkName || !linkUrl) {
-       document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-       return;
-     }
-
-    document.getElementById("errorMessage").innerHTML = "";
-    document.getElementById("successMessage").innerHTML = "";
-    var linksRef = database.ref("links");
-
-    linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-      var newId = 0;
-      snapshot.forEach(function(childSnapshot) {
-        var childData = childSnapshot.val();
-        if (childData.id > newId) {
-          newId = childData.id;
-        }
+      document.getElementById("myForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitLink();
       });
-      newId++;
-      linksRef.child(linkName).set({
+
+      function submitLink() {
+        var linkName = encodeURIComponent(document.getElementById("linkName").value);
+        var linkUrl = encodeURIComponent(document.getElementById("linkUrl").value);
+
+        if (!linkName || !linkUrl) {
+          document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
+          return;
+        }
+
+        document.getElementById("errorMessage").innerHTML = "";
+        document.getElementById("successMessage").innerHTML = "";
+        var linksRef = database.ref("links");
+
+        linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
+          var newId = 0;
+          snapshot.forEach(function(childSnapshot) {
+            var childData = childSnapshot.val();
+            if (childData.id > newId) {
+              newId = childData.id;
+            }
+          });
+          newId++;
+       linksRef.child(linkName).set({
         id: newId,
+        name: linkName,
         url: linkUrl,
         timestamp: firebase.database.ServerValue.TIMESTAMP
       });
       document.getElementById("successMessage").innerHTML = "Link submitted successfully";
       document.getElementById("linkName").value = "";
       document.getElementById("linkUrl").value = "";
+      renderLinks();
     });
+  }
+  
+  function renderLinks() {
+    linksRef.once("value", function(snapshot) {
+      document.getElementById("linkList").innerHTML = "";
+      snapshot.forEach(function(childSnapshot) {
+        var childData = childSnapshot.val();
+        document.getElementById("linkList").innerHTML += '<li><input type="checkbox" name="link" value="' + childSnapshot.key + '">' + childData.name + ' - ' + childData.url + '</li>';
+      });
+    });
+  }
+
+  function deleteLinks() {
+    var selectedLinks = document.getElementsByName("link");
+    for (var i = 0; i < selectedLinks.length; i++) {
+      if (selectedLinks[i].checked) {
+        linksRef.child(selectedLinks[i].value).remove();
+      }
+    }
+    renderLinks();
   }
 
   function clearForm() {
@@ -82,6 +102,8 @@ var database = firebase.database();
   function clearUrl() {
     document.getElementById("linkUrl").value = "";
   }
+  
+  renderLinks();
   </script>    
   </body>
-</html>
+</html> 
