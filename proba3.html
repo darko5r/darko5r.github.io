@@ -3,37 +3,43 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-    <style>
-      .menu-header {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        background-color: #333;
-        color: white;
-        cursor: pointer;
-        user-select: none;
-      }
-      .menu-body {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.2s ease-out;
-      }
-      .menu-body.open {
-        max-height: 500px;
-        transition: max-height 0.2s ease-in;
-      }
-    </style>
+   <style>
+  .toggle-menu {
+    display: none;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .toggle-menu div {
+    display: flex;
+    align-items: center;
+  }
+  .toggle-menu label {
+    flex-grow: 1;
+    margin-left: 10px;
+    word-break: break-all;
+  }
+     .toggle-menu-button {
+  display: block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+</style>
   </head>
   <body>
-    <div class="toggle-menu">
-      <div class="menu-header">
-        Toggle Menu
-      </div>
-      <div class="menu-body">
-        <!-- menu links will be added here -->
-      </div>
+    <div class="toggle-menu-button" onclick="toggleMenu()">Toggle Menu</div>
+    <div id="toggle-menu" class="toggle-menu">
+      <div id="link-list"></div>
+      <button id="delete-selected-links">Delete Selected</button>
     </div>
-
     <script>
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
@@ -45,65 +51,42 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
-      
+
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      var toggleMenu = document.querySelector("toggle-menu");
-      var menuHeader = document.querySelector("menu-header");
-      var menuBody = document.querySelector("menu-body");
-      var deleteSelectedLinksBtn = document.querySelector(".delete-selected-links");
-
-      toggleMenu.addEventListener("click", function () {
-        menuBody.classList.toggle("open");
-      });
+      function toggleMenu() {
+        var toggleMenu = document.getElementById("toggle-menu");
+        if (toggleMenu.style.display === "none") {
+          toggleMenu.style.display = "block";
+        } else {
+          toggleMenu.style.display = "none";
+        }
+      }
       
-      database.ref("links").on("value", function (snapshot) {
+      database.ref("links").on("value", function(snapshot) {
   var links = snapshot.val();
-  var maxLength = 0;
-
+  var linkList = document.getElementById("link-list");
+  linkList.innerHTML = "";
   for (var link in links) {
-    var linkName = links[link].linkName;
-    var linkURL = links[link].linkURL;
-    maxLength = Math.max(maxLength, linkName.length);
+    linkList.innerHTML += `
+      <div>
+        <input type="checkbox" id="${link}">
+        <label for="${link}">${link} (${links[link].url})</label>
+      </div>
+    `;
   }
-
-  var toggleMenu = document.getElementById("toggle-menu");
-        
-  toggleMenu.innerHTML = "";
-
-for (var link in links) {
-var linkName = links[link].linkName;
-var linkURL = links[link].linkURL;
-var listItem = document.createElement("div");
-var checkbox = document.createElement("input");
-checkbox.type = "checkbox";
-checkbox.style.marginRight = "5px";
-var label = document.createElement("label");
-label.style.fontSize = maxLength === linkName.length ? "20px" : "15px";
-label.innerHTML = linkName + " (" + linkURL + ")";
-listItem.appendChild(checkbox);
-listItem.appendChild(label);
-toggleMenu.appendChild(listItem);
-}
-        
-        deleteSelectedLinksButton.innerHTML = "Delete Selected Links";
-toggleMenu.appendChild(deleteSelectedLinksButton);
-
-deleteSelectedLinksButton.addEventListener("click", function () {
-  var checkboxes = toggleMenu.querySelectorAll("input[type=checkbox]");
-  var selectedLinks = [];
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      selectedLinks.push(i);
-    }
-  }
-  selectedLinks.reverse().forEach(function (index) {
-    var linkName = links[index].linkName;
-    database.ref("links").child(linkName).remove();
-  });
 });
 
+document.getElementById("delete-selected-links").addEventListener("click", function() {
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      database.ref("links").child(checkboxes[i].id).remove();
+    }
+  }
+});
     </script>
-    </head>
+  </body>
 </html>
