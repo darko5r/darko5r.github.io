@@ -39,28 +39,28 @@
       // your firebase event listener
       
       database.ref("links").on("value", function(snapshot) {
-        var links = snapshot.val();
-        var linkList = document.getElementById("link-list");
-        linkList.innerHTML = "";
-        for (var link in links) {
-          var div = document.createElement("div");
-          div.style.display = "block";
+  var links = snapshot.val();
+  var linkList = document.getElementById("link-list");
+  linkList.innerHTML = "";
+  for (var key in links) {
+    linkList.innerHTML += `
+      <div>
+        <input type="checkbox" id="${key}">
+        <label for="${key}">${links[key].name} (${links[key].url})</label>
+      </div>
+    `;
+  }
+});
 
-          var checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = link;
-
-          var label = document.createElement("label");
-          label.for = link;
-          label.innerHTML = link + " (" + links[link].url + ")";
-
-          div.appendChild(checkbox);
-          div.appendChild(label);
-
-          linkList.appendChild(div);
-        }
-      });
-
+document.getElementById("delete-selected-links").addEventListener("click", function() {
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      database.ref("links").child(checkboxes[i].id).remove();
+    }
+  }
+});
       // your delete selected links button event listener
     </script>
 </body>
