@@ -7,14 +7,15 @@
 
   <body>
     <form id="myForm">
-      <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
-      <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
-      <input type="hidden" id="linkId">
-      <div id="errorMessage" style="color: red;"></div>
-      <div id="successMessage" style="color: green;"></div>
-      <button id="submitBtn" onclick="submitLink()">Submit</button>
-      <button id="updateBtn" onclick="updateLink()" style="display:none">Update</button>
-    </form>
+  <input type="text" id="linkName" name="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+  <input type="text" id="linkUrl" name="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
+  <div id="errorMessage" style="color: red;"></div>
+  <div id="successMessage" style="color: green;"></div>
+  <button id="myBtn" onclick="submitLink()">Submit</button>
+  <button id="updateBtn" style="display: none;" onclick="updateLink()">Update</button>
+  <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">Cancel</button>
+</form>
+
       
       <script>          
       // <script type="module">
