@@ -42,14 +42,14 @@
   var links = snapshot.val();
   var linkList = document.getElementById("link-list");
   linkList.innerHTML = "";
-  for (var key in links) {
-    linkList.innerHTML += `
-      <div>
-        <input type="checkbox" id="${key}">
-        <label for="${key}">${links[key].name} (${links[key].url})</label>
-      </div>
-    `;
-  }
+  for (var link in links) {
+  linkList.innerHTML += `
+    <div>
+      <input type="checkbox" id="${link}">
+      <label for="${link}">${link} (${links[link].url})</label>
+    </div>
+  `;
+}             
 });
 
 document.getElementById("delete-selected-links").addEventListener("click", function() {
