@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
+
+      database.ref("links").on("value", function(snapshot) {
+        var links = snapshot.val();
+
+        document.getElementById("toggle-list").innerHTML = Object.keys(links).map(function(link) {
+          return `<li class="toggle-item">
+            <input type="checkbox" id="${link}" name="link">
+            <label for="${link}">${link} (${links[link].url})</label>
+          </li>`;
+        }).join('');
+
+        // get all toggle items
+        var toggleItems = document.querySelectorAll('.toggle-item');
+
+        // set the height of each toggle item
+        toggleItems.forEach(function(item) {
+          item.style.height = item.offsetHeight + 'px';
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="toggle-menu">
+      <input type="checkbox" id="toggle-checkbox">
+      <label for="toggle-checkbox">Toggle Menu</label>
+      <ul id="toggle-list"></ul>
+    </div>
+  </body>
+</html>
