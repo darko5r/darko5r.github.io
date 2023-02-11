@@ -17,15 +17,8 @@
 <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
   <div id="link-list"></div>
   <button id="delete-selected-links">Delete Selected</button>
-  <button id="update-links">Update Links</button>
-  <div id="update-form" style="display: none;">
-    <label for="update-link-name">Link Name:</label>
-    <input type="text" id="update-link-name">
-    <label for="update-link-url">Link URL:</label>
-    <input type="text" id="update-link-url">
-    <button id="save-updated-link">Save</button>
-    <button id="cancel-updated-link">Cancel</button>
-  </div>
+  <button id="update-selected-links">Update Selected</button>
+  
 </div>
 
     
@@ -93,19 +86,25 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
 });
       // your delete selected links button event listener
       
-      var updateForm = document.getElementById("update-form");
-document.getElementById("update-links").addEventListener("click", function() {
-  updateForm.style.display = "block";
-});
-document.getElementById("cancel-updated-link").addEventListener("click", function() {
-  updateForm.style.display = "none";
-});
-document.getElementById("save-updated-link").addEventListener("click", function() {
-  var linkName = document.getElementById("update-link-name").value;
-  var linkUrl = document.getElementById("update-link-url").value;
-  // update the link here
-  updateForm.style.display = "none";
-});
+      // Your update selected links button event listener
+  document.getElementById("update-selected-links").addEventListener("click", function() {
+    var selectedLinks = document.querySelectorAll("#link-list input[type='checkbox']:checked");
+    if (selectedLinks.length === 0) {
+      alert("Please select links to update");
+      return;
+    }
+
+    var newName = prompt("Enter new link name:");
+    var newUrl = prompt("Enter new link URL:");
+    if (!newName || !newUrl) {
+      return;
+    }
+
+    selectedLinks.forEach(function(link) {
+      var parent = link.parentNode;
+      parent.querySelector("span").innerHTML = newName + " (" + newUrl + ")";
+    });
+  });
     </script>
 </body>
 </html>
