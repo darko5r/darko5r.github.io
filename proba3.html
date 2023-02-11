@@ -12,7 +12,12 @@
       <button id="delete-selected-links">Delete Selected</button>
     </div>
     
-    <style>#toggle-button:hover {background-color: yellow;};</style>
+    <style>
+    button.toggle:hover {
+    transform: rotate(360deg);
+    transition: all 0.2s ease-in-out;
+    }
+    </style>
     
     <script>
       // your firebase configuration and setup
