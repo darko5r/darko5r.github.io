@@ -86,25 +86,33 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
 });
       // your delete selected links button event listener
       
-      // Your update selected links button event listener
-  document.getElementById("update-selected-links").addEventListener("click", function() {
-    var selectedLinks = document.querySelectorAll("#link-list input[type='checkbox']:checked");
-    if (selectedLinks.length === 0) {
-      alert("Please select links to update");
-      return;
-    }
+      // Update Selected Links function
+async function updateSelectedLinks() {
+  const linkList = document.getElementById("link-list");
+  const checkboxes = linkList.getElementsByTagName("input");
 
-    var newName = prompt("Enter new link name:");
-    var newUrl = prompt("Enter new link URL:");
-    if (!newName || !newUrl) {
-      return;
+  // Get all selected links
+  const selectedLinks = [];
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      selectedLinks.push(checkboxes[i].value);
     }
+  }
 
-    selectedLinks.forEach(function(link) {
-      var parent = link.parentNode;
-      parent.querySelector("span").innerHTML = newName + " (" + newUrl + ")";
-    });
-  });
+  // Update the selected links in the Firebase Realtime Database
+  for (const id of selectedLinks) {
+    const newLinkName = prompt("Enter the new link name:");
+    const newLinkUrl = prompt("Enter the new link URL:");
+    if (newLinkName && newLinkUrl) {
+      await firebase
+        .database()
+        .ref("links/" + id)
+        .update({
+          url: newLinkUrl,
+        });
+    }
+  }
+}
     </script>
 </body>
 </html>
