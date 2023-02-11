@@ -102,20 +102,21 @@ async function updateSelectedLinks() {
   // Update Selected Links button event listener
   document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 
-  // Update the selected links in the Firebase Realtime Database
-  for (const id of selectedLinks) {
-    const newLinkName = prompt("Enter the new link name:");
-    const newLinkUrl = prompt("Enter the new link URL:");
-    if (newLinkName && newLinkUrl) {
-      await firebase
-        .database()
-        .ref("links/" + id)
-        .update({
-          url: newLinkUrl,
-        });
+  async function updateSelectedLinks() {
+    // Update the selected links in the Firebase Realtime Database
+    for (const id of selectedLinks) {
+      const newLinkName = prompt("Enter the new link name:");
+      const newLinkUrl = prompt("Enter the new link URL:");
+      if (newLinkName && newLinkUrl) {
+        await firebase
+          .database()
+          .ref("links/" + id)
+          .update({
+            url: newLinkUrl,
+          });
+      }
     }
   }
-}
     </script>
 </body>
 </html>
