@@ -89,8 +89,8 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       // update
       
       document.getElementById("update-selected-links").addEventListener("click", function() {
-  const linkList = document.getElementById("link-list");
-  const checkboxes = linkList.getElementsByTagName("input");
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       const newLink = prompt("Enter the updated link for the selected item:");
