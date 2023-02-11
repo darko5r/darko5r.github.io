@@ -98,6 +98,9 @@ async function updateSelectedLinks() {
       selectedLinks.push(checkboxes[i].value);
     }
   }
+  
+  // Update Selected Links button event listener
+  document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 
   // Update the selected links in the Firebase Realtime Database
   for (const id of selectedLinks) {
