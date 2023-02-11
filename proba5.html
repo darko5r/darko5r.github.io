@@ -60,23 +60,19 @@
   document.getElementById("toggle-menu").style.display = "none";
 
       // your firebase event listener
-db.collection("links").onSnapshot(snapshot => {
-  let links = {};
-  snapshot.forEach(doc => {
-    links[doc.id] = doc.data();
-  });
-  console.log(links);
-
-  let linkList = document.querySelector("#link-list");
+      
+      database.ref("links").on("value", function(snapshot) {
+  var links = snapshot.val();
+  var linkList = document.getElementById("link-list");
   linkList.innerHTML = "";
-  Object.keys(links).forEach(link => {
-    linkList.innerHTML += `
-      <div>
-        <input type="checkbox" id="${link}" value="${link}">
-        <label for="${link}">${link} (${links[link].url})</label>
-      </div>
-    `;
-  });
+  for (var link in links) {
+  linkList.innerHTML += `
+  <div>
+    <input type="checkbox" id="${link}" value="${link}">
+    <label for="${link}">${link} (${links[link].url})</label>
+  </div>
+`;
+}             
 });
          
    document.getElementById("update-selected-links").addEventListener("click", function() {
