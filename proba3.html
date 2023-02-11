@@ -88,14 +88,13 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       
       // update
       
-     document.getElementById("update-selected-links").addEventListener("click", function() {
+    document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       var newLink = prompt("Enter the updated link for the selected item:");
-      console.log("newLink:", newLink);
-      if (newLink) {
+      if (newLink !== null) {
         database.ref("links").child(checkboxes[i].id).set({
           link: newLink
         });
