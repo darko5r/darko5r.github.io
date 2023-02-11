@@ -88,32 +88,18 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       
       // update
       
-      function updateSelectedLinks() {
-  const selectedLinks = [];
+      document.getElementById("update-selected-links-button").addEventListener("click", function() {
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
 
-  // Get all selected links
-  const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
-  for (let i = 0; i < checkboxes.length; i++) {
-    const checkbox = checkboxes[i];
-    const parent = checkbox.parentElement;
-    const link = parent.querySelector("a");
-    selectedLinks.push(link.href);
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      var newLink = prompt("Enter the updated link for " + checkboxes[i].id, "");
+      database.ref("links").child(checkboxes[i].id).set(newLink);
+    }
   }
+});
 
-  // Update the selected links display
-  const selectedLinksContainer = document.getElementById("selected-links-container");
-  selectedLinksContainer.innerHTML = "";
-  for (let i = 0; i < selectedLinks.length; i++) {
-    const link = selectedLinks[i];
-    const linkDisplay = document.createElement("div");
-    linkDisplay.innerHTML = link;
-    selectedLinksContainer.appendChild(linkDisplay);
-  }
-}
-
-// Add the updateSelectedLinks function as an event listener for the "Update Selected Links" button
-const updateSelectedLinksButton = document.getElementById("update-selected-links-button");
-updateSelectedLinksButton.addEventListener("click", updateSelectedLinks);
     </script>
 </body>
 </html>
