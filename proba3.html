@@ -86,37 +86,34 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
 });
       // your delete selected links button event listener
       
-      // Update Selected Links function
-async function updateSelectedLinks() {
-  const linkList = document.getElementById("link-list");
-  const checkboxes = linkList.getElementsByTagName("input");
+      // update
+      
+      function updateSelectedLinks() {
+  const selectedLinks = [];
 
   // Get all selected links
-  const selectedLinks = [];
+  const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
   for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      selectedLinks.push(checkboxes[i].value);
-    }
+    const checkbox = checkboxes[i];
+    const parent = checkbox.parentElement;
+    const link = parent.querySelector("a");
+    selectedLinks.push(link.href);
   }
-  
-  // Update Selected Links button event listener
-  document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 
-  async function updateSelectedLinks() {
-    // Update the selected links in the Firebase Realtime Database
-    for (const id of selectedLinks) {
-      const newLinkName = prompt("Enter the new link name:");
-      const newLinkUrl = prompt("Enter the new link URL:");
-      if (newLinkName && newLinkUrl) {
-        await firebase
-          .database()
-          .ref("links/" + id)
-          .update({
-            url: newLinkUrl,
-          });
-      }
-    }
+  // Update the selected links display
+  const selectedLinksContainer = document.getElementById("selected-links-container");
+  selectedLinksContainer.innerHTML = "";
+  for (let i = 0; i < selectedLinks.length; i++) {
+    const link = selectedLinks[i];
+    const linkDisplay = document.createElement("div");
+    linkDisplay.innerHTML = link;
+    selectedLinksContainer.appendChild(linkDisplay);
   }
+}
+
+// Add the updateSelectedLinks function as an event listener for the "Update Selected Links" button
+const updateSelectedLinksButton = document.getElementById("update-selected-links-button");
+updateSelectedLinksButton.addEventListener("click", updateSelectedLinks);
     </script>
 </body>
 </html>
