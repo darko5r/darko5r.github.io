@@ -4,64 +4,45 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-
-  var firebaseConfig = {
-    apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-    authDomain: "blog-25253.firebaseapp.com",
-    databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "blog-25253",
-    storageBucket: "blog-25253.appspot.com",
-    messagingSenderId: "906101390805",
-    appId: "1:906101390805:web:871c51f2486921f443115c",
-    measurementId: "G-MY3P2TWN4L"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  var database = firebase.database();
-              
-  var links = [];
-  database.ref().once('value').then(function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-      var childData = childSnapshot.val();
-      links.push({
-        id: childSnapshot.key,
-        name: childData.name,
-        url: childData.url
-      });
-    });
-    renderLinks();
-  });
-  
-  function renderLinks() {
-    var linkList = document.getElementById('linkList');
-    links.forEach(function(link) {
-      var li = document.createElement('li');
-      var checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = link.id;
-      li.appendChild(checkbox);
-      li.appendChild(document.createTextNode(link.name + ' (' + link.url + ')'));
-      linkList.appendChild(li);
-    });
-    var updateButton = document.createElement('button');
-    updateButton.innerHTML = 'Update';
-    updateButton.addEventListener('click', function() {
-      var checkedLinks = links.filter(function(link) {
-        return link.isChecked;
-      });
-      checkedLinks.forEach(function(link) {
-        database.ref(link.id).update({
-          name: prompt('Enter the new name for link ' + link.id),
-          url: prompt('Enter the new URL for link ' + link.id)
-        });
-      });
-    });
-    linkList.appendChild(updateButton);
-  }
-  </script>
-
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
+    </script>
   </head>
   <body>
-    <ul id="linkList"></ul>
+    <div id="linksContainer"></div>
+    <button id="updateButton">Update</button>
+    <script>
+      database.ref("/").once("value").then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          var childData = childSnapshot.val();
+          var link = `<div><input type="checkbox" id="${childSnapshot.key}"/>${childData.name} (${childData.url})</div>`;
+          document.getElementById("linksContainer").innerHTML += link;
+        });
+      });
+      document.getElementById("updateButton").addEventListener("click", function() {
+        var checkboxes = document.querySelectorAll("input[type=checkbox]");
+        checkboxes.forEach(function(checkbox) {
+          if (checkbox.checked) {
+            var name = prompt("Enter new name:");
+            var url = prompt("Enter new URL:");
+            database.ref(checkbox.id).update({
+              name: name,
+              url: url
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>
+
