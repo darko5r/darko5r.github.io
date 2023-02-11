@@ -67,11 +67,11 @@
   linkList.innerHTML = "";
   for (var link in links) {
   linkList.innerHTML += `
-  <div>
-    <input type="checkbox" id="${link}" value="${link}">
-    <label for="${link}">${link} (${links[link].url})</label>
-  </div>
-`;
+    <div>
+      <input type="checkbox" id="${link}">
+      <label for="${link}">${link} (${links[link].url})</label>
+    </div>
+  `;
 }             
 });
          
