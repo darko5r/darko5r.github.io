@@ -93,15 +93,18 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var newLink = prompt("Enter the updated link for the selected item:");
-      if (newLink !== null) {
-        database.ref("links").child(checkboxes[i].id).set({
-          link: newLink
-        });
-      }
+      setTimeout(function() {
+        var newLink = prompt("Enter the updated link for the selected item:");
+        if (newLink) {
+          database.ref("links").child(checkboxes[i].id).set({
+            link: newLink
+          });
+        }
+      }, 0);
     }
   }
 });
+
 
     </script>
 </body>
