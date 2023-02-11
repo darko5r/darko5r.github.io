@@ -5,19 +5,19 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
   </head>
   <body>
+    
+    <style>
+    #toggle-button:hover {
+      transform: rotate(360deg);
+      transition: transform 0.3s ease-in-out;
+    }
+    </style>
 
     <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">+</button></p></div>
     <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
       <div id="link-list"></div>
       <button id="delete-selected-links">Delete Selected</button>
-    </div>
-    
-    <style>
-    button.toggle:hover {
-    transform: rotate(360deg);
-    transition: all 0.2s ease-in-out;
-    }
-    </style>
+    </div>  
     
     <script>
       // your firebase configuration and setup
