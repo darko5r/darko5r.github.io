@@ -89,13 +89,16 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       // update
       
       document.getElementById("update-selected-links").addEventListener("click", function() {
-  var linkList = document.getElementById("link-list");
-  var checkboxes = linkList.getElementsByTagName("input");
-
-  for (var i = 0; i < checkboxes.length; i++) {
+  const linkList = document.getElementById("link-list");
+  const checkboxes = linkList.getElementsByTagName("input");
+  for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      var newLink = prompt("Enter the updated link for " + checkboxes[i].id, "");
-      database.ref("links").child(checkboxes[i].id).set(newLink);
+      const newLink = prompt("Enter the updated link for the selected item:");
+      if (newLink) {
+        database.ref("links").child(checkboxes[i].id).set({
+          link: newLink
+        });
+      }
     }
   }
 });
