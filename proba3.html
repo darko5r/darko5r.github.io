@@ -88,49 +88,43 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       
       // update
       
-      document.getElementById("update-selected-links").addEventListener("click", function() {
+   document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
-
-  var form = document.createElement("form");
-  form.style.display = "flex";
-  form.style.flexDirection = "column";
-  form.style.alignItems = "center";
-  form.style.marginTop = "10px";
-
-  var inputName = document.createElement("input");
-  inputName.type = "text";
-  inputName.placeholder = "Link Name";
-  form.appendChild(inputName);
-
-  var inputLink = document.createElement("input");
-  inputLink.type = "text";
-  inputLink.placeholder = "Link URL";
-  form.appendChild(inputLink);
-
-  var updateButton = document.createElement("button");
-  updateButton.textContent = "Update Selected";
-  form.appendChild(updateButton);
-
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      linkList.insertBefore(form, checkboxes[i].nextSibling);
-      break;
+      // Create input fields for link name and URL
+      var linkNameInput = document.createElement("input");
+      linkNameInput.type = "text";
+      linkNameInput.id = "link-name-input";
+      linkNameInput.placeholder = "Link name";
+
+      var linkUrlInput = document.createElement("input");
+      linkUrlInput.type = "text";
+      linkUrlInput.id = "link-url-input";
+      linkUrlInput.placeholder = "Link URL";
+
+      // Create an "Update" button
+      var updateButton = document.createElement("button");
+      updateButton.id = "update-button";
+      updateButton.innerText = "Update";
+      updateButton.addEventListener("click", function() {
+        var newLinkName = linkNameInput.value;
+        var newLinkUrl = linkUrlInput.value;
+        if (newLinkName && newLinkUrl) {
+          database.ref("links").child(checkboxes[i].id).set({
+            linkName: newLinkName,
+            linkUrl: newLinkUrl
+          });
+        }
+      });
+
+      // Add the input fields and update button to the page
+      linkList.appendChild(linkNameInput);
+      linkList.appendChild(linkUrlInput);
+      linkList.appendChild(updateButton);
     }
   }
-
-  updateButton.addEventListener("click", function(event) {
-    event.preventDefault();
-
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        database.ref("links").child(checkboxes[i].id).set({
-          link: inputLink.value,
-          name: inputName.value
-        });
-      }
-    }
-  });
 });
       
 
