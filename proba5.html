@@ -4,7 +4,6 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-      
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -18,34 +17,43 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-                  
-      database.ref("links").on("value", function(snapshot) {
+
+      var linksRef = database.ref("Links");
+
+      linksRef.on("value", function(snapshot) {
         var links = snapshot.val();
-        var linksHTML = "";
-        for (var link in links) {
-          linksHTML += `<input type="checkbox" id="link-${link}" value="${link}">`;
-          linksHTML += `<label for="link-${link}">${links[link].name} (${links[link].url})</label><br>`;
+
+        var linksList = document.getElementById("linksList");
+        linksList.innerHTML = "";
+
+        for (var key in links) {
+          var link = links[key];
+
+          var name = link.name;
+          var url = link.url;
+
+          var listItem = document.createElement("li");
+          listItem.innerHTML = `<input type="checkbox" id="${key}" data-name="${name}" data-url="${url}" /> ${name} (${url})`;
+          linksList.appendChild(listItem);
         }
-        document.getElementById("links").innerHTML = linksHTML;
       });
-      
-      function updateSelectedLinks() {
-        var checkedLinks = document.querySelectorAll('input[type="checkbox"]:checked');
-        for (var i = 0; i < checkedLinks.length; i++) {
-          var linkId = checkedLinks[i].value;
-          var name = prompt("Enter the new name for link " + linkId);
-          var url = prompt("Enter the new URL for link " + linkId);
-          database.ref("links/" + linkId).update({
-            name: name,
-            url: url
-          });
-        }
+
+      function updateLinks() {
+        var checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
+
+        checkboxes.forEach(function(checkbox) {
+          var key = checkbox.id;
+          var name = checkbox.getAttribute("data-name");
+          var url = checkbox.getAttribute("data-url");
+
+          var linkRef = linksRef.child(key);
+          linkRef.update({ name: name, url: url });
+        });
       }
-      
     </script>
   </head>
   <body>
-    <div id="links"></div>
-    <button onclick="updateSelectedLinks()">Update Selected Links</button>
+    <ul id="linksList"></ul>
+    <button onclick="updateLinks()">Update</button>
   </body>
 </html>
