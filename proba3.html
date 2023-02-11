@@ -96,8 +96,9 @@ document.getElementById("delete-selected-links").addEventListener("click", funct
       var newLink = prompt("Enter the updated link for the selected item:");
       if (newLink) {
         database.ref("links").child(checkboxes[i].id).set({
-          link: newLink
-        });
+        url: newLink
+       });
+
       }
     }
   }
