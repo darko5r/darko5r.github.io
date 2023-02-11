@@ -4,56 +4,64 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
     <script>
-      var firebaseConfig = {
-        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-        authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "blog-25253",
-        storageBucket: "blog-25253.appspot.com",
-        messagingSenderId: "906101390805",
-        appId: "1:906101390805:web:871c51f2486921f443115c",
-        measurementId: "G-MY3P2TWN4L"
-      };
 
-      firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();
+  var firebaseConfig = {
+    apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+    authDomain: "blog-25253.firebaseapp.com",
+    databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "blog-25253",
+    storageBucket: "blog-25253.appspot.com",
+    messagingSenderId: "906101390805",
+    appId: "1:906101390805:web:871c51f2486921f443115c",
+    measurementId: "G-MY3P2TWN4L"
+  };
 
-      var linksRef = database.ref("Links");
-
-      linksRef.on("value", function(snapshot) {
-        var links = snapshot.val();
-
-        var linksList = document.getElementById("linksList");
-        linksList.innerHTML = "";
-
-        for (var key in links) {
-          var link = links[key];
-
-          var name = link.name;
-          var url = link.url;
-
-          var listItem = document.createElement("li");
-          listItem.innerHTML = `<input type="checkbox" id="${key}" data-name="${name}" data-url="${url}" /> ${name} (${url})`;
-          linksList.appendChild(listItem);
-        }
+  firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
+              
+  var links = [];
+  database.ref().once('value').then(function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var childData = childSnapshot.val();
+      links.push({
+        id: childSnapshot.key,
+        name: childData.name,
+        url: childData.url
       });
-
-      function updateLinks() {
-        var checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
-
-        checkboxes.forEach(function(checkbox) {
-          var key = checkbox.id;
-          var name = checkbox.getAttribute("data-name");
-          var url = checkbox.getAttribute("data-url");
-
-          var linkRef = linksRef.child(key);
-          linkRef.update({ name: name, url: url });
+    });
+    renderLinks();
+  });
+  
+  function renderLinks() {
+    var linkList = document.getElementById('linkList');
+    links.forEach(function(link) {
+      var li = document.createElement('li');
+      var checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = link.id;
+      li.appendChild(checkbox);
+      li.appendChild(document.createTextNode(link.name + ' (' + link.url + ')'));
+      linkList.appendChild(li);
+    });
+    var updateButton = document.createElement('button');
+    updateButton.innerHTML = 'Update';
+    updateButton.addEventListener('click', function() {
+      var checkedLinks = links.filter(function(link) {
+        return link.isChecked;
+      });
+      checkedLinks.forEach(function(link) {
+        database.ref(link.id).update({
+          name: prompt('Enter the new name for link ' + link.id),
+          url: prompt('Enter the new URL for link ' + link.id)
         });
-      }
-    </script>
+      });
+    });
+    linkList.appendChild(updateButton);
+  }
+  </script>
+
   </head>
   <body>
-    <ul id="linksList"></ul>
-    <button onclick="updateLinks()">Update</button>
+    <ul id="linkList"></ul>
   </body>
 </html>
