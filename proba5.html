@@ -3,27 +3,8 @@
   <head>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
-  </head>
-  <body>
-    
-    <style>
-    #toggle-button:hover {
-      transform: rotate(360deg);
-      transition: transform 0.3s ease-in-out;
-    }
-    </style>
-
-    <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
-<div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
-  <div id="link-list"></div>
- 
-  <button id="update-selected-links">Update Selected</button>
-  
-</div>
-
-    
     <script>
-      // your firebase configuration and setup
+      
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -37,83 +18,34 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-      
-      
-      var menuExpanded = false;
-
-  function toggleMenu() {
-    var toggleMenu = document.getElementById("toggle-menu");
-    var toggleButton = document.getElementById("toggle-button");
-
-    if (menuExpanded) {
-      toggleMenu.style.display = "none";
-      toggleButton.textContent = "➕";
-    } else {
-      toggleMenu.style.display = "block";
-      toggleButton.textContent = "➖";
-    }
-
-    menuExpanded = !menuExpanded;
-  }
-
-  document.getElementById("toggle-button").addEventListener("click", toggleMenu);
-  document.getElementById("toggle-menu").style.display = "none";
-
-      // your firebase event listener
-      
+                  
       database.ref("links").on("value", function(snapshot) {
-  var links = snapshot.val();
-  var linkList = document.getElementById("link-list");
-  linkList.innerHTML = "";
-  for (var link in links) {
-  linkList.innerHTML += `
-    <div>
-      <input type="checkbox" id="${link}">
-      <label for="${link}">${link} (${links[link].url})</label>
-    </div>
-  `;
-}             
-});
-         
-   document.getElementById("update-selected-links").addEventListener("click", function() {
-  var linkList = document.getElementById("link-list");
-  var checkboxes = linkList.getElementsByTagName("input");
-  for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      // Create input fields for link name and URL
-      var linkNameInput = document.createElement("input");
-      linkNameInput.type = "text";
-      linkNameInput.id = "link-name-input";
-      linkNameInput.placeholder = "Link name";
-
-      var linkUrlInput = document.createElement("input");
-      linkUrlInput.type = "text";
-      linkUrlInput.id = "link-url-input";
-      linkUrlInput.placeholder = "Link URL";
-
-      // Create an "Update" button
-      var updateButton = document.createElement("button");
-      updateButton.id = "update-button";
-      updateButton.innerText = "Update";
-      updateButton.addEventListener("click", function() {
-        var newLinkName = linkNameInput.value;
-        var newLinkUrl = linkUrlInput.value;
-        if (newLinkName && newLinkUrl) {
-          database.ref("links").child(checkboxes[i].id).set({
-            linkName: newLinkName,
-            linkUrl: newLinkUrl
+        var links = snapshot.val();
+        var linksHTML = "";
+        for (var link in links) {
+          linksHTML += `<input type="checkbox" id="link-${link}" value="${link}">`;
+          linksHTML += `<label for="link-${link}">${links[link].name} (${links[link].url})</label><br>`;
+        }
+        document.getElementById("links").innerHTML = linksHTML;
+      });
+      
+      function updateSelectedLinks() {
+        var checkedLinks = document.querySelectorAll('input[type="checkbox"]:checked');
+        for (var i = 0; i < checkedLinks.length; i++) {
+          var linkId = checkedLinks[i].value;
+          var name = prompt("Enter the new name for link " + linkId);
+          var url = prompt("Enter the new URL for link " + linkId);
+          database.ref("links/" + linkId).update({
+            name: name,
+            url: url
           });
         }
-      });
-
-      // Add the input fields and update button to the page
-      linkList.appendChild(linkNameInput);
-      linkList.appendChild(linkUrlInput);
-      linkList.appendChild(updateButton);
-    }
-  }
-});
+      }
       
     </script>
-</body>
-</html> 
+  </head>
+  <body>
+    <div id="links"></div>
+    <button onclick="updateSelectedLinks()">Update Selected Links</button>
+  </body>
+</html>
