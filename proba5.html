@@ -74,18 +74,13 @@
   `;
 }             
 });
-         
-  document.getElementById("update-selected-links").addEventListener("click", function() {
+      
+      document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      // Create input fields for link name and URL
-      var linkNameInput = document.createElement("input");
-      linkNameInput.type = "text";
-      linkNameInput.id = "link-name-input";
-      linkNameInput.placeholder = "Link name";
-
+      // Create an input field for the link URL
       var linkUrlInput = document.createElement("input");
       linkUrlInput.type = "text";
       linkUrlInput.id = "link-url-input";
@@ -96,25 +91,22 @@
       updateButton.id = "update-button";
       updateButton.innerText = "Update";
       updateButton.addEventListener("click", function() {
-        var newLinkName = linkNameInput.value;
         var newLinkUrl = linkUrlInput.value;
-        if (newLinkName && newLinkUrl) {
-          var linkRef = database.ref("links").child(checkboxes[i].id);
+        if (newLinkUrl) {
+          var linkRef = database.ref("tableName").child(checkboxes[i].id);
           linkRef.update({
-            name: newLinkName,
             url: newLinkUrl
           });
         }
       });
 
-      // Add the input fields and update button to the page
-      linkList.appendChild(linkNameInput);
+      // Add the input field and update button to the page
       linkList.appendChild(linkUrlInput);
       linkList.appendChild(updateButton);
     }
   }
 });
-      
+         
     </script>
 </body>
 </html> 
