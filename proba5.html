@@ -75,11 +75,17 @@
 }             
 });
       
-      document.getElementById("update-selected-links").addEventListener("click", function() {
+  document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
+      // Create an input field for the table name
+      var tableNameInput = document.createElement("input");
+      tableNameInput.type = "text";
+      tableNameInput.id = "table-name-input";
+      tableNameInput.placeholder = "Table name";
+
       // Create an input field for the link URL
       var linkUrlInput = document.createElement("input");
       linkUrlInput.type = "text";
@@ -91,16 +97,18 @@
       updateButton.id = "update-button";
       updateButton.innerText = "Update";
       updateButton.addEventListener("click", function() {
+        var newTableName = tableNameInput.value;
         var newLinkUrl = linkUrlInput.value;
-        if (newLinkUrl) {
-          var linkRef = database.ref("tableName").child(checkboxes[i].id);
+        if (newTableName && newLinkUrl) {
+          var linkRef = database.ref(newTableName).child(checkboxes[i].id);
           linkRef.update({
             url: newLinkUrl
           });
         }
       });
 
-      // Add the input field and update button to the page
+      // Add the input fields and update button to the page
+      linkList.appendChild(tableNameInput);
       linkList.appendChild(linkUrlInput);
       linkList.appendChild(updateButton);
     }
