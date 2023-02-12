@@ -23,7 +23,7 @@
 
     
     <script>
-      // your firebase configuration and setup
+      // firebase configuration and setup
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -59,7 +59,7 @@
   document.getElementById("toggle-button").addEventListener("click", toggleMenu);
   document.getElementById("toggle-menu").style.display = "none";
 
-      // your firebase event listener
+      // firebase event listener
       
       database.ref("links").on("value", function(snapshot) {
   var links = snapshot.val();
@@ -75,7 +75,7 @@
 }             
 });
          
-   document.getElementById("update-selected-links").addEventListener("click", function() {
+  document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
@@ -99,7 +99,8 @@
         var newLinkName = linkNameInput.value;
         var newLinkUrl = linkUrlInput.value;
         if (newLinkName && newLinkUrl) {
-          database.ref("links").child(checkboxes[i].id).set({
+          var linkRef = database.ref("links").child(checkboxes[i].id);
+          linkRef.update({
             linkName: newLinkName,
             linkUrl: newLinkUrl
           });
