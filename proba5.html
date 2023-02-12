@@ -80,13 +80,12 @@
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      // Create an input field for the link name
+      // Create input fields for link name and URL
       var linkNameInput = document.createElement("input");
       linkNameInput.type = "text";
       linkNameInput.id = "link-name-input";
       linkNameInput.placeholder = "Link name";
 
-      // Create an input field for the link URL
       var linkUrlInput = document.createElement("input");
       linkUrlInput.type = "text";
       linkUrlInput.id = "link-url-input";
@@ -100,10 +99,19 @@
         var newLinkName = linkNameInput.value;
         var newLinkUrl = linkUrlInput.value;
         if (newLinkName && newLinkUrl) {
-          var linkRef = database.ref("links").child(checkboxes[i].id);
-          linkRef.update({
-            linkName: newLinkName,
-            linkUrl: newLinkUrl
+          var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
+          var newRef = firebase.database().ref("links/" + newLinkName);
+          oldRef.once("value", function(snapshot) {
+            var updates = {};
+            updates[newLinkName] = snapshot.val();
+            updates[newLinkName].url = newLinkUrl;
+            newRef.set(updates[newLinkName], function(error) {
+              if (!error) { 
+                oldRef.remove();
+              } else {
+                console.log("Error in updating the name of the child node: " + error);
+              }
+            });
           });
         }
       });
