@@ -101,8 +101,8 @@
         if (newLinkName && newLinkUrl) {
           var linkRef = database.ref("links").child(checkboxes[i].id);
           linkRef.update({
-            linkName: newLinkName,
-            linkUrl: newLinkUrl
+            name: newLinkName,
+            url: newLinkUrl
           });
         }
       });
