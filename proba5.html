@@ -142,12 +142,15 @@ document.addEventListener("click", function(event) {
       }
     }
     
-    // Remove input fields
+    // Remove input fields and "Update" button
     if (linkNameInput) {
       linkNameInput.remove();
     }
     if (linkUrlInput) {
       linkUrlInput.remove();
+    }
+    if (updateButton) {
+      updateButton.remove();
     }
   }
 });
