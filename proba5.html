@@ -75,19 +75,13 @@
 }             
 });
       
-  document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
-document.addEventListener("click", function(event) {
-  if (event.target.closest("#link-list") || event.target.closest("#update-selected-links")) {
-    return;
-  }
-  clearSelectedLinks();
-});
-
-function updateSelectedLinks() {
+  // Add an event listener to update selected links
+document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
+  
   for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
+    if (checkboxes[i].checked) {
       // Create input fields for link name and URL
       var linkNameInput = document.createElement("input");
       linkNameInput.type = "text";
@@ -114,37 +108,43 @@ function updateSelectedLinks() {
             updates[newLinkName] = snapshot.val();
             updates[newLinkName].url = newLinkUrl;
             newRef.set(updates[newLinkName], function(error) {
-              if (!error) {
+              if (!error) { 
                 oldRef.remove();
-                clearSelectedLinks();
               } else {
                 console.log("Error in updating the name of the child node: " + error);
               }
             });
           });
+          
+          // Remove the input fields and "Update" button
+          linkList.removeChild(linkNameInput);
+          linkList.removeChild(linkUrlInput);
+          linkList.removeChild(updateButton);
         }
       });
 
-      // Add the input fields and update button to the page
+      // Add the input fields and "Update" button to the page
       linkList.appendChild(linkNameInput);
       linkList.appendChild(linkUrlInput);
       linkList.appendChild(updateButton);
     }
   }
-}
-
-function clearSelectedLinks() {
-  var linkList = document.getElementById("link-list");
-  var inputs = linkList.getElementsByTagName("input");
-  var updateButton = document.getElementById("update-button");
-  for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i].id === "link-name-input" || inputs[i].id === "link-url-input" || inputs[i].id === "update-button") {
-      linkList.removeChild(inputs[i]);
-    } else if (inputs[i].type === "checkbox" && inputs[i].checked) {
-      inputs[i].checked = false;
+  
+  // Add an event listener to clear selected checkboxes and input fields
+  window.addEventListener("click", function(event) {
+    if (!event.target.matches("#update-selected-links, #link-name-input, #link-url-input, #update-button")) {
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          checkboxes[i].checked = false;
+        }
+      }
+      
+      linkList.removeChild(linkNameInput);
+      linkList.removeChild(linkUrlInput);
+      linkList.removeChild(updateButton);
     }
-  }
-}
+  });
+});
          
     </script>
 </body>
