@@ -87,7 +87,6 @@ document.addEventListener("click", function(event) {
 function updateSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
-  var inputFieldsExist = false;
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
       // Check if input fields already exist
@@ -96,19 +95,19 @@ function updateSelectedLinks() {
         // Create input fields for link name and URL
         var linkNameInput = document.createElement("input");
         linkNameInput.type = "text";
-        linkNameInput.id = "link-name-input-" + i;
+        linkNameInput.id = "link-name-input";
         linkNameInput.className = "link-input-fields";
         linkNameInput.placeholder = "Link name";
 
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
-        linkUrlInput.id = "link-url-input-" + i;
+        linkUrlInput.id = "link-url-input";
         linkUrlInput.className = "link-input-fields";
         linkUrlInput.placeholder = "Link URL";
 
         // Create an "Update" button
         var updateButton = document.createElement("button");
-        updateButton.id = "update-button-" + i;
+        updateButton.id = "update-button";
         updateButton.className = "link-input-fields";
         updateButton.innerText = "Update";
         updateButton.addEventListener("click", function() {
@@ -137,14 +136,8 @@ function updateSelectedLinks() {
         linkList.appendChild(linkNameInput);
         linkList.appendChild(linkUrlInput);
         linkList.appendChild(updateButton);
-        inputFieldsExist = true;
       }
     }
-  }
-  
-  // Clear input fields if no checkboxes are selected
-  if (!inputFieldsExist) {
-    clearSelectedLinks();
   }
 }
       
