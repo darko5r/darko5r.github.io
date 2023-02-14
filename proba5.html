@@ -79,7 +79,23 @@
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
 
-  if (!document.getElementById("link-name-input")) {
+  if (document.getElementById("update-selected-message")) {
+    // do nothing if the message is already displayed
+    return;
+  }
+
+  if (document.getElementById("link-name-input") || document.getElementById("link-url-input") || document.getElementById("update-button")) {
+    // remove the input fields and update button if they already exist
+    document.getElementById("link-name-input").remove();
+    document.getElementById("link-url-input").remove();
+    document.getElementById("update-button").remove();
+    
+    // clear the checkboxes
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+  } else {
+    // create the input fields and update button if they don't exist
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i].checked) {
         // Create input fields for link name and URL
@@ -114,17 +130,9 @@
         linkList.appendChild(updateButton);
       }
     }
-  } else {
-    var toggleButton = document.getElementById("toggle-button");
-    toggleButton.addEventListener("click", function() {
-      if (!toggleButton.classList.contains("toggled")) {
-        linkList.removeChild(document.getElementById("link-name-input"));
-        linkList.removeChild(document.getElementById("link-url-input"));
-        linkList.removeChild(document.getElementById("update-button"));
-      }
-    });
   }
 });
+
          
     </script>
 </body>
