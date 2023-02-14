@@ -132,8 +132,7 @@ function updateSelectedLinks() {
     }
   }
 }
-
-function clearSelectedLinks() {
+      function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var inputs = linkList.getElementsByTagName("input");
   var updateButton = document.getElementById("update-button");
@@ -143,9 +142,6 @@ function clearSelectedLinks() {
     } else if (inputs[i].type === "checkbox" && inputs[i].checked) {
       inputs[i].checked = false;
     }
-  }
-  if (updateButton) {
-    updateButton.remove();
   }
 }
          
