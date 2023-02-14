@@ -130,11 +130,11 @@ document.addEventListener("click", function(event) {
   var toggleMenu = document.getElementById("toggle-menu");
   var linkNameInput = document.getElementById("link-name-input");
   var linkUrlInput = document.getElementById("link-url-input");
+  var linkList = document.getElementById("link-list");
   
-  // Check if the click target is not within the toggle menu or input fields
-  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput) {
+  // Check if the click target is not within the toggle menu or input fields or the link list area
+  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput && !linkList.contains(event.target)) {
     // Clear selected checkboxes
-    var linkList = document.getElementById("link-list");
     var checkboxes = linkList.getElementsByTagName("input");
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i].checked) {
