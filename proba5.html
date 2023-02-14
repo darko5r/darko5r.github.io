@@ -123,6 +123,34 @@
     }
   }
 });
+      
+      // Add click event listener to the document object
+document.addEventListener("click", function(event) {
+  // Get references to the toggle menu and input fields
+  var toggleMenu = document.getElementById("toggle-menu");
+  var linkNameInput = document.getElementById("link-name-input");
+  var linkUrlInput = document.getElementById("link-url-input");
+  
+  // Check if the click target is not within the toggle menu or input fields
+  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput) {
+    // Clear selected checkboxes
+    var linkList = document.getElementById("link-list");
+    var checkboxes = linkList.getElementsByTagName("input");
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].checked) {
+        checkboxes[i].checked = false;
+      }
+    }
+    
+    // Remove input fields
+    if (linkNameInput) {
+      linkNameInput.remove();
+    }
+    if (linkUrlInput) {
+      linkUrlInput.remove();
+    }
+  }
+});
          
     </script>
 </body>
