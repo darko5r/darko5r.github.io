@@ -78,54 +78,52 @@
   document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      // Create input fields for link name and URL
+      var linkNameInput = document.createElement("input");
+      linkNameInput.type = "text";
+      linkNameInput.id = "link-name-input";
+      linkNameInput.placeholder = "Link name";
 
-  if (!document.getElementById("link-name-input")) {
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        // Create input fields for link name and URL
-        var linkNameInput = document.createElement("input");
-        linkNameInput.type = "text";
-        linkNameInput.id = "link-name-input";
-        linkNameInput.placeholder = "Link name";
+      var linkUrlInput = document.createElement("input");
+      linkUrlInput.type = "text";
+      linkUrlInput.id = "link-url-input";
+      linkUrlInput.placeholder = "Link URL";
 
-        var linkUrlInput = document.createElement("input");
-        linkUrlInput.type = "text";
-        linkUrlInput.id = "link-url-input";
-        linkUrlInput.placeholder = "Link URL";
-
-        // Create an "Update" button
-        var updateButton = document.createElement("button");
-        updateButton.id = "update-button";
-        updateButton.innerText = "Update";
-        updateButton.addEventListener("click", function() {
-          var newLinkName = linkNameInput.value;
-          var newLinkUrl = linkUrlInput.value;
-          if (newLinkName && newLinkUrl) {
-            database.ref("links").child(checkboxes[i].id).set({
-              linkName: newLinkName,
-              linkUrl: newLinkUrl
+      // Create an "Update" button
+      var updateButton = document.createElement("button");
+      updateButton.id = "update-button";
+      updateButton.innerText = "Update";
+      updateButton.addEventListener("click", function() {
+        var newLinkName = linkNameInput.value;
+        var newLinkUrl = linkUrlInput.value;
+        if (newLinkName && newLinkUrl) {
+          var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
+          var newRef = firebase.database().ref("links/" + newLinkName);
+          oldRef.once("value", function(snapshot) {
+            var updates = {};
+            updates[newLinkName] = snapshot.val();
+            updates[newLinkName].url = newLinkUrl;
+            newRef.set(updates[newLinkName], function(error) {
+              if (!error) { 
+                oldRef.remove();
+              } else {
+                console.log("Error in updating the name of the child node: " + error);
+              }
             });
-          }
-        });
+          });
+        }
+      });
 
-        // Add the input fields and update button to the page
-        linkList.appendChild(linkNameInput);
-        linkList.appendChild(linkUrlInput);
-        linkList.appendChild(updateButton);
-      }
+      // Add the input fields and update button to the page
+      linkList.appendChild(linkNameInput);
+      linkList.appendChild(linkUrlInput);
+      linkList.appendChild(updateButton);
     }
-  } else {
-    var toggleButton = document.getElementById("toggle-button");
-    toggleButton.addEventListener("click", function() {
-      if (!toggleButton.classList.contains("toggled")) {
-        linkList.removeChild(document.getElementById("link-name-input"));
-        linkList.removeChild(document.getElementById("link-url-input"));
-        linkList.removeChild(document.getElementById("update-button"));
-      }
-    });
   }
 });
-        
+         
     </script>
 </body>
 </html>
