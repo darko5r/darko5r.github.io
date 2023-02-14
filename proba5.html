@@ -87,28 +87,30 @@ document.addEventListener("click", function(event) {
 function updateSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
+  var count = 0;
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
-      // Check if input fields already exist
-      var existingInputFields = linkList.getElementsByClassName("link-input-fields");
-      if (existingInputFields.length === 0) {
-        // Create input fields for link name and URL
+      count++;
+      // Check if input fields for this link already exist
+      var existingInputFields = document.getElementById("input-fields-" + checkboxes[i].id);
+      if (!existingInputFields) {
+        // Create input fields and update button for this link
+        var inputFields = document.createElement("div");
+        inputFields.id = "input-fields-" + checkboxes[i].id;
+        inputFields.className = "link-input-fields";
+
         var linkNameInput = document.createElement("input");
         linkNameInput.type = "text";
-        linkNameInput.id = "link-name-input";
-        linkNameInput.className = "link-input-fields";
+        linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
 
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
-        linkUrlInput.id = "link-url-input";
-        linkUrlInput.className = "link-input-fields";
+        linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
         linkUrlInput.placeholder = "Link URL";
 
-        // Create an "Update" button
         var updateButton = document.createElement("button");
-        updateButton.id = "update-button";
-        updateButton.className = "link-input-fields";
+        updateButton.id = "update-button-" + checkboxes[i].id;
         updateButton.innerText = "Update";
         updateButton.addEventListener("click", function() {
           var newLinkName = linkNameInput.value;
@@ -132,10 +134,18 @@ function updateSelectedLinks() {
           }
         });
 
-        // Add the input fields and update button to the page
-        linkList.appendChild(linkNameInput);
-        linkList.appendChild(linkUrlInput);
-        linkList.appendChild(updateButton);
+        inputFields.appendChild(linkNameInput);
+        inputFields.appendChild(linkUrlInput);
+        inputFields.appendChild(updateButton);
+
+        // Add the input fields and update button to the page, limiting to 3 at once
+        var currentInputFields = linkList.getElementsByClassName("link-input-fields");
+        if (currentInputFields.length < 3) {
+          linkList.appendChild(inputFields);
+        } else {
+          currentInputFields[0].remove();
+          linkList.appendChild(inputFields);
+        }
       }
     }
   }
