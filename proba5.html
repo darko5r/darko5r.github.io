@@ -112,9 +112,9 @@ function updateSelectedLinks() {
         linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
         linkNameInput.value = linkNameText;
-        
-        
-       
+        linkNameInput.addEventListener("click", function() {
+  this.select(); 
+           
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
         linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
