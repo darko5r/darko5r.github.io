@@ -116,13 +116,11 @@ function updateSelectedLinks() {
   this.select(); 
           });
         
-        var linkUrl = checkboxes[i].parentNode.querySelector("a").href; // Get the URL of the link
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
         linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
         linkUrlInput.placeholder = "Link URL";
-        linkUrlInput.value = linkUrl; // Set the value of the input to the URL
-           
+        linkUrlInput.value = checkboxes[i].parentNode.querySelector("a").getAttribute("href");         
 
         var updateButton = document.createElement("button");
         updateButton.id = "update-button-" + checkboxes[i].id;
