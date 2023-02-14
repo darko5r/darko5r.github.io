@@ -110,7 +110,7 @@ function updateSelectedLinks() {
         linkNameInput.type = "text";
         linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
-        linkNameInput.value = linkNameText;
+        linkNameInput.value = linkName; // Set the input field's value to the checkbox label's text content
        
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
