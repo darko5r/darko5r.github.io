@@ -91,63 +91,62 @@
       linkUrlInput.id = "link-url-input";
       linkUrlInput.placeholder = "Link URL";
 
-      // Create an "Update" button
-      var updateButton = document.createElement("button");
-      updateButton.id = "update-button";
-      updateButton.innerText = "Update";
-      updateButton.addEventListener("click", function() {
-        var newLinkName = linkNameInput.value;
-        var newLinkUrl = linkUrlInput.value;
-        if (newLinkName && newLinkUrl) {
-          var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
-          var newRef = firebase.database().ref("links/" + newLinkName);
-          oldRef.once("value", function(snapshot) {
-            var updates = {};
-            updates[newLinkName] = snapshot.val();
-            updates[newLinkName].url = newLinkUrl;
-            newRef.set(updates[newLinkName], function(error) {
-              if (!error) { 
-                oldRef.remove();
-              } else {
-                console.log("Error in updating the name of the child node: " + error);
-              }
-            });
-          });
-        }
-      });
-
-      // Add the input fields and update button to the page
-      linkList.appendChild(linkNameInput);
-      linkList.appendChild(linkUrlInput);
-      linkList.appendChild(updateButton);
-    }
-  }
-});
-      
       // Add click event listener to the document object
 document.addEventListener("click", function(event) {
   // Get references to the toggle menu and input fields
   var toggleMenu = document.getElementById("toggle-menu");
   var linkNameInput = document.getElementById("link-name-input");
   var linkUrlInput = document.getElementById("link-url-input");
+  var updateButton = document.getElementById("update-button");
   var linkList = document.getElementById("link-list");
   
   // Check if the click target is not within the toggle menu or input fields or the link list area
-  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput && !linkList.contains(event.target)) {
+  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput && event.target != updateButton && !linkList.contains(event.target)) {
     // Clear selected checkboxes
     var checkboxes = linkList.getElementsByTagName("input");
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i].checked) {
         checkboxes[i].checked = false;
+        // Remove input fields and "Update" button
+        if (linkNameInput) {
+          linkNameInput.remove();
+        }
+        if (linkUrlInput) {
+          linkUrlInput.remove();
+        }
+        if (updateButton) {
+          updateButton.remove();
+        }
+        // Create an "Update" button
+        updateButton = document.createElement("button");
+        updateButton.id = "update-button";
+        updateButton.innerText = "Update";
+        updateButton.addEventListener("click", function() {
+          var newLinkName = linkNameInput.value;
+          var newLinkUrl = linkUrlInput.value;
+          if (newLinkName && newLinkUrl) {
+            var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
+            var newRef = firebase.database().ref("links/" + newLinkName);
+            oldRef.once("value", function(snapshot) {
+              var updates = {};
+              updates[newLinkName] = snapshot.val();
+              updates[newLinkName].url = newLinkUrl;
+              newRef.set(updates[newLinkName], function(error) {
+                if (!error) { 
+                  oldRef.remove();
+                } else {
+                  console.log("Error in updating the name of the child node: " + error);
+                }
+              });
+            });
+          }
+        });
+
+        // Add the input fields and update button to the page
+        linkList.appendChild(linkNameInput);
+        linkList.appendChild(linkUrlInput);
+        linkList.appendChild(updateButton);
       }
-    }
-    
-    // Remove input fields
-    if (linkNameInput) {
-      linkNameInput.remove();
-    }
-    if (linkUrlInput) {
-      linkUrlInput.remove();
     }
   }
 });
