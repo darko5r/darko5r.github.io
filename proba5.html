@@ -133,20 +133,20 @@ function updateSelectedLinks() {
   }
 }
       
-      function clearSelectedLinks() {
+     function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var inputs = linkList.getElementsByTagName("input");
-  var updateButton = document.getElementById("update-button");
+  var updateButtons = document.querySelectorAll("#link-list button");
   for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i].id === "link-name-input" || inputs[i].id === "link-url-input" || inputs[i].id === "update-button") {
+    if (inputs[i].id === "link-name-input" || inputs[i].id === "link-url-input") {
       linkList.removeChild(inputs[i]);
     } else if (inputs[i].type === "checkbox" && inputs[i].checked) {
       inputs[i].checked = false;
     }
   }
-  if (updateButton) {
-    updateButton.remove();
-  }
+  updateButtons.forEach(function(button) {
+    button.remove();
+  });
 }
          
     </script>
