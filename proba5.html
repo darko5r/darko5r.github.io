@@ -78,6 +78,13 @@
   document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
+
+  // Check if input fields are already present
+  if (document.getElementById("link-name-input") && document.getElementById("link-url-input")) {
+    alert("Update Selected is already pressed, fill up the input fields");
+    return;
+  }
+
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       // Create input fields for link name and URL
@@ -99,19 +106,9 @@
         var newLinkName = linkNameInput.value;
         var newLinkUrl = linkUrlInput.value;
         if (newLinkName && newLinkUrl) {
-          var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
-          var newRef = firebase.database().ref("links/" + newLinkName);
-          oldRef.once("value", function(snapshot) {
-            var updates = {};
-            updates[newLinkName] = snapshot.val();
-            updates[newLinkName].url = newLinkUrl;
-            newRef.set(updates[newLinkName], function(error) {
-              if (!error) { 
-                oldRef.remove();
-              } else {
-                console.log("Error in updating the name of the child node: " + error);
-              }
-            });
+          database.ref("links").child(checkboxes[i].id).set({
+            linkName: newLinkName,
+            linkUrl: newLinkUrl
           });
         }
       });
@@ -126,4 +123,4 @@
          
     </script>
 </body>
-</html> 
+</html>
