@@ -75,63 +75,69 @@
 }             
 });
       
-  var inputFieldsOpen = false;
-document.getElementById("update-selected-links").addEventListener("click", function() {
-  if (inputFieldsOpen) {
-    // Show message with "Yes" and "No" buttons
-    var message = document.createElement("p");
-    message.innerText = "Update Selected is already pressed, fill up the input fields or choose again";
-
+  document.getElementById("update-selected-links").addEventListener("click", function() {
+  // Check if input fields are already created
+  var linkNameInput = document.getElementById("link-name-input");
+  var linkUrlInput = document.getElementById("link-url-input");
+  var updateButton = document.getElementById("update-button");
+  if (linkNameInput && linkUrlInput && updateButton) {
+    // If input fields are created, show error message
+    var errorMessage = document.createElement("p");
+    errorMessage.innerText = "Update Selected is already pressed, fill up the input fields or choose again.";
     var yesButton = document.createElement("button");
     yesButton.innerText = "Yes";
     yesButton.addEventListener("click", function() {
-      inputFieldsOpen = false;
+      errorMessage.remove();
+      yesButton.remove();
+      noButton.remove();
     });
-
     var noButton = document.createElement("button");
     noButton.innerText = "No";
+    noButton.addEventListener("click", function() {
+      errorMessage.remove();
+      yesButton.remove();
+      noButton.remove();
+    });
+    linkList.appendChild(errorMessage);
+    linkList.appendChild(yesButton);
+    linkList.appendChild(noButton);
+    return;
+  }
 
-    document.body.appendChild(message);
-    document.body.appendChild(yesButton);
-    document.body.appendChild(noButton);
-  } else {
-    inputFieldsOpen = true;
-    var linkList = document.getElementById("link-list");
-    var checkboxes = linkList.getElementsByTagName("input");
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        // Create input fields for link name and URL
-        var linkNameInput = document.createElement("input");
-        linkNameInput.type = "text";
-        linkNameInput.id = "link-name-input";
-        linkNameInput.placeholder = "Link name";
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      // Create input fields for link name and URL
+      linkNameInput = document.createElement("input");
+      linkNameInput.type = "text";
+      linkNameInput.id = "link-name-input";
+      linkNameInput.placeholder = "Link name";
 
-        var linkUrlInput = document.createElement("input");
-        linkUrlInput.type = "text";
-        linkUrlInput.id = "link-url-input";
-        linkUrlInput.placeholder = "Link URL";
+      linkUrlInput = document.createElement("input");
+      linkUrlInput.type = "text";
+      linkUrlInput.id = "link-url-input";
+      linkUrlInput.placeholder = "Link URL";
 
-        // Create an "Update" button
-        var updateButton = document.createElement("button");
-        updateButton.id = "update-button";
-        updateButton.innerText = "Update";
-        updateButton.addEventListener("click", function() {
-          var newLinkName = linkNameInput.value;
-          var newLinkUrl = linkUrlInput.value;
-          if (newLinkName && newLinkUrl) {
-            database.ref("links").child(checkboxes[i].id).update({
-              linkName: newLinkName,
-              linkUrl: newLinkUrl
-            });
-            inputFieldsOpen = false;
-          }
-        });
+      // Create an "Update" button
+      updateButton = document.createElement("button");
+      updateButton.id = "update-button";
+      updateButton.innerText = "Update";
+      updateButton.addEventListener("click", function() {
+        var newLinkName = linkNameInput.value;
+        var newLinkUrl = linkUrlInput.value;
+        if (newLinkName && newLinkUrl) {
+          database.ref("links").child(checkboxes[i].id).set({
+            linkName: newLinkName,
+            url: newLinkUrl
+          });
+        }
+      });
 
-        // Add the input fields and update button to the page
-        linkList.appendChild(linkNameInput);
-        linkList.appendChild(linkUrlInput);
-        linkList.appendChild(updateButton);
-      }
+      // Add the input fields and update button to the page
+      linkList.appendChild(linkNameInput);
+      linkList.appendChild(linkUrlInput);
+      linkList.appendChild(updateButton);
     }
   }
 });
