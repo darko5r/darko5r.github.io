@@ -88,9 +88,12 @@ function updateSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   var count = 0;
+  var checkedLabels = [];
+
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
       count++;
+
       // Check if input fields for this link already exist
       var existingInputFields = document.getElementById("input-fields-" + checkboxes[i].id);
       if (!existingInputFields) {
@@ -103,6 +106,8 @@ function updateSelectedLinks() {
         linkNameInput.type = "text";
         linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
+        linkNameInput.value = checkboxes[i].parentNode.querySelector("label").textContent;
+        checkedLabels.push(linkNameInput.value);
 
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
@@ -149,7 +154,18 @@ function updateSelectedLinks() {
       }
     }
   }
+
+  if (count > 3) {
+    alert("You can only select up to three links");
+    checkboxes.forEach(function(checkbox) {
+      if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) !== -1) {
+        checkbox.checked = false;
+      }
+    });
+    clearSelectedLinks();
+  }
 }
+
       
      function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
