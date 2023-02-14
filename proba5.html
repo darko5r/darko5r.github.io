@@ -101,14 +101,17 @@ function updateSelectedLinks() {
         var inputFields = document.createElement("div");
         inputFields.id = "input-fields-" + checkboxes[i].id;
         inputFields.className = "link-input-fields";
-
+        
+        var linkName = checkboxes[i].parentNode.querySelector("label").innerText;
+        var linkNameText = linkName.split(" (")[0];
+        var linkNameLabel = document.createElement("label");
+        linkNameLabel.innerText = "Link name: " + linkNameText;
         var linkNameInput = document.createElement("input");
         linkNameInput.type = "text";
         linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
-        linkNameInput.value = checkboxes[i].parentNode.querySelector("label").textContent;
-        checkedLabels.push(linkNameInput.value);
-
+        linkNameInput.value = linkNameText;
+       
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
         linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
