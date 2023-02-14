@@ -75,29 +75,6 @@
 }             
 });
       
-      function updateSelected() {
-  var checkboxes = document.getElementsByName("select");
-  var inputsVisible = document.getElementsByClassName("input-visible").length > 0;
-  if (inputsVisible) {
-    // If input fields are already visible, do nothing.
-    return;
-  }
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      checkboxes[i].parentNode.parentNode.classList.add("highlighted");
-      var inputs = checkboxes[i].parentNode.parentNode.querySelectorAll("input[type='text']");
-      for (var j = 0; j < inputs.length; j++) {
-        inputs[j].classList.add("input-visible");
-      }
-    } else {
-      checkboxes[i].parentNode.parentNode.classList.remove("highlighted");
-      var inputs = checkboxes[i].parentNode.parentNode.querySelectorAll("input[type='text']");
-      for (var j = 0; j < inputs.length; j++) {
-        inputs[j].classList.remove("input-visible");
-      }
-    }
-  }
-}
       
   document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 document.addEventListener("click", function(event) {
@@ -112,47 +89,54 @@ function updateSelectedLinks() {
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
-      // Create input fields for link name and URL
-      var linkNameInput = document.createElement("input");
-      linkNameInput.type = "text";
-      linkNameInput.id = "link-name-input";
-      linkNameInput.placeholder = "Link name";
+      // Check if input fields already exist
+      var existingInputFields = linkList.getElementsByClassName("link-input-fields");
+      if (existingInputFields.length === 0) {
+        // Create input fields for link name and URL
+        var linkNameInput = document.createElement("input");
+        linkNameInput.type = "text";
+        linkNameInput.id = "link-name-input";
+        linkNameInput.className = "link-input-fields";
+        linkNameInput.placeholder = "Link name";
 
-      var linkUrlInput = document.createElement("input");
-      linkUrlInput.type = "text";
-      linkUrlInput.id = "link-url-input";
-      linkUrlInput.placeholder = "Link URL";
+        var linkUrlInput = document.createElement("input");
+        linkUrlInput.type = "text";
+        linkUrlInput.id = "link-url-input";
+        linkUrlInput.className = "link-input-fields";
+        linkUrlInput.placeholder = "Link URL";
 
-      // Create an "Update" button
-      var updateButton = document.createElement("button");
-      updateButton.id = "update-button";
-      updateButton.innerText = "Update";
-      updateButton.addEventListener("click", function() {
-        var newLinkName = linkNameInput.value;
-        var newLinkUrl = linkUrlInput.value;
-        if (newLinkName && newLinkUrl) {
-          var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
-          var newRef = firebase.database().ref("links/" + newLinkName);
-          oldRef.once("value", function(snapshot) {
-            var updates = {};
-            updates[newLinkName] = snapshot.val();
-            updates[newLinkName].url = newLinkUrl;
-            newRef.set(updates[newLinkName], function(error) {
-              if (!error) {
-                oldRef.remove();
-                clearSelectedLinks();
-              } else {
-                console.log("Error in updating the name of the child node: " + error);
-              }
+        // Create an "Update" button
+        var updateButton = document.createElement("button");
+        updateButton.id = "update-button";
+        updateButton.className = "link-input-fields";
+        updateButton.innerText = "Update";
+        updateButton.addEventListener("click", function() {
+          var newLinkName = linkNameInput.value;
+          var newLinkUrl = linkUrlInput.value;
+          if (newLinkName && newLinkUrl) {
+            var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
+            var newRef = firebase.database().ref("links/" + newLinkName);
+            oldRef.once("value", function(snapshot) {
+              var updates = {};
+              updates[newLinkName] = snapshot.val();
+              updates[newLinkName].url = newLinkUrl;
+              newRef.set(updates[newLinkName], function(error) {
+                if (!error) {
+                  oldRef.remove();
+                  clearSelectedLinks();
+                } else {
+                  console.log("Error in updating the name of the child node: " + error);
+                }
+              });
             });
-          });
-        }
-      });
+          }
+        });
 
-      // Add the input fields and update button to the page
-      linkList.appendChild(linkNameInput);
-      linkList.appendChild(linkUrlInput);
-      linkList.appendChild(updateButton);
+        // Add the input fields and update button to the page
+        linkList.appendChild(linkNameInput);
+        linkList.appendChild(linkUrlInput);
+        linkList.appendChild(updateButton);
+      }
     }
   }
 }
