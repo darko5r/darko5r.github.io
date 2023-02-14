@@ -88,11 +88,15 @@ function updateSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   var count = 0;
-  var checkedLabels = [];
-
+  
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
       count++;
+      if (count > 3) {
+        alert("You can only select up to three fields.");
+        checkboxes[i].checked = false;
+        continue;
+      }
 
       // Check if input fields for this link already exist
       var existingInputFields = document.getElementById("input-fields-" + checkboxes[i].id);
@@ -102,13 +106,16 @@ function updateSelectedLinks() {
         inputFields.id = "input-fields-" + checkboxes[i].id;
         inputFields.className = "link-input-fields";
 
+        var linkName = checkboxes[i].parentNode.getElementsByTagName("label")[0].innerText;
+        var linkNameLabel = document.createElement("label");
+        linkNameLabel.innerText = "Link name: " + linkName;
         var linkNameInput = document.createElement("input");
         linkNameInput.type = "text";
         linkNameInput.id = "link-name-input-" + checkboxes[i].id;
         linkNameInput.placeholder = "Link name";
-        linkNameInput.value = checkboxes[i].parentNode.querySelector("label").textContent;
-        checkedLabels.push(linkNameInput.value);
 
+        var linkUrlLabel = document.createElement("label");
+        linkUrlLabel.innerText = "Link URL: ";
         var linkUrlInput = document.createElement("input");
         linkUrlInput.type = "text";
         linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
@@ -139,7 +146,9 @@ function updateSelectedLinks() {
           }
         });
 
+        inputFields.appendChild(linkNameLabel);
         inputFields.appendChild(linkNameInput);
+        inputFields.appendChild(linkUrlLabel);
         inputFields.appendChild(linkUrlInput);
         inputFields.appendChild(updateButton);
 
@@ -154,6 +163,7 @@ function updateSelectedLinks() {
       }
     }
   }
+}
 
   if (count > 3) {
     alert("You can only select up to three links");
