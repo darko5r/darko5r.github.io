@@ -88,7 +88,8 @@ function updateSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   var count = 0;
-  
+  var checkedLabels = [];
+
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
       count++;
@@ -151,19 +152,19 @@ function updateSelectedLinks() {
         inputFields.appendChild(linkUrlLabel);
         inputFields.appendChild(linkUrlInput);
         inputFields.appendChild(updateButton);
-
+        
         // Add the input fields and update button to the page, limiting to 3 at once
-        var currentInputFields = linkList.getElementsByClassName("link-input-fields");
-        if (currentInputFields.length < 3) {
-          linkList.appendChild(inputFields);
-        } else {
-          currentInputFields[0].remove();
-          linkList.appendChild(inputFields);
-        }
-      }
-    }
-  }
+var currentInputFields = linkList.getElementsByClassName("link-input-fields");
+if (currentInputFields.length < 3) {
+  linkList.appendChild(inputFields);
+} else {
+  currentInputFields[0].remove();
+  linkList.appendChild(inputFields);
 }
+
+// Add the link name to the input field
+document.getElementById("link-name-input-" + checkboxes[i].id).value = linkName;
+
 
   if (count > 3) {
     alert("You can only select up to three links");
