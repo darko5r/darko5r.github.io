@@ -154,16 +154,17 @@ function updateSelectedLinks() {
      function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var inputs = linkList.getElementsByTagName("input");
-  var updateButtons = linkList.getElementsByClassName("update-button");
-
+  var updateButtons = document.querySelectorAll("#link-list button");
   for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i].className === "link-input-fields" || inputs[i].type === "checkbox") {
+    if (inputs[i].id.startsWith("link-name-input-") || inputs[i].id.startsWith("link-url-input-")) {
       linkList.removeChild(inputs[i]);
+    } else if (inputs[i].type === "checkbox" && inputs[i].checked) {
+      inputs[i].checked = false;
     }
   }
-  for (let i = updateButtons.length - 1; i >= 0; i--) {
-    updateButtons[i].remove();
-  }
+  updateButtons.forEach(function(button) {
+    button.remove();
+  });
 }
          
     </script>
