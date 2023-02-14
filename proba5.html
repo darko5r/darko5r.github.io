@@ -75,6 +75,30 @@
 }             
 });
       
+      function updateSelected() {
+  var checkboxes = document.getElementsByName("select");
+  var inputsVisible = document.getElementsByClassName("input-visible").length > 0;
+  if (inputsVisible) {
+    // If input fields are already visible, do nothing.
+    return;
+  }
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      checkboxes[i].parentNode.parentNode.classList.add("highlighted");
+      var inputs = checkboxes[i].parentNode.parentNode.querySelectorAll("input[type='text']");
+      for (var j = 0; j < inputs.length; j++) {
+        inputs[j].classList.add("input-visible");
+      }
+    } else {
+      checkboxes[i].parentNode.parentNode.classList.remove("highlighted");
+      var inputs = checkboxes[i].parentNode.parentNode.querySelectorAll("input[type='text']");
+      for (var j = 0; j < inputs.length; j++) {
+        inputs[j].classList.remove("input-visible");
+      }
+    }
+  }
+}
+      
   document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 document.addEventListener("click", function(event) {
   if (event.target.closest("#link-list") || event.target.closest("#update-selected-links")) {
