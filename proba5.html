@@ -75,7 +75,29 @@
 }             
 });
       
-  document.getElementById("update-selected-links").addEventListener("click", function() {
+  document.addEventListener("click", function(event) {
+  var linkList = document.getElementById("link-list");
+  var checkboxes = linkList.getElementsByTagName("input");
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked && !event.target.matches("#link-name-input, #link-url-input, #update-button")) {
+      checkboxes[i].checked = false;
+      var linkNameInput = document.getElementById("link-name-input");
+      var linkUrlInput = document.getElementById("link-url-input");
+      var updateButton = document.getElementById("update-button");
+      if (linkNameInput) {
+        linkList.removeChild(linkNameInput);
+      }
+      if (linkUrlInput) {
+        linkList.removeChild(linkUrlInput);
+      }
+      if (updateButton) {
+        linkList.removeChild(updateButton);
+      }
+    }
+  }
+});
+
+document.getElementById("update-selected-links").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
   for (let i = 0; i < checkboxes.length; i++) {
@@ -108,6 +130,10 @@
             newRef.set(updates[newLinkName], function(error) {
               if (!error) { 
                 oldRef.remove();
+                linkList.removeChild(linkNameInput);
+                linkList.removeChild(linkUrlInput);
+                linkList.removeChild(updateButton);
+                checkboxes[i].checked = false;
               } else {
                 console.log("Error in updating the name of the child node: " + error);
               }
@@ -120,34 +146,6 @@
       linkList.appendChild(linkNameInput);
       linkList.appendChild(linkUrlInput);
       linkList.appendChild(updateButton);
-    }
-  }
-});
-      
-      // Add click event listener to the document object
-document.addEventListener("click", function(event) {
-  // Get references to the toggle menu and input fields
-  var toggleMenu = document.getElementById("toggle-menu");
-  var linkNameInput = document.getElementById("link-name-input");
-  var linkUrlInput = document.getElementById("link-url-input");
-  var linkList = document.getElementById("link-list");
-  
-  // Check if the click target is not within the toggle menu or input fields or the link list area
-  if (event.target != toggleMenu && event.target != linkNameInput && event.target != linkUrlInput && !linkList.contains(event.target)) {
-    // Clear selected checkboxes
-    var checkboxes = linkList.getElementsByTagName("input");
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].checked) {
-        checkboxes[i].checked = false;
-      }
-    }
-    
-    // Remove input fields
-    if (linkNameInput) {
-      linkNameInput.remove();
-    }
-    if (linkUrlInput) {
-      linkUrlInput.remove();
     }
   }
 });
