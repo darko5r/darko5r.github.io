@@ -76,8 +76,9 @@
 });
       
       
-  document.addEventListener("click", function(event) {
-  if (event.target.closest("#link-list") || event.target.closest("#update-selected-links") || event.target.closest(".link-input-fields") || event.target.closest(".update-button")) {
+  document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
+document.addEventListener("click", function(event) {
+  if (event.target.closest("#link-list") || event.target.closest("#update-selected-links")) {
     return;
   }
   clearSelectedLinks();
@@ -155,7 +156,7 @@ function updateSelectedLinks() {
   var inputs = linkList.getElementsByTagName("input");
   var updateButtons = document.querySelectorAll("#link-list button");
   for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i].id.startsWith("link-name-input-") || inputs[i].id.startsWith("link-url-input-")) {
+    if (inputs[i].className === "link-input-field") {
       linkList.removeChild(inputs[i]);
     } else if (inputs[i].type === "checkbox" && inputs[i].checked) {
       inputs[i].checked = false;
