@@ -76,9 +76,8 @@
 });
       
       
-  document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
-document.addEventListener("click", function(event) {
-  if (event.target.closest("#link-list") || event.target.closest("#update-selected-links")) {
+  document.addEventListener("click", function(event) {
+  if (event.target.closest("#link-list") || event.target.closest("#update-selected-links") || event.target.closest(".link-input-fields") || event.target.closest(".update-button")) {
     return;
   }
   clearSelectedLinks();
