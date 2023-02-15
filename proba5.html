@@ -167,16 +167,30 @@ function updateSelectedLinks() {
       }
     }
   }
-
+  
   if (count > 3) {
-    alert("You can only select up to three links");
-    checkboxes.forEach(function(checkbox) {
-      if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) !== -1) {
-        checkbox.checked = false;
+  // Uncheck the fourth checkbox
+  checkboxes.forEach(function(checkbox) {
+    if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) === -1) {
+      checkbox.checked = false;
+      // Remove input fields associated with the unchecked checkbox
+      var inputFields = document.getElementById("input-fields-" + checkbox.id);
+      if (inputFields) {
+        inputFields.remove();
       }
-    });
-    clearSelectedLinks();
-  }
+    }
+  });
+  // Show an error message
+  var errorMessage = document.createElement("div");
+  errorMessage.innerText = "You can only select up to three links";
+  errorMessage.className = "error-message";
+  document.body.appendChild(errorMessage);
+  // Clear the selected links
+  clearSelectedLinks();
+  // Remove the error message after 3 seconds
+  setTimeout(function() {
+    errorMessage.remove();
+  }, 3000);
 }
 
       
