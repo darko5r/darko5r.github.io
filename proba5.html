@@ -113,8 +113,8 @@ function updateSelectedLinks() {
         linkNameInput.placeholder = "Link name";
         linkNameInput.value = linkNameText;
         linkNameInput.addEventListener("click", function() {
-  this.select(); 
-          });
+          this.select();
+        });
         
         var linkURL = checkboxes[i].parentNode.querySelector("label").innerText;
         var linkURLText = linkURL.split(" (")[1].replace(")", ""); 
@@ -124,8 +124,8 @@ function updateSelectedLinks() {
         linkUrlInput.placeholder = "Link URL";
         linkUrlInput.value = linkURLText;
         linkUrlInput.addEventListener("click", function() {
-  this.select(); 
-          });
+          this.select();
+        });
         
         var updateButton = document.createElement("button");
         updateButton.id = "update-button-" + checkboxes[i].id;
