@@ -171,23 +171,15 @@ function updateSelectedLinks() {
   if (count > 3) {
   alert("You can only select up to three links");
   checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) === -1) {
-      checkbox.checked = false;
-      var inputFields = document.getElementById("input-fields-" + checkbox.id);
-      if (inputFields) {
-        inputFields.remove();
-      }
+  if (checkbox.checked && count > 3) {
+    checkbox.checked = false;
+    var inputFields = document.getElementById("input-fields-" + checkbox.id);
+    if (inputFields) {
+      inputFields.remove();
     }
-  });
-  checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) > 2) {
-      checkbox.checked = false;
-      var inputFields = document.getElementById("input-fields-" + checkbox.id);
-      if (inputFields) {
-        inputFields.remove();
-      }
-    }
-  });
+    count--;
+  }
+});
     clearSelectedLinks();
   }
 } 
