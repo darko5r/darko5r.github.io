@@ -93,6 +93,47 @@ function updateSelectedLinks() {
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
       count++;
+      
+      // bigger then 3
+      
+      if (numSelected > 3) {
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (i >= 3) {
+        checkboxes[i].checked = false;
+        checkboxes[i].parentNode.removeChild(checkboxes[i]);
+      }
+    }
+  }
+
+  if (numCurrentInputFields === 3) {
+    currentInputFields[0].remove();
+  }
+
+  const inputsContainer = document.querySelector('.inputs-container');
+  const inputField = document.createElement('div');
+  inputField.classList.add('input-field');
+  const label = document.createElement('label');
+  label.innerHTML = `Field ${numCurrentInputFields + 1}: `;
+  const input = document.createElement('input');
+  input.setAttribute('type', 'text');
+  input.setAttribute('name', `field${numCurrentInputFields + 1}`);
+  inputField.appendChild(label);
+  inputField.appendChild(input);
+  inputsContainer.appendChild(inputField);
+
+  if (numCurrentInputFields < 3) {
+    const updateButton = document.querySelector('.update-button');
+    if (!updateButton) {
+      const buttonContainer = document.querySelector('.button-container');
+      const button = document.createElement('button');
+      button.classList.add('update-button');
+      button.innerHTML = 'Update';
+      button.addEventListener('click', updateData);
+      buttonContainer.appendChild(button);
+    }
+  }
+}
+
 
       // Check if input fields for this link already exist
       var existingInputFields = document.getElementById("input-fields-" + checkboxes[i].id);
