@@ -168,33 +168,47 @@ function updateSelectedLinks() {
     }
   }
   
-  if (count > 3) {
-  // Uncheck the fourth checkbox
-  checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) === -1) {
-      checkbox.checked = false;
-      // Remove input fields associated with the unchecked checkbox
-      var inputFields = document.getElementById("input-fields-" + checkbox.id);
-      if (inputFields) {
-        inputFields.remove();
+  var count = 0;
+var checkboxes = document.querySelectorAll("input[type='checkbox']");
+
+checkboxes.forEach(function(checkbox) {
+  checkbox.addEventListener("change", function() {
+    var checkedLabels = [];
+    checkboxes.forEach(function(checkbox) {
+      if (checkbox.checked) {
+        var label = checkbox.parentNode.querySelector("label");
+        checkedLabels.push(label.textContent);
       }
+    });
+    count = checkedLabels.length;
+    
+    if (count > 3) {
+      // Uncheck the fourth checkbox
+      checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked && checkedLabels.indexOf(checkbox.parentNode.querySelector("label").textContent) === -1) {
+          checkbox.checked = false;
+          // Remove input fields associated with the unchecked checkbox
+          var inputFields = document.getElementById("input-fields-" + checkbox.id);
+          if (inputFields) {
+            inputFields.remove();
+          }
+        }
+      });
+
+      // Show an error message
+      var errorMessage = document.createElement("div");
+      errorMessage.innerText = "You can only select up to three links";
+      errorMessage.className = "error-message";
+      document.body.appendChild(errorMessage);
+      // Clear the selected links
+      clearSelectedLinks();
+      // Remove the error message after 3 seconds
+      setTimeout(function() {
+        errorMessage.remove();
+      }, 3000);
     }
   });
-  
-    // Show an error message
-  var errorMessage = document.createElement("div");
-  errorMessage.innerText = "You can only select up to three links";
-  errorMessage.className = "error-message";
-  document.body.appendChild(errorMessage);
-  // Clear the selected links
-  clearSelectedLinks();
-  // Remove the error message after 3 seconds
-  setTimeout(function() {
-    errorMessage.remove();
-  }, 3000);
-}
-  });
-
+});
       
      function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
