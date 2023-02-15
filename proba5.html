@@ -180,18 +180,7 @@ function updateSelectedLinks() {
       }
     }
   });
-  // Show an error message
-  var errorMessage = document.createElement("div");
-  errorMessage.innerText = "You can only select up to three links";
-  errorMessage.className = "error-message";
-  document.body.appendChild(errorMessage);
-  // Clear the selected links
-  clearSelectedLinks();
-  // Remove the error message after 3 seconds
-  setTimeout(function() {
-    errorMessage.remove();
-  }, 3000);
-}
+  
 
       
      function clearSelectedLinks() {
