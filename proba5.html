@@ -176,17 +176,19 @@ function updateSelectedLinks() {
     errorDiv.textContent = "You can only select up to three links";
     linkList.parentNode.insertBefore(errorDiv, linkList);
   }
-  
-  checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked && count > 3) {
-      checkbox.checked = false;
-      var inputFields = document.getElementById("input-fields-" + checkbox.id);
-      if (inputFields) {
-        inputFields.remove();
+
+  if (Array.isArray(checkboxes)) {
+    checkboxes.forEach(function(checkbox) {
+      if (checkbox.checked && count > 3) {
+        checkbox.checked = false;
+        var inputFields = document.getElementById("input-fields-" + checkbox.id);
+        if (inputFields) {
+          inputFields.remove();
+        }
+        count--;
       }
-      count--;
-    }
-  });
+    });
+  }
   
   
     clearSelectedLinks();
