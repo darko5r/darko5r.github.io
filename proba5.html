@@ -167,6 +167,7 @@ function updateSelectedLinks() {
       }
     }
   }
+        
   
   if (count > 3) {
   var errorMessage = document.getElementById("error-message");
@@ -177,23 +178,11 @@ function updateSelectedLinks() {
     errorMessage.style.fontWeight = "bold";
     errorMessage.innerText = "You can only select up to three links";
     linkList.parentNode.insertBefore(errorMessage, linkList);
-  }
-  errorMessage.style.display = "block";
-  checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked && count > 3) {
-      checkbox.checked = false;
-      var inputFields = document.getElementById("input-fields-" + checkbox.id);
-      if (inputFields) {
-        inputFields.remove();
       }
       count--;
     }
   });
   clearSelectedLinks();
-} else {
-  var errorMessage = document.getElementById("error-message");
-  if (errorMessage) {
-    errorMessage.style.display = "none";
   }
 }
   
