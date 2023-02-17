@@ -193,18 +193,11 @@ function updateSelectedLinks() {
   }
     
     
-    clearSelectedLinks();
-  } else {
-    var errorDiv = document.getElementById("link-limit-error");
-    if (errorDiv) {
-      errorDiv.remove();
-    }
-    clearSelectedLinks();
+        clearSelectedLinks();
   }
-}
+} 
   
-     
-  
+      
      function clearSelectedLinks() {
   var linkList = document.getElementById("link-list");
   var inputs = linkList.getElementsByTagName("input");
