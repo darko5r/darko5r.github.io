@@ -168,29 +168,58 @@ function updateSelectedLinks() {
     }
   }
   
-  if (count > 3) {
-  var errorDiv = document.getElementById("link-limit-error");
-  if (!errorDiv) {
-    errorDiv = document.createElement("div");
-    errorDiv.id = "link-limit-error";
-    errorDiv.textContent = "You can only select up to three links";
-    linkList.parentNode.insertBefore(errorDiv, linkList);
-  } else {
-    errorDiv.textContent = "You can only select up to three links";
-  }
   
-  if (Array.isArray(checkboxes)) {
-    checkboxes.forEach(function(checkbox) {
-      if (checkbox.checked && count > 3) {
-        checkbox.checked = false;
-        var inputFields = document.getElementById("input-fields-" + checkbox.id);
-        if (inputFields) {
-          inputFields.remove();
+  
+  function handleLinkSelection(event) {
+  var checkbox = event.target;
+  var count = getSelectedLinks().length;
+  var linkList = document.getElementById("link-list");
+  var inputFields = document.getElementById("input-fields-" + checkbox.id);
+
+  if (inputFields) {
+    if (checkbox.checked) {
+      if (count > 3) {
+        var errorDiv = document.getElementById("link-limit-error");
+        if (errorDiv) {
+          errorDiv.remove();
         }
-        count--;
       }
-    });
+      linkList.appendChild(inputFields);
+      addUpdateButton(inputFields, checkbox);
+    } else {
+      linkList.removeChild(inputFields.nextSibling);
+      linkList.removeChild(inputFields);
+    }
   }
+
+  if (count > 3) {
+    var errorDiv = document.getElementById("link-limit-error");
+    if (!errorDiv) {
+      errorDiv = document.createElement("div");
+      errorDiv.id = "link-limit-error";
+      errorDiv.textContent = "You can only select up to three links";
+      linkList.parentNode.insertBefore(errorDiv, linkList);
+    } else {
+      errorDiv.textContent = "You can only select up to three links";
+    }
+
+    var checkboxes = getSelectedCheckboxes();
+    if (Array.isArray(checkboxes)) {
+      checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked && count > 3 && checkbox !== event.target) {
+          checkbox.checked = false;
+          var inputFields = document.getElementById("input-fields-" + checkbox.id);
+          if (inputFields) {
+            inputFields.remove();
+          }
+          count--;
+        }
+      });
+    }
+  }
+}
+  
+  
     
     
         clearSelectedLinks();
