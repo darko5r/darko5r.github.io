@@ -196,28 +196,33 @@ function updateSelectedLinks() {
         clearSelectedLinks();
   }
 } 
-  
       
-     function clearSelectedLinks() {
-  var linkList = document.getElementById("link-list");
-  var inputs = linkList.getElementsByTagName("input");
-  var inputFields = linkList.getElementsByClassName("link-input-fields");
-  var updateButtons = linkList.getElementsByClassName("update-button");
-
-  for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i].type === "checkbox" && inputs[i].checked) {
-      inputs[i].checked = false;
+      
+      
+      function clearSelectedLinks() {
+  var errorDiv = document.getElementById("link-limit-error");
+  if (!errorDiv) {
+    // Clear selected links if error message is not present
+    var checkboxes = linkList.getElementsByClassName("link-checkbox");
+    if (Array.isArray(checkboxes)) {
+      checkboxes.forEach(function(checkbox) {
+        if (checkbox.checked) {
+          checkbox.checked = false;
+          var inputFields = document.getElementById("input-fields-" + checkbox.id);
+          if (inputFields) {
+            inputFields.remove();
+          }
+        }
+      });
     }
   }
-
-  for (let i = inputFields.length - 1; i >= 0; i--) {
-    linkList.removeChild(inputFields[i]);
-  }
-
-  for (let i = updateButtons.length - 1; i >= 0; i--) {
-    linkList.removeChild(updateButtons[i]);
+  else {
+    // Do nothing if error message is present
   }
 }
+  
+      
+     
          
     </script>
 </body>
