@@ -168,6 +168,17 @@ function updateSelectedLinks() {
     }
   }
   
+  // Remove error message when a checkbox is checked
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].type === "checkbox") {
+      checkboxes[i].addEventListener("change", function() {
+        if (this.checked) {
+          removeLinkLimitError();
+        }
+      });
+    }
+  }
+  
   if (count > 3) {
   var errorDiv = document.getElementById("link-limit-error");
   if (!errorDiv) {
@@ -216,6 +227,13 @@ function updateSelectedLinks() {
 
   for (let i = updateButtons.length - 1; i >= 0; i--) {
     linkList.removeChild(updateButtons[i]);
+  }
+}
+      
+      function removeLinkLimitError() {
+  var errorDiv = document.getElementById("link-limit-error");
+  if (errorDiv) {
+    errorDiv.remove();
   }
 }
             
