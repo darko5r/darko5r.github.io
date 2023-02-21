@@ -119,23 +119,23 @@
     }
   });     
 }
-      
-      
-  // Reset input fields function
-  function resetInputs() {
-    document.getElementById("linkName").value = "";
-    document.getElementById("linkUrl").value = "";
-  }
-
-  // Add event listener to document to detect "Ctrl + R" key combination
+   
+  // Add event listener to document to detect "Ctrl + R" key combination    
   document.addEventListener("keydown", function(event) {
-    if (event.ctrlKey && event.keyCode === 82) {
-      resetInputs();
-    }
-  });    
-      
-            
-                         
+  if (event.ctrlKey && event.keyCode === 82) { // "Ctrl + R"
+    event.preventDefault();
+    resetInputs();
+  }
+});
+
+// Reset input fields function     
+function resetInputs() {
+  document.getElementById("linkName").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("successMessage").innerHTML = "";
+  document.getElementById("errorMessage").innerHTML = "";
+}    
+       
       
   function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
