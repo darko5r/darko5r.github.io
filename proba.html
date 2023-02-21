@@ -94,18 +94,7 @@
   document.getElementById("linkName").value = "";
 }
       
-      
-                      
-
-  document.getElementById("errorMessage").innerHTML = "";
-  document.getElementById("successMessage").innerHTML = "";
-  var linksRef = database.ref("links");
-
-  linksRef.child(linkName).remove();
-
-  document.getElementById("successMessage").innerHTML = "Link deleted successfully";
-  document.getElementById("linkName").value = "";
-}
+                         
       
   function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
