@@ -94,7 +94,7 @@
     const link = snapshot.val();
 
     if (link === null) {
-      document.getElementById("errorMessage").innerHTML = "Link with name '${linkName}' not found in database";
+      document.getElementById("errorMessage").innerHTML = "Link not found in the database";
     } else {
       linkRef.remove();
       document.getElementById("successMessage").innerHTML = "Link deleted successfully";
