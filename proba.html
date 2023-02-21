@@ -86,13 +86,22 @@
 
   document.getElementById("errorMessage").innerHTML = "";
   document.getElementById("successMessage").innerHTML = "";
-  var linksRef = database.ref("links");
+        
+        
+  var linkRef = firebase.database().ref("links").child(linkName);
 
-  linksRef.child(linkName).remove();
+  linkRef.once("value", (snapshot) => {
+    const link = snapshot.val();
 
-  document.getElementById("successMessage").innerHTML = "Link deleted successfully";
-  document.getElementById("linkName").value = "";
-}
+    if (link === null) {
+      document.getElementById("errorMessage").innerHTML = "Link with name '${linkName}' not found in database";
+    } else {
+      linkRef.remove();
+      document.getElementById("successMessage").innerHTML = "Link deleted successfully";
+    }
+  });     
+        
+      }
       
                          
       
