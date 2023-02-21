@@ -73,6 +73,17 @@
       function deleteLink() {
   var linkName = document.getElementById("linkName").value;
   var linkUrl = document.getElementById("linkUrl").value;
+        
+  // Check if the "Delete" or "Backspace" key was pressed
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Delete") {
+      if (event.target.id === "linkName" || event.target.id === "linkUrl") {
+        event.preventDefault();
+        submitForm();
+      }
+    }
+  });     
+        
 
   if (linkName && linkUrl && linkName === linkUrl) {
     document.getElementById("errorMessage").innerHTML = "The link name and URL are the same";
