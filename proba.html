@@ -155,12 +155,11 @@ function getLinks() {
     snapshot.forEach(function(childSnapshot) {
       var linkName = childSnapshot.key;
       linkList.innerHTML += `
-    <div>
-        <input type="checkbox" id="${linkName}" name="linkCheckbox" />
-        <label for="${linkName}">${linkName}</label>
-    </div>
-`;    
-	        
+        <div>
+          <input type="checkbox" id="${linkName}" name="linkCheckbox" />
+          <label for="${linkName}">${linkName}</label>
+        </div>
+      `;	        
     });
   });
 }
