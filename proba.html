@@ -98,11 +98,13 @@
     } else {
       linkRef.remove();
       document.getElementById("successMessage").innerHTML = "Link deleted successfully";
+      document.getElementById("linkName").value = "";
+      document.getElementById("linkUrl").value = "";
     }
   });     
-        
-      }
+}
       
+            
                          
       
   function toggleLinks() {
