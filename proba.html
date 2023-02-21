@@ -68,13 +68,33 @@
         document.getElementById("linkUrl").value = "";
       }
       
+      
+      
       function deleteLink() {
   var linkName = document.getElementById("linkName").value;
+  var linkUrl = document.getElementById("linkUrl").value;
+
+  if (linkName && linkUrl && linkName === linkUrl) {
+    document.getElementById("errorMessage").innerHTML = "The link name and URL are the same";
+    return;
+  }
 
   if (!linkName) {
     document.getElementById("errorMessage").innerHTML = "Link name is required";
     return;
   }
+
+  document.getElementById("errorMessage").innerHTML = "";
+  document.getElementById("successMessage").innerHTML = "";
+  var linksRef = database.ref("links");
+
+  linksRef.child(linkName).remove();
+
+  document.getElementById("successMessage").innerHTML = "Link deleted successfully";
+  document.getElementById("linkName").value = "";
+}
+      
+      
                       
 
   document.getElementById("errorMessage").innerHTML = "";
