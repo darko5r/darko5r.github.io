@@ -135,37 +135,36 @@ function resetInputs() {
 	document.getElementById("successMessage").innerHTML = "";
 	document.getElementById("errorMessage").innerHTML = "";
 }
-
-
+	    
+	    
 function toggleLinks() {
-	var linkContainer = document.getElementById("linkContainer");
-	if (linkContainer.style.display === "none") {
-		linkContainer.style.display = "block";
-		getLinks();
-	} else {
-		linkContainer.style.display = "none";
-	}
+  var linkContainer = document.getElementById("linkContainer");
+  if (linkContainer.style.display === "none") {
+    linkContainer.style.display = "block";
+    getLinks();
+  } else {
+    linkContainer.style.display = "none";
+  }
 }
 
 function getLinks() {
-	var linksRef = database.ref("links");
-	linksRef.once("value", function(snapshot) {
-		var linkList = document.getElementById("linkList");
-		linkList.innerHTML = "";
-		snapshot.forEach(function(childSnapshot) {
-			var linkName = childSnapshot.key;
-			linkList.innerHTML += `
+  var linksRef = database.ref("links");
+  linksRef.once("value", function(snapshot) {
+    var linkList = document.getElementById("linkList");
+    linkList.innerHTML = "";
+    snapshot.forEach(function(childSnapshot) {
+      var linkName = childSnapshot.key;
+      linkList.innerHTML += `
         <div>
-          <input type="checkbox" id="${linkName}" />
+          <input type="checkbox" id="${linkName}" name="linkCheckbox" />
           <label for="${linkName}">${linkName}</label>
         </div>
       `;
-		});
-	});
+    });
+  });
 }
 
-	    
- document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
+document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
   for (var i = 0; i < checkboxes.length; i++) {
@@ -173,7 +172,9 @@ function getLinks() {
       database.ref("links").child(checkboxes[i].id).remove();
     }
   }
-});
+});	    
+
+
       
  </script>
   </head>
