@@ -68,13 +68,38 @@
         document.getElementById("linkUrl").value = "";
       }
       
+      
+      
       function deleteLink() {
-  var linkName = document.getElementById("linkName").value;
-
-  if (!linkName) {
-    document.getElementById("errorMessage").innerHTML = "Link name is required";
+  let linkName = document.getElementById("linkName").value;
+  let linkURL = document.getElementById("linkURL").value;
+  let indexToDelete = -1;
+        
+  if (!linkName || !url) {
+    const errorElement = document.getElementById("error");
+    errorElement.innerHTML = "Please enter both link name and URL.";
     return;
+  }     
+  
+  // Find the index of the link in the links array
+  for (let i = 0; i < links.length; i++) {
+    if (links[i].name === linkName && links[i].url === linkURL) {
+      indexToDelete = i;
+      break;
+    }
   }
+  
+  // Delete the link from the links array
+  if (indexToDelete >= 0) {
+    links.splice(indexToDelete, 1);
+    saveLinksToLocalStorage();
+    displayLinks();
+    message.innerHTML = "Link deleted successfully";
+  } else {
+    message.innerHTML = "Link not found";
+  }
+}
+      
 
   document.getElementById("errorMessage").innerHTML = "";
   document.getElementById("successMessage").innerHTML = "";
