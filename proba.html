@@ -18,13 +18,15 @@
 
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
-          
       
-      document.addEventListener("submit", function(event) {
-      event.preventDefault();
-      submitLink();
+      
+      document.addEventListener("keydown", function(event) {
+        if (event.keyCode === 13) {
+         event.preventDefault();
+         submitLink();
+       }
      });
-                  
+                            
       
       function submitLink() {
         var linkName = document.getElementById("linkName").value;
