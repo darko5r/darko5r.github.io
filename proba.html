@@ -137,80 +137,58 @@ function resetInputs() {
 }
 	    
 	    
-var menuExpanded = false;
-
-  function toggleMenu() {
-    var toggleMenu = document.getElementById("toggle-menu");
-    var toggleButton = document.getElementById("toggle-button");
-
-    if (menuExpanded) {
-      toggleMenu.style.display = "none";
-      toggleButton.textContent = "➕";
-    } else {
-      toggleMenu.style.display = "block";
-      toggleButton.textContent = "➖";
-    }
-
-    menuExpanded = !menuExpanded;
+function toggleLinks() {
+  var linkContainer = document.getElementById("linkContainer");
+  if (linkContainer.style.display === "none") {
+    linkContainer.style.display = "block";
+    getLinks();
+  } else {
+    linkContainer.style.display = "none";
   }
+}
 
-  document.getElementById("toggle-button").addEventListener("click", toggleMenu);
-  document.getElementById("toggle-menu").style.display = "none";
+function getLinks() {
+  var linksRef = database.ref("links");
+  linksRef.once("value", function(snapshot) {
+    var linkList = document.getElementById("linkList");
+    linkList.innerHTML = "";
+    snapshot.forEach(function(childSnapshot) {
+      var linkName = childSnapshot.key;
+      linkList.innerHTML += `
+        <div>
+          <input type="checkbox" id="${linkName}" name="linkCheckbox" />
+          <label for="${linkName}">${linkName}</label>
+        </div>
+      `;	        
+    });
+  });
+}
 
-      // firebase event listener
-      
-      database.ref("links").on("value", function(snapshot) {
-  var links = snapshot.val();
-  var linkList = document.getElementById("link-list");
-  linkList.innerHTML = "";
-  for (var link in links) {
-  linkList.innerHTML += `
-    <div>
-      <input type="checkbox" id="${link}">
-      <label for="${link}">${link} (${links[link].url})</label>
-    </div>
-  `;
-}             
-});
-
-document.getElementById("delete-selected-links").addEventListener("click", function() {
-  var linkList = document.getElementById("link-list");
+document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
+  var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       database.ref("links").child(checkboxes[i].id).remove();
     }
   }
-});
-      // delete selected links button event listener
+});	    
 
 
       
  </script>
   </head>
   <body>
-    <style>
-    #toggle-button:hover {
-      transform: rotate(360deg);
-      transition: transform 0.3s ease-in-out;
-    }
-    </style>	  
     <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
     <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">
     <div id="errorMessage" style="color: red;"></div>
     <div id="successMessage" style="color: green;"></div>
     <button onclick="submitLink()">Submit</button>
     <button onclick="deleteLink()">Delete</button>
-   <!-- <button id="toggleButton" onclick="toggleLinks()">Toggle Links</button>
+    <button id="toggleButton" onclick="toggleLinks()">Toggle Links</button>
     <div id="linkContainer" style="display: none;">
     <div id="linkList"></div>
-    <button id="deleteSelectedBtn">Delete Selected</button> -->
-    <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
-    <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
-    <div id="link-list"></div>
-    <button id="delete-selected-links">Delete Selected</button>
-    <button id="update-selected-links">Update Selected</button>  
-    </div>	  
+    <button id="deleteSelectedBtn">Delete Selected</button>
     </div>
   </body>
-</html>
+</html> 
