@@ -204,6 +204,31 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     }
   }
 });
+	    
+	    
+function updateSelectedLinks() {
+  var linkList = document.getElementById("linkList");
+  var checkboxes = linkList.getElementsByTagName("input");
+  var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
+  
+  if (checkedCheckboxes.length === 0) {
+    document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
+    return;
+  }
+  
+  var newName = document.getElementById("linkName").value;
+  var newUrl = document.getElementById("linkUrl").value;
+  
+  checkedCheckboxes.forEach(function(checkbox) {
+    var linkRef = database.ref("links/" + checkbox.id);
+    linkRef.update({
+      name: newName,
+      url: newUrl
+    });
+  });
+  
+  document.getElementById("successMessage").innerHTML = "Selected links updated successfully";
+}	    
 	    	    
             	    	    	    	 	    	    	  	    	    	    	       	    
  </script>
@@ -218,7 +243,8 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     <button id="toggleButton" onclick="toggleLinks()">Toggle Links</button>
     <div id="linkContainer" style="display: none;">
     <div id="linkList"></div>
-    <button id="deleteSelectedBtn">Delete Selected</button>   
+    <button id="deleteSelectedBtn">Delete Selected</button>
+    <button onclick="updateSelectedLinks()">Update Selected</button>	    
     </div>
   </body>
 </html>
