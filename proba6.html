@@ -68,14 +68,7 @@
       database.ref("links").on("value", function(snapshot) {
   var links = snapshot.val();
   var linkList = document.getElementById("link-list");
-  linkList.innerHTML = "";
-        
-  var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
-      if (checkedCheckboxes.length === 0) {
-        document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
-	      return;
-      }
-        
+  linkList.innerHTML = "";       
   for (var link in links) {
   linkList.innerHTML += `
     <div>
