@@ -142,6 +142,15 @@ function toggleLinks() {
   if (linkContainer.style.display === "none") {
     linkContainer.style.display = "block";
     getLinks();
+    document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
+      var linkList = document.getElementById("linkList");
+      var checkboxes = linkList.getElementsByTagName("input");
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          database.ref("links").child(checkboxes[i].id).remove();
+        }
+      }
+    });
   } else {
     linkContainer.style.display = "none";
   }
