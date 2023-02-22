@@ -168,7 +168,11 @@ function getLinks() {
           <input type="checkbox" id="${linkName}" name="linkCheckbox" />
           <label for="${linkName}">${linkName}</label>
         </div>
-      `;	        
+      `;
+
+      // add event listener to each checkbox
+      var checkbox = document.getElementById(linkName);
+      checkbox.addEventListener("click", removeDeletedLinks);
     });
   });
 }
@@ -184,7 +188,7 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
 });
 
 
-	function removeDeletedLinks() {
+function removeDeletedLinks() {
   const deletedLinks = document.querySelectorAll('input[type="checkbox"]:checked');
   deletedLinks.forEach(link => link.parentNode.remove());
 }
