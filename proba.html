@@ -161,14 +161,17 @@ function toggleLinks() {
     });
     
     document.addEventListener("click", function(e) {
-      if (!linkContainer.contains(e.target)) {
-        var checkboxes = document.querySelectorAll('input[name="linkCheckbox"]');
-        for (var i = 0; i < checkboxes.length; i++) {
-          checkboxes[i].checked = false;
-        }
-        document.getElementById("errorMessage").innerHTML = "";
-      }
-    });
+  if (!linkContainer.contains(e.target)) {
+    var checkboxes = document.querySelectorAll('input[name="linkCheckbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+    var errorMessage = document.getElementById("errorMessage").innerHTML;
+    if (errorMessage === "You need to select at least one checkbox") {
+      document.getElementById("errorMessage").innerHTML = "";
+    }
+  }
+});
   } else {
     linkContainer.style.display = "none";
     document.getElementById("errorMessage").innerHTML = "";
