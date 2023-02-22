@@ -136,7 +136,7 @@ function resetInputs() {
 	document.getElementById("errorMessage").innerHTML = "";
 }
 	    
-
+	    
 function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
   if (linkContainer.style.display === "none") {
@@ -145,11 +145,11 @@ function toggleLinks() {
     document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
       var linkList = document.getElementById("linkList");
       var checkboxes = linkList.getElementsByTagName("input");
-      var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
 	    
+      var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
       if (checkedCheckboxes.length === 0) {
         document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
-        return;
+	      return;
       }
 	    
       for (var i = 0; i < checkboxes.length; i++) {
@@ -160,28 +160,18 @@ function toggleLinks() {
       }
     });
     
-    // Add event listener to the document
-    document.addEventListener('click', function(event) {
-      var linkContainer = document.getElementById("linkContainer");
-      var errorMessage = document.getElementById("errorMessage");
-      
-      // Check if the click event happened inside or outside the linkContainer
-      if (event.target.closest('#linkContainer') === null) {
-        // If the click is outside the linkContainer, hide the linkContainer
-        linkContainer.style.display = "none";
-        // Uncheck all checkboxes
-        var checkboxes = document.getElementsByName("linkCheckbox");
-        checkboxes.forEach(function(checkbox) {
-          checkbox.checked = false;
-        });
-        // Remove error message if it is displayed
-        if (errorMessage.innerHTML !== "") {
-          errorMessage.innerHTML = "";
+    document.addEventListener("click", function(e) {
+      if (!linkContainer.contains(e.target)) {
+        var checkboxes = document.querySelectorAll('input[name="linkCheckbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+          checkboxes[i].checked = false;
         }
+        document.getElementById("errorMessage").innerHTML = "";
       }
     });
   } else {
     linkContainer.style.display = "none";
+    document.getElementById("errorMessage").innerHTML = "";
   }
 }
 
@@ -211,7 +201,7 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     }
   }
 });	    
-	    	  
+	    	    	 	    	    	  
 	    	    	    	       	    
  </script>
   </head>
