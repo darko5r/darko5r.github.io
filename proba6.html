@@ -19,7 +19,8 @@
  
   <button id="update-selected-links">Update Selected</button>
   <button id="deleteSelectedBtn">Delete Selected</button>
-  <div id="errorDiv" style="color: red;"></div>
+  <div id="link-limit-error" style="color: red;"></div>
+  <div id="errorMessage" style="color: red;"></div>
   <!-- <div id="successMessage" style="color: green;"></div> -->
   
 </div>
@@ -68,6 +69,13 @@
   var links = snapshot.val();
   var linkList = document.getElementById("link-list");
   linkList.innerHTML = "";
+        
+  var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
+      if (checkedCheckboxes.length === 0) {
+        document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
+	      return;
+      }
+        
   for (var link in links) {
   linkList.innerHTML += `
     <div>
