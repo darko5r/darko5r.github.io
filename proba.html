@@ -145,8 +145,14 @@ function toggleLinks() {
     document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
       var linkList = document.getElementById("linkList");
       var checkboxes = linkList.getElementsByTagName("input");
+	    
+      if (checkedCheckboxes.length === 0) {
+        document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
+	return;
+      }
+	    
       for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
+        if (checkboxes[i].checked) { 
           database.ref("links").child(checkboxes[i].id).remove();
           checkboxes[i].parentNode.remove(); // Remove checkbox from the DOM
         }
