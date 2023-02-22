@@ -136,14 +136,11 @@ function resetInputs() {
 	document.getElementById("errorMessage").innerHTML = "";
 }
 	    
-// Function to toggle links menu
 function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
   if (linkContainer.style.display === "none") {
     linkContainer.style.display = "block";
     getLinks();
-
-    // Event listener to delete selected links
     document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
       var linkList = document.getElementById("linkList");
       var checkboxes = linkList.getElementsByTagName("input");
@@ -152,8 +149,10 @@ function toggleLinks() {
       if (checkedCheckboxes.length === 0) {
         document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
         return;
+      } else {
+        document.getElementById("errorMessage").innerHTML = "";
       }
-      // Delete selected links from the database and remove them from the DOM
+	    
       for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) { 
           database.ref("links").child(checkboxes[i].id).remove();
@@ -161,26 +160,11 @@ function toggleLinks() {
         }
       }
     });
-
-    // Event listener to hide the links menu when clicked outside the menu
-    document.addEventListener("click", function(e) {
-      if (!linkContainer.contains(e.target)) {
-        linkContainer.style.display = "none";
-        // Clear error message if present
-        document.getElementById("errorMessage").innerHTML = "";
-        // Uncheck all checkboxes
-        var checkboxes = linkContainer.querySelectorAll('input[type="checkbox"]');
-        for (var i = 0; i < checkboxes.length; i++) {
-          checkboxes[i].checked = false;
-        }
-      }
-    });
   } else {
     linkContainer.style.display = "none";
   }
-}
+}	    	    	    
 
-// Function to get links from the database and display them in the menu
 function getLinks() {
   var linksRef = database.ref("links");
   linksRef.once("value", function(snapshot) {
@@ -198,7 +182,6 @@ function getLinks() {
   });
 }
 
-// Event listener to delete selected links
 document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
@@ -207,8 +190,7 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
       database.ref("links").child(checkboxes[i].id).remove();
     }
   }
-});	    
-
+});
 	    	    	    	       	    
  </script>
   </head>
