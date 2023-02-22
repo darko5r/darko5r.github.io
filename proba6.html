@@ -187,7 +187,6 @@ function updateSelectedLinks() {
     errorDiv = document.createElement("div");
     errorDiv.id = "link-limit-error";
     errorDiv.textContent = "You can only select up to three links";
-    errorDiv.textContent.style.color = "red";
     linkList.parentNode.insertBefore(errorDiv, linkList);
   } else {
     errorDiv.textContent = "You can only select up to three links";
