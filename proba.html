@@ -136,7 +136,7 @@ function resetInputs() {
 	document.getElementById("errorMessage").innerHTML = "";
 }
 	    
-	    
+
 function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
   if (linkContainer.style.display === "none") {
@@ -145,10 +145,13 @@ function toggleLinks() {
     document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
       var linkList = document.getElementById("linkList");
       var checkboxes = linkList.getElementsByTagName("input");
+      var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
 	    
       if (checkedCheckboxes.length === 0) {
         document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
-	return;
+        return;
+      } else {
+        document.getElementById("errorMessage").innerHTML = "";
       }
 	    
       for (var i = 0; i < checkboxes.length; i++) {
@@ -161,7 +164,9 @@ function toggleLinks() {
   } else {
     linkContainer.style.display = "none";
   }
-}
+}	    
+	    
+	    
 
 function getLinks() {
   var linksRef = database.ref("links");
@@ -206,4 +211,4 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     <button id="deleteSelectedBtn">Delete Selected</button>
     </div>
   </body>
-</html> 
+</html>
