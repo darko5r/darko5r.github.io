@@ -181,10 +181,18 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
       database.ref("links").child(checkboxes[i].id).remove();
     }
   }
-});	    
+});
 
 
-      
+	function removeDeletedLinks() {
+  const deletedLinks = document.querySelectorAll('input[type="checkbox"]:checked');
+  deletedLinks.forEach(link => link.parentNode.remove());
+}
+	    
+// After the links are deleted
+removeDeletedLinks();    
+   
+	    
  </script>
   </head>
   <body>
