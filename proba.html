@@ -209,26 +209,155 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
 function updateSelectedLinks() {
   var linkList = document.getElementById("linkList");
   var checkboxes = linkList.getElementsByTagName("input");
-  var checkedCheckboxes = linkList.querySelectorAll('input[type="checkbox"]:checked');
-  
-  if (checkedCheckboxes.length === 0) {
-    document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
-    return;
+  var count = 0;
+  var checkedLabels = [];
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
+      count++;
+
+      // Check if input fields for this link already exist
+      var existingInputFields = document.getElementById("input-fields-" + checkboxes[i].id);
+      if (!existingInputFields) {
+        // Create input fields and update button for this link
+        var inputFields = document.createElement("div");
+        inputFields.id = "input-fields-" + checkboxes[i].id;
+        inputFields.className = "link-input-fields";
+        
+        
+        var linkName = checkboxes[i].parentNode.querySelector("label").innerText;
+        var linkNameText = linkName.split(" (")[0];
+        var linkNameLabel = document.createElement("label");
+        linkNameLabel.innerText = "Link name: " + linkNameText;
+        var linkNameInput = document.createElement("input");
+        linkNameInput.type = "text";
+        linkNameInput.id = "link-name-input-" + checkboxes[i].id;
+        linkNameInput.placeholder = "Link name";
+        linkNameInput.value = linkNameText;
+        linkNameInput.addEventListener("click", function() {
+  this.select(); 
+          });
+        
+        var linkURL = checkboxes[i].parentNode.querySelector("label").innerText;
+        var linkURLText = linkURL.split(" (")[1].replace(")", ""); 
+        var linkUrlInput = document.createElement("input");
+        linkUrlInput.type = "text";
+        linkUrlInput.id = "link-url-input-" + checkboxes[i].id;
+        linkUrlInput.placeholder = "Link URL";
+        linkUrlInput.value = linkURLText;
+        linkUrlInput.addEventListener("click", function() {
+  this.select(); 
+          });
+        
+        var updateButton = document.createElement("button");
+        updateButton.id = "update-button-" + checkboxes[i].id;
+        updateButton.innerText = "Update";
+        updateButton.addEventListener("click", function() {
+          var newLinkName = linkNameInput.value;
+          var newLinkUrl = linkUrlInput.value;
+          if (newLinkName && newLinkUrl) {
+            var oldRef = firebase.database().ref("links/" + checkboxes[i].id);
+            var newRef = firebase.database().ref("links/" + newLinkName);
+            oldRef.once("value", function(snapshot) {
+              var updates = {};
+              updates[newLinkName] = snapshot.val();
+              updates[newLinkName].url = newLinkUrl;
+              newRef.set(updates[newLinkName], function(error) {
+                if (!error) {
+                  oldRef.remove();
+                  clearSelectedLinks();
+                } else {
+                  console.log("Error in updating the name of the child node: " + error);
+                }
+              });
+            });
+          }
+        });
+
+        inputFields.appendChild(linkNameInput);
+        inputFields.appendChild(linkUrlInput);
+        inputFields.appendChild(updateButton);
+
+        // Add the input fields and update button to the page, limiting to 3 at once
+        var currentInputFields = linkList.getElementsByClassName("link-input-fields");
+        if (currentInputFields.length < 3) {
+          linkList.appendChild(inputFields);
+        } else {
+          currentInputFields[0].remove();
+          linkList.appendChild(inputFields);
+        }
+      }
+    }
   }
   
-  var newName = document.getElementById("linkName").value;
-  var newUrl = document.getElementById("linkUrl").value;
+  // Remove error message when a checkbox is checked
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].type === "checkbox") {
+      checkboxes[i].addEventListener("change", function() {
+        if (this.checked) {
+          removeLinkLimitError();
+        }
+      });
+    }
+  }
   
-  checkedCheckboxes.forEach(function(checkbox) {
-    var linkRef = database.ref("links/" + checkbox.id);
-    linkRef.update({
-      name: newName,
-      url: newUrl
+  if (count > 3) {
+  var errorDiv = document.getElementById("link-limit-error");
+  if (!errorDiv) {
+    errorDiv = document.createElement("div");
+    errorDiv.id = "link-limit-error";
+    errorDiv.textContent = "You can only select up to three links";
+    linkList.parentNode.insertBefore(errorDiv, linkList);
+  } else {
+    errorDiv.textContent = "You can only select up to three links";
+  }
+  
+  if (Array.isArray(checkboxes)) {
+    checkboxes.forEach(function(checkbox) {
+      if (checkbox.checked && count > 3) {
+        checkbox.checked = false;
+        var inputFields = document.getElementById("input-fields-" + checkbox.id);
+        if (inputFields) {
+          inputFields.remove();
+        }
+        count--;
+      }
     });
-  });
-  
-  document.getElementById("successMessage").innerHTML = "Selected links updated successfully";
-}	    
+  }
+      
+    
+        clearSelectedLinks();
+  }
+} 
+      
+      
+      function clearSelectedLinks() {
+  var linkList = document.getElementById("linkList");
+  var inputs = linkList.getElementsByTagName("input");
+  var inputFields = linkList.getElementsByClassName("link-input-fields");
+  var updateButtons = linkList.getElementsByClassName("update-button");
+
+  for (let i = inputs.length - 1; i >= 0; i--) {
+    if (inputs[i].type === "checkbox" && inputs[i].checked) {
+      inputs[i].checked = false;
+    }
+  }
+
+  for (let i = inputFields.length - 1; i >= 0; i--) {
+    linkList.removeChild(inputFields[i]);
+  }
+
+  for (let i = updateButtons.length - 1; i >= 0; i--) {
+    linkList.removeChild(updateButtons[i]);
+  }
+}
+      
+      function removeLinkLimitError() {
+  var errorDiv = document.getElementById("link-limit-error");
+  if (errorDiv) {
+    errorDiv.remove();
+  }
+}
 	    	    
             	    	    	    	 	    	    	  	    	    	    	       	    
  </script>
