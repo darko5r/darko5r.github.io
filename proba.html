@@ -136,6 +136,7 @@ function resetInputs() {
 	document.getElementById("errorMessage").innerHTML = "";
 }
 	    
+
 function toggleLinks() {
   var linkContainer = document.getElementById("linkContainer");
   if (linkContainer.style.display === "none") {
@@ -149,8 +150,6 @@ function toggleLinks() {
       if (checkedCheckboxes.length === 0) {
         document.getElementById("errorMessage").innerHTML = "You need to select at least one checkbox";
         return;
-      } else {
-        document.getElementById("errorMessage").innerHTML = "";
       }
 	    
       for (var i = 0; i < checkboxes.length; i++) {
@@ -160,10 +159,31 @@ function toggleLinks() {
         }
       }
     });
+    
+    // Add event listener to the document
+    document.addEventListener('click', function(event) {
+      var linkContainer = document.getElementById("linkContainer");
+      var errorMessage = document.getElementById("errorMessage");
+      
+      // Check if the click event happened inside or outside the linkContainer
+      if (event.target.closest('#linkContainer') === null) {
+        // If the click is outside the linkContainer, hide the linkContainer
+        linkContainer.style.display = "none";
+        // Uncheck all checkboxes
+        var checkboxes = document.getElementsByName("linkCheckbox");
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = false;
+        });
+        // Remove error message if it is displayed
+        if (errorMessage.innerHTML !== "") {
+          errorMessage.innerHTML = "";
+        }
+      }
+    });
   } else {
     linkContainer.style.display = "none";
   }
-}	    	    	    
+}
 
 function getLinks() {
   var linksRef = database.ref("links");
@@ -190,7 +210,8 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
       database.ref("links").child(checkboxes[i].id).remove();
     }
   }
-});
+});	    
+	    	  
 	    	    	    	       	    
  </script>
   </head>
