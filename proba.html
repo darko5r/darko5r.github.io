@@ -6,8 +6,8 @@
   </head>
   <body>
     <form>
-      <label for="table-name">Table Name:</label>
-      <input type="text" id="table-name" name="table-name">
+      <label for="parent-node">Parent Node:</label>
+      <input type="text" id="parent-node" name="parent-node">
       <button type="submit" id="submit-button">Submit</button>
     </form>
 
@@ -24,29 +24,28 @@
         measurementId: "G-MY3P2TWN4L"
       };
 
-
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      // reference to the table name input field and submit button
-      var tableNameInput = document.getElementById("table-name");
+      // reference to the parent node input field and submit button
+      var parentNodeInput = document.getElementById("parent-node");
       var submitButton = document.getElementById("submit-button");
 
-      // add event listener to the submit button to save the table name to the database
+      // add event listener to the submit button to save the parent node to the database
       submitButton.addEventListener("click", function(event) {
         event.preventDefault(); // prevent form from submitting
 
-        // get the table name from the input field
-        var tableName = tableNameInput.value;
+        // get the parent node name from the input field
+        var parentNodeName = parentNodeInput.value;
 
-        // reference to the location where you want to store the table name
-        var tableNameRef = database.ref().push();
+        // reference to the location where you want to store the parent node name
+        var parentNodeRef = database.ref(parentNodeName);
 
         // set the data at the location referenced in step 2 to null
-        tableNameRef.set({ tableName });
+        parentNodeRef.set({});
 
         // clear the input field
-        tableNameInput.value = "";
+        parentNodeInput.value = "";
       });
     </script>
   </body>
