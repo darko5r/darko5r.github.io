@@ -271,16 +271,23 @@ function hideErrorMessageOnClickOutside(event) {
 document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
   var checkboxes = linkList.getElementsByTagName("input");
+  var atLeastOneCheckboxChecked = false;
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       database.ref("links").child(checkboxes[i].id).remove();
-      } else {
-       document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
-       return;
-      }
+      atLeastOneCheckboxChecked = true;
+    }
   }
-});      
-            
+  if (!atLeastOneCheckboxChecked) {
+    document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+    return;
+  }
+  document.addEventListener("click", function removeErrorMessage() {
+    document.getElementById("errorMessage").innerHTML = "";
+    document.removeEventListener("click", removeErrorMessage);
+  });
+});     
+                 
          
     </script>
 </body>
