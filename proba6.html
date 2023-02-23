@@ -261,7 +261,7 @@ function hideErrorMessageOnClickOutside(event) {
   var errorMessage = document.getElementById("errorMessage");
 
   // check if the click event occurred outside of the toggle menu and error message
-  if (!event.target.closest("#toggle-menu") && !event.target.closest("#errorMessage")) {
+  if (!event.target.closest("#toggle-menu") && !event.target.closest("#errorMessage") || !event.target.closest("#deleteSelectedBtn")) {
     // hide the error message
     errorMessage.innerHTML = "";
     document.removeEventListener('click', hideErrorMessageOnClickOutside);
@@ -287,8 +287,7 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     document.getElementById("errorMessage").innerHTML = "";
   }
 });
-
-                 
+                            
          
     </script>
 </body>
