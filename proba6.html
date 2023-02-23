@@ -19,6 +19,7 @@
  
   <button id="update-selected-links">Update Selected</button>
   <button id="deleteSelectedBtn">Delete Selected</button>
+  <div id="errorMessage" style="color: red;"></div>
   <!-- <div id="link-limit-error" style="color: red;"></div> -->
   
 </div>
@@ -91,6 +92,19 @@ function updateSelectedLinks() {
   var checkboxes = linkList.getElementsByTagName("input");
   var count = 0;
   var checkedLabels = [];
+  
+  // check if at least one checkbox has been checked
+  var atLeastOneCheckboxChecked = false;
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
+      atLeastOneCheckboxChecked = true;
+      break;
+    }
+  }
+  if (!atLeastOneCheckboxChecked) {
+    document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+    return;
+  }
 
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
