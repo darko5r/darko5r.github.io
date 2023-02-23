@@ -13,10 +13,7 @@
     }
     </style>
 
-	
-    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
-    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">  
-    <button onclick="submitLink()">Submit</button>	  
+		  
     <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
     <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
     <div id="link-list"></div>
@@ -47,68 +44,7 @@
       
       
       var menuExpanded = false;
-      
-      
-  document.addEventListener("keydown", function(event) {
-	if (event.keyCode === 13) {
-		event.preventDefault();
-		submitLink();
-	}
-});
-      
-      
-
-
-function submitLink() {
-	var linkName = document.getElementById("linkName").value;
-	var linkUrl = document.getElementById("linkUrl").value;
-
-	if (!linkName || !linkUrl) {
-		document.getElementById("errorMessage").innerHTML = "Both the link name and URL are required";
-		return;
-	}
-
-	document.getElementById("errorMessage").innerHTML = "";
-	document.getElementById("successMessage").innerHTML = "";
-	var linksRef = database.ref("links");
-
-	linksRef.orderByChild("id").limitToLast(1).once("value", function(snapshot) {
-		var newId = 0;
-		snapshot.forEach(function(childSnapshot) {
-			var childData = childSnapshot.val();
-			if (childData.id > newId) {
-				newId = childData.id;
-			}
-		});
-		newId++;
-
-		linksRef.child(linkName).set({
-			id: newId,
-			url: linkUrl,
-			timestamp: firebase.database.ServerValue.TIMESTAMP
-		});
-
-		document.getElementById("successMessage").innerHTML = "Link submitted successfully";
-		document.getElementById("linkName").value = "";
-		document.getElementById("linkUrl").value = "";
-	});
-}
-
-function clearForm() {
-	document.getElementById("errorMessage").innerHTML = "";
-	document.getElementById("successMessage").innerHTML = "";
-}
-
-function clearName() {
-	document.getElementById("linkName").value = "";
-}
-
-function clearUrl() {
-	document.getElementById("linkUrl").value = "";
-}
-      
-      
-      
+                  
 
   function toggleMenu() {
     var toggleMenu = document.getElementById("toggle-menu");
