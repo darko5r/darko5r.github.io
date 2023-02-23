@@ -27,11 +27,11 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      // reference to the table form, input field and submit button
-      var tableForm = document.getElementById("table-form");
+      // reference to the table name input field and form
       var tableNameInput = document.getElementById("table-name");
+      var tableForm = document.getElementById("table-form");
 
-      // add event listener to the table form to save the table name to the database
+      // add event listener to the form to save the table name to the database
       tableForm.addEventListener("submit", function(event) {
         event.preventDefault(); // prevent form from submitting
 
