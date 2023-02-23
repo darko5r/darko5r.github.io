@@ -43,7 +43,7 @@
         var tableNameRef = database.ref().push();
 
         // set the data at the location referenced in step 2 to null
-        tableNameRef.set({ name: tableName });
+        tableNameRef.set({ tableName });
 
         // clear the input field
         tableNameInput.value = "";
