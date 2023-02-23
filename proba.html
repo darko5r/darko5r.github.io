@@ -6,8 +6,8 @@
   </head>
   <body>
     <form>
-      <label for="parent-node">Parent Node:</label>
-      <input type="text" id="parent-node" name="parent-node">
+      <label for="parent-node-name">Parent Node Name:</label>
+      <input type="text" id="parent-node-name" name="parent-node-name">
       <button type="submit" id="submit-button">Submit</button>
     </form>
 
@@ -27,16 +27,16 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      // reference to the parent node input field and submit button
-      var parentNodeInput = document.getElementById("parent-node");
+      // reference to the parent node name input field and submit button
+      var parentNodeNameInput = document.getElementById("parent-node-name");
       var submitButton = document.getElementById("submit-button");
 
-      // add event listener to the submit button to save the parent node to the database
+      // add event listener to the submit button to save the parent node name to the database
       submitButton.addEventListener("click", function(event) {
         event.preventDefault(); // prevent form from submitting
 
         // get the parent node name from the input field
-        var parentNodeName = parentNodeInput.value;
+        var parentNodeName = parentNodeNameInput.value;
 
         // reference to the location where you want to store the parent node name
         var parentNodeRef = database.ref(parentNodeName);
@@ -45,7 +45,7 @@
         parentNodeRef.set({});
 
         // clear the input field
-        parentNodeInput.value = "";
+        parentNodeNameInput.value = "";
       });
     </script>
   </body>
