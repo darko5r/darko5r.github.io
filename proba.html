@@ -5,7 +5,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
   </head>
   <body>
-    <form>
+    <form id="table-form">
       <label for="table-name">Table Name:</label>
       <input type="text" id="table-name" name="table-name">
       <button type="submit" id="submit-button">Submit</button>
@@ -27,12 +27,12 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      // reference to the table name input field and submit button
+      // reference to the table form, input field and submit button
+      var tableForm = document.getElementById("table-form");
       var tableNameInput = document.getElementById("table-name");
-      var submitButton = document.getElementById("submit-button");
 
-      // add event listener to the submit button to save the table name to the database
-      submitButton.addEventListener("click", function(event) {
+      // add event listener to the table form to save the table name to the database
+      tableForm.addEventListener("submit", function(event) {
         event.preventDefault(); // prevent form from submitting
 
         // get the table name from the input field
