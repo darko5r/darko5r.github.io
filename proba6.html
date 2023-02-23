@@ -260,11 +260,10 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       database.ref("links").child(checkboxes[i].id).remove();
-      else {
+      } else {
        document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
        return;
       }
-    }
   }
 });      
             
