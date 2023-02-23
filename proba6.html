@@ -13,6 +13,10 @@
     }
     </style>
 
+	
+    <input type="text" id="linkName" placeholder="Link Name" onfocus="clearForm();clearName();">
+    <input type="text" id="linkUrl" placeholder="Link URL" onfocus="clearForm();clearUrl();">  
+    <button onclick="submitLink()">Submit</button>	  
     <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
     <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
     <div id="link-list"></div>
@@ -20,7 +24,6 @@
     <button id="update-selected-links">Update Selected</button>
     <button id="deleteSelectedBtn">Delete Selected</button>
     <div id="errorMessage" style="color: red;"></div>
-    <button onclick="submitLink()">Submit</button>
     <!-- <div id="link-limit-error" style="color: red;"></div> -->
   
     </div>
