@@ -288,14 +288,6 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
   }
 });
 
-document.addEventListener("click", function(event) {
-  var errorMessage = document.getElementById("errorMessage");
-  if (event.target.closest("#deleteSelectedBtn") || event.target.closest("#errorMessage")) {
-    return;
-  } else {
-    errorMessage.innerHTML = "";
-  }
-});
                  
          
     </script>
