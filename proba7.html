@@ -135,7 +135,36 @@ function resetInputs() {
 	document.getElementById("successMessage").innerHTML = "";
 	document.getElementById("errorMessage").innerHTML = "";
 }
-	    
+	
+	  </script>
+	  
+	  
+	  
+	  <div>
+		  
+	  <style>
+    #toggle-button:hover {
+      transform: rotate(360deg);
+      transition: transform 0.3s ease-in-out;
+    }
+    </style>
+
+		  
+    <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
+    <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
+    <div id="link-list"></div>
+ 
+    <button id="update-selected-links">Update Selected</button>
+    <button id="deleteSelectedBtn">Delete Selected</button>
+    <div id="errorMessage" style="color: red;"></div>
+    <!-- <div id="link-limit-error" style="color: red;"></div> -->
+  
+    </div>
+	  
+	  
+	  </div>
+	  
+	  <script>
 	    
 var menuExpanded = false;
                   
@@ -396,8 +425,7 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     errorMessage.innerHTML = "";
   }
 });                                       
-	    	    	    	    
-            	    	    	    	 	    	    	  	    	    	    	       	    
+	    	    	    	                	    	    	    	 	    	    	  	    	    	    	       	    
  </script>
   </head>
   <body>
@@ -408,24 +436,6 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
     <button onclick="submitLink()">Submit</button>
     <button onclick="deleteLink()">Delete</button>
     </div>
-  
-   <style>
-    #toggle-button:hover {
-      transform: rotate(360deg);
-      transition: transform 0.3s ease-in-out;
-    }
-    </style>
-
-		  
-    <div><p>Toggle Links:<button id="toggle-button" style="border: none; background-color: transparent; font-weight: bold; font-size: 16px;" onMouseOver="this.style.color='#ec2f2f'" onMouseOut="this.style.color='#212020'">➕</button></p></div>
-    <div id="toggle-menu" class="toggle-menu" style="border: none; background-color: transparent;">
-    <div id="link-list"></div>
- 
-    <button id="update-selected-links">Update Selected</button>
-    <button id="deleteSelectedBtn">Delete Selected</button>
-    <div id="errorMessage" style="color: red;"></div>
-    <!-- <div id="link-limit-error" style="color: red;"></div> -->
-  
-    </div>
+   
   </body>
 </html>
