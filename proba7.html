@@ -156,7 +156,7 @@ function resetInputs() {
  
     <button id="update-selected-links">Update Selected</button>
     <button id="deleteSelectedBtn">Delete Selected</button>
-    <div id="errorMessage" style="color: red;"></div>
+    <div id="errorMessageToggle" style="color: red;"></div>
     <!-- <div id="link-limit-error" style="color: red;"></div> -->
   
     </div>
@@ -227,7 +227,7 @@ function updateSelectedLinks() {
     }
   }
   if (!atLeastOneCheckboxChecked) {
-    document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+    document.getElementById("errorMessageToggle").innerHTML = "Please select at least one link to update or delete.";
     document.addEventListener('click', hideErrorMessageOnClickOutside);
     return;
   }
@@ -383,10 +383,10 @@ function updateSelectedLinks() {
       
 function hideErrorMessageOnClickOutside(event) {
   // get the error message element
-  var errorMessage = document.getElementById("errorMessage");
+  var errorMessage = document.getElementById("errorMessageToggle");
 
   // check if the click event occurred outside of the toggle menu and error message
-  if (!event.target.closest("#toggle-menu") && !event.target.closest("#errorMessage")) {
+  if (!event.target.closest("#toggle-menu") && !event.target.closest("#errorMessageToggle")) {
     // hide the error message
     errorMessage.innerHTML = "";
     document.removeEventListener('click', hideErrorMessageOnClickOutside);
@@ -406,18 +406,18 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
   }
   
   if (!atLeastOneCheckboxChecked) {
-    document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+    document.getElementById("errorMessageToggle").innerHTML = "Please select at least one link to update or delete.";
     return;
   } else {
-    document.getElementById("errorMessage").innerHTML = "";
+    document.getElementById("errorMessageToggle").innerHTML = "";
   }
 });
       
  document.addEventListener("click", function(event) {
-  var errorMessage = document.getElementById("errorMessage");
+  var errorMessage = document.getElementById("errorMessageToggle");
   var deleteButton = document.getElementById("deleteSelectedBtn");
 
-  if (event.target.closest("#toggle-menu") || event.target.closest("#errorMessage") || event.target.closest("#deleteSelectedBtn")) {
+  if (event.target.closest("#toggle-menu") || event.target.closest("#errorMessageToggle") || event.target.closest("#deleteSelectedBtn")) {
     // the click occurred inside the toggle menu, error message, or delete button
     return;
   } else {
