@@ -78,6 +78,21 @@
 }             
 });
       
+document.addEventListener("click", function(event) {
+  var toggleMenu = document.getElementById("toggle-menu");
+  var errorMessage = document.getElementById("errorMessage");
+  if (toggleMenu.contains(event.target)) {
+    // Click event occurred inside toggle menu
+    // Do nothing
+  } else {
+    // Click event occurred outside toggle menu
+    // Remove error message if it is currently shown
+    if (errorMessage.style.display !== "none") {
+      errorMessage.style.display = "none";
+    }
+  }
+});
+      
       
   document.getElementById("update-selected-links").addEventListener("click", updateSelectedLinks);
 document.addEventListener("click", function(event) {
