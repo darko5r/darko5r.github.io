@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
   </head>
   <body>
     <form>
@@ -23,27 +23,29 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
+
+      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
+
+      // Get a reference to the database
       var database = firebase.database();
 
-      // reference to the parent node input field and submit button
+      // Get references to the input field and submit button
       var parentNodeInput = document.getElementById("parent-node");
       var submitButton = document.getElementById("submit-button");
 
-      // add event listener to the submit button to save the parent node to the database
+      // Add event listener to the submit button to save the parent node to the database
       submitButton.addEventListener("click", function(event) {
         event.preventDefault(); // prevent form from submitting
 
-        // get the parent node name from the input field
+        // Get the parent node name from the input field
         var parentNodeName = parentNodeInput.value;
 
-        // reference to the location where you want to store the parent node
-        var parentNodeRef = database.ref().child(parentNodeName);
+        // Push a new parent node to the database
+        var newParentNodeRef = database.ref().push();
+        newParentNodeRef.set({ name: parentNodeName });
 
-        // set the data at the location referenced in step 2 to null
-        parentNodeRef.set({});
-
-        // clear the input field
+        // Clear the input field
         parentNodeInput.value = "";
       });
     </script>
