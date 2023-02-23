@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-database.js"></script>
   </head>
   <body>
     <form>
-      <label for="parent-node">Parent Node:</label>
-      <input type="text" id="parent-node" name="parent-node">
+      <label for="parent-name">Parent Name:</label>
+      <input type="text" id="parent-name" name="parent-name">
+      <label for="child-name">Child Name:</label>
+      <input type="text" id="child-name" name="child-name">
       <button type="submit" id="submit-button">Submit</button>
     </form>
 
@@ -24,29 +26,31 @@
         measurementId: "G-MY3P2TWN4L"
       };
 
-      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-
-      // Get a reference to the database
       var database = firebase.database();
 
-      // Get references to the input field and submit button
-      var parentNodeInput = document.getElementById("parent-node");
+      // reference to the parent name and child name input fields and submit button
+      var parentNameInput = document.getElementById("parent-name");
+      var childNameInput = document.getElementById("child-name");
       var submitButton = document.getElementById("submit-button");
 
-      // Add event listener to the submit button to save the parent node to the database
+      // add event listener to the submit button to save the parent and child names to the database
       submitButton.addEventListener("click", function(event) {
         event.preventDefault(); // prevent form from submitting
 
-        // Get the parent node name from the input field
-        var parentNodeName = parentNodeInput.value;
+        // get the parent and child names from the input fields
+        var parentName = parentNameInput.value;
+        var childName = childNameInput.value;
 
-        // Push a new parent node to the database
-        var newParentNodeRef = database.ref().push();
-        newParentNodeRef.set({ name: parentNodeName });
+        // reference to the location where you want to store the parent node
+        var parentRef = database.ref();
 
-        // Clear the input field
-        parentNodeInput.value = "";
+        // add the child node to the specified parent node
+        parentRef.child(parentName).set({ name: childName });
+
+        // clear the input fields
+        parentNameInput.value = "";
+        childNameInput.value = "";
       });
     </script>
   </body>
