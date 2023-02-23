@@ -12,7 +12,7 @@
     </form>
 
     <script>
-       // firebase configuration and setup
+      // firebase configuration and setup
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -23,7 +23,7 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
-      
+
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
@@ -39,10 +39,10 @@
         var tableName = tableNameInput.value;
 
         // reference to the location where you want to store the table name
-        var tableNameRef = database.ref().child(tableName);
+        var tableNameRef = database.ref(tableName);
 
-        // create an empty object at the new location
-        tableNameRef.push().set({});
+        // set the data at the location referenced in step 2 to null
+        tableNameRef.set(null);
 
         // clear the input field
         tableNameInput.value = "";
