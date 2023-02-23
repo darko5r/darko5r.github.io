@@ -260,22 +260,10 @@ document.getElementById("deleteSelectedBtn").addEventListener("click", function(
   for (var i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
       database.ref("links").child(checkboxes[i].id).remove();
-      
-      
-      // check if at least one checkbox has been checked
-  var atLeastOneCheckboxChecked = false;
-  for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
-      atLeastOneCheckboxChecked = true;
-      break;
-    }
-  }
-  if (!atLeastOneCheckboxChecked) {
-    document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
-    return;
-  }
-      
-      
+      else {
+       document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+       return;
+      }
     }
   }
 });      
