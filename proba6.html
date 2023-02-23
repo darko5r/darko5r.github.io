@@ -103,8 +103,10 @@ function updateSelectedLinks() {
   }
   if (!atLeastOneCheckboxChecked) {
     document.getElementById("errorMessage").innerHTML = "Please select at least one link to update or delete.";
+    document.addEventListener('click', hideErrorMessageOnClickOutside);
     return;
   }
+  
 
   for (let i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
@@ -253,6 +255,18 @@ function updateSelectedLinks() {
     errorDiv.remove();
   }
 }
+      
+function hideErrorMessageOnClickOutside(event) {
+  // get the error message element
+  var errorMessage = document.getElementById("errorMessage");
+
+  // check if the click event occurred outside of the toggle menu and error message
+  if (!event.target.closest("#toggle-menu") && !event.target.closest("#errorMessage")) {
+    // hide the error message
+    errorMessage.innerHTML = "";
+    document.removeEventListener('click', hideErrorMessageOnClickOutside);
+  }
+}      
       
 document.getElementById("deleteSelectedBtn").addEventListener("click", function() {
   var linkList = document.getElementById("link-list");
