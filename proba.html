@@ -6,10 +6,12 @@
   </head>
   <body>
     <form>
-      <label for="parent-name">Parent Name:</label>
-      <input type="text" id="parent-name" name="parent-name">
+      <label for="parent-name">Parent Node Name:</label>
+      <input type="text" id="parent-name" name="parent-name"><br><br>
       <label for="child-name">Child Name:</label>
-      <input type="text" id="child-name" name="child-name">
+      <input type="text" id="child-name" name="child-name"><br><br>
+      <label for="child-value">Child Value:</label>
+      <input type="text" id="child-value" name="child-value"><br><br>
       <button type="submit" id="submit-button">Submit</button>
     </form>
 
@@ -29,28 +31,32 @@
       firebase.initializeApp(firebaseConfig);
       var database = firebase.database();
 
-      // reference to the parent name and child name input fields and submit button
+      // reference to the input fields and submit button
       var parentNameInput = document.getElementById("parent-name");
       var childNameInput = document.getElementById("child-name");
+      var childValueInput = document.getElementById("child-value");
       var submitButton = document.getElementById("submit-button");
 
-      // add event listener to the submit button to save the parent and child names to the database
+      // add event listener to the submit button to save the data to the database
       submitButton.addEventListener("click", function(event) {
         event.preventDefault(); // prevent form from submitting
 
-        // get the parent and child names from the input fields
+        // get the values from the input fields
         var parentName = parentNameInput.value;
         var childName = childNameInput.value;
+        var childValue = childValueInput.value;
 
-        // reference to the location where you want to store the parent node
-        var parentRef = database.ref();
+        // reference to the location where you want to store the data
+        var parentRef = database.ref().child(parentName);
+        var childRef = parentRef.child(childName);
 
-        // add the child node to the specified parent node
-        parentRef.child(parentName).set({ name: childName });
+        // set the data at the location referenced in the previous step
+        childRef.set(childValue);
 
         // clear the input fields
         parentNameInput.value = "";
         childNameInput.value = "";
+        childValueInput.value = "";
       });
     </script>
   </body>
