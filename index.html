@@ -7,6 +7,9 @@
   <body>
     <h1>My Links</h1>
     <ul id="links-list"></ul>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <h1>My Posts</h1>
     <table>
       <thead>
@@ -20,60 +23,63 @@
       </thead>
       <tbody id="post-table-body"></tbody>
     </table>
-    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // Initialize Firebase
       var firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "YOUR_DATABASE_URL",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID",
-        measurementId: "YOUR_MEASUREMENT_ID"
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
       };
       firebase.initializeApp(firebaseConfig);
-
+      
       // Reference to the links in the Firebase Database
-      var linksRef = firebase.database().ref("links");
+var linksRef = firebase.database().ref("links");
 
-      // Read the links from the Firebase Database
-      linksRef.on("value", function(snapshot) {
-        // Get the links data
-        var links = snapshot.val();
+// Read the links from the Firebase Database
+linksRef.on("value", function(snapshot) {
+  // Get the links data
+  var links = snapshot.val();
 
-        // Loop through the links and add them to the list
-        $.each(links, function(key, link) {
-          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
-        });
-      });
+  // Loop through the links and add them to the list
+  $.each(links, function(key, link) {
+    $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+  });
+});
 
-      // Reference to the posts in the Firebase Database
-      var postsRef = firebase.database().ref("posts");
+// Reference to the posts in the Firebase Database
+var postsRef = firebase.database().ref("posts");
 
-      // Read the posts from the Firebase Database
-      postsRef.on("value", function(snapshot) {
-        // Get the posts data
-        var posts = snapshot.val();
+// Read the posts from the Firebase Database
+postsRef.on("value", function(snapshot) {
+  // Get the posts data
+  var posts = snapshot.val();
 
-        // Loop through the posts and add them to the table
-        $.each(posts, function(postId, post) {
-          var row = $("<tr>");
-          $("<td>").text(post.postTitle).appendTo(row);
-          $("<td>").text(post.postAuthor).appendTo(row);
-          $("<td>").text(post.postContent).appendTo(row);
-          $("<td>").text(post.postDate).appendTo(row);
-          var categoryRef = firebase.database().ref("categories/" + post.postCategory);
-          categoryRef.once("value", function(snapshot) {
-            var category = snapshot.val();
-            $("<td>").text(category.categoryName).appendTo(row);
-          });
-          row.appendTo("#post-table-body");
-        });
-      });
-    </script>
+  // Loop through the posts and add them to the table
+  var tableBody = document.getElementById("post-table-body");
+  for (var postId in posts) {
+    if (posts.hasOwnProperty(postId)) {
+      var post = posts[postId];
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      titleCell.innerText = post.postTitle;
+      authorCell.innerText = post.postAuthor;
+      contentCell.innerText = post.postContent;
+      dateCell.innerText = post.postDate;
+      categoryCell.innerText = post.categoryName;
+    }
+  }
+});
+      
+      
+    </script>      
   </body>
 </html>
