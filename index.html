@@ -55,7 +55,7 @@
         });
       });
 
-      const postsRef = firebase.database().ref('posts');
+      const postsRef = firebase.database().ref('posts/post1');
 const tableBody = document.querySelector('#post-table tbody');
 postsRef.on('value', (snapshot) => {
   snapshot.forEach((childSnapshot) => {
