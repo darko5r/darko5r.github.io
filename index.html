@@ -2,9 +2,11 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Blog</title>
+    <title>My Github Pages Website</title>
   </head>
   <body>
+    <h1>My Links</h1>
+    <ul id="links-list"></ul>
     <h1>My Posts</h1>
     <table>
       <thead>
@@ -18,23 +20,36 @@
       </thead>
       <tbody id="post-table-body"></tbody>
     </table>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // Initialize Firebase
       var firebaseConfig = {
-        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
-        authDomain: "blog-25253.firebaseapp.com",
-        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "blog-25253",
-        storageBucket: "blog-25253.appspot.com",
-        messagingSenderId: "906101390805",
-        appId: "1:906101390805:web:871c51f2486921f443115c",
-        measurementId: "G-MY3P2TWN4L"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID",
+        measurementId: "YOUR_MEASUREMENT_ID"
       };
       firebase.initializeApp(firebaseConfig);
+
+      // Reference to the links in the Firebase Database
+      var linksRef = firebase.database().ref("links");
+
+      // Read the links from the Firebase Database
+      linksRef.on("value", function(snapshot) {
+        // Get the links data
+        var links = snapshot.val();
+
+        // Loop through the links and add them to the list
+        $.each(links, function(key, link) {
+          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+        });
+      });
 
       // Reference to the posts in the Firebase Database
       var postsRef = firebase.database().ref("posts");
@@ -45,18 +60,17 @@
         var posts = snapshot.val();
 
         // Loop through the posts and add them to the table
-        $.each(posts, function(key, post) {
+        $.each(posts, function(postId, post) {
           var row = $("<tr>");
           $("<td>").text(post.postTitle).appendTo(row);
           $("<td>").text(post.postAuthor).appendTo(row);
           $("<td>").text(post.postContent).appendTo(row);
           $("<td>").text(post.postDate).appendTo(row);
           var categoryRef = firebase.database().ref("categories/" + post.postCategory);
-categoryRef.once("value", function(snapshot) {
-  var category = snapshot.val();
-  var categoryCell = row.insertCell(4);
-  categoryCell.innerText = category.categoryName;
-});
+          categoryRef.once("value", function(snapshot) {
+            var category = snapshot.val();
+            $("<td>").text(category.categoryName).appendTo(row);
+          });
           row.appendTo("#post-table-body");
         });
       });
