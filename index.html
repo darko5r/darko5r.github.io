@@ -58,23 +58,31 @@ categoriesRef.once('value', snapshot => {
 });
 
 // Retrieve the posts with the corresponding category
-const tableBody = document.querySelector('#post-table tbody');
-postsRef.on('value', snapshot => {
-  tableBody.innerHTML = '';
-  snapshot.forEach(childSnapshot => {
-    const post = childSnapshot.val();
-    const category = categories[post.categories.category1];
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${post.postTitle}</td>
-      <td>${post.postAuthor}</td>
-      <td>${post.postContent}</td>
-      <td>${post.postDate}</td>
-      <td>${category ? category.categoryName : ''}</td>
-    `;
-    tableBody.appendChild(row);
+        
+  var tableBody = document.getElementById("post-table-body");
+firebase.database().ref('posts').once('value', function(snapshot) {
+  var posts = snapshot.val();
+  firebase.database().ref('categories').once('value', function(categorySnapshot) {
+    var categories = categorySnapshot.val();
+    for (var postId in posts) {
+      if (posts.hasOwnProperty(postId)) {
+        var post = posts[postId];
+        var row = tableBody.insertRow(-1);
+        var titleCell = row.insertCell(0);
+        var authorCell = row.insertCell(1);
+        var contentCell = row.insertCell(2);
+        var dateCell = row.insertCell(3);
+        var categoryCell = row.insertCell(4);
+        titleCell.innerText = post.postTitle;
+        authorCell.innerText = post.postAuthor;
+        contentCell.innerText = post.postContent;
+        dateCell.innerText = post.postDate;
+        var category = categories[post.categories.category1];
+        categoryCell.innerText = category.categoryName;
+      }
+    }
   });
-});      
+});
         
     </script>
   </body>
