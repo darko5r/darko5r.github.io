@@ -45,42 +45,37 @@
 
         // Loop through the posts and add them to the table
         
-        const categoriesRef = firebase.database().ref('categories');
-const postsRef = firebase.database().ref('posts');
-const tableBody = document.querySelector('#post-table tbody');
+        const postsRef = firebase.database().ref('posts');
+const categoriesRef = firebase.database().ref('categories');
 
-// Retrieve the categories from the Firebase Realtime Database
-categoriesRef.on('value', (snapshot) => {
-  const categories = {}; // Store the categories data as an object
-
-  snapshot.forEach((childSnapshot) => {
+// Create a dictionary of categories
+let categories = {};
+categoriesRef.once('value', snapshot => {
+  snapshot.forEach(childSnapshot => {
     const category = childSnapshot.val();
-    const categoryId = category.categoryid;
-
-    categories[categoryId] = category; // Add the category data to the categories object
+    categories[category.categoryid] = category;
   });
+});
 
-  // Retrieve the posts from the Firebase Realtime Database
-  postsRef.on('value', (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const post = childSnapshot.val();
-      const categoryId = post.categories.category1; // Get the category ID for this post
-
-      // Use the category ID to retrieve the corresponding category data from the categories object
-      const category = categories[categoryId];
-
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${post.postTitle}</td>
-        <td>${post.postAuthor}</td>
-        <td>${post.postContent}</td>
-        <td>${post.postDate}</td>
-        <td>${category ? category.categoryName : ''}</td> <!-- Show the category name if it exists -->
-      `;
-      tableBody.appendChild(row);
-    });
+// Retrieve the posts with the corresponding category
+const tableBody = document.querySelector('#post-table tbody');
+postsRef.on('value', snapshot => {
+  tableBody.innerHTML = '';
+  snapshot.forEach(childSnapshot => {
+    const post = childSnapshot.val();
+    const category = categories[post.categories.category1];
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${post.postTitle}</td>
+      <td>${post.postAuthor}</td>
+      <td>${post.postContent}</td>
+      <td>${post.postDate}</td>
+      <td>${category ? category.categoryName : ''}</td>
+    `;
+    tableBody.appendChild(row);
   });
-});              
+});      
+        
     </script>
   </body>
 </html>
