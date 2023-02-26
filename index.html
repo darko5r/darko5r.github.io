@@ -35,6 +35,20 @@
       };
       firebase.initializeApp(firebaseConfig);
       
+      // Reference to the links in the Firebase Database
+      var linksRef = firebase.database().ref("links");
+
+      // Read the links from the Firebase Database
+      linksRef.on("value", function(snapshot) {
+        // Get the links data
+        var links = snapshot.val();
+
+        // Loop through the links and add them to the list
+        $.each(links, function(key, link) {
+          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+        });
+      });
+      
       // Reference to the posts in the Firebase Database
       var postsRef = firebase.database().ref("posts");
 
@@ -59,36 +73,25 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
-firebase.database().ref('posts').once('value').then(function(snapshot) {
-  var posts = snapshot.val();
-  var tableBody = document.getElementById('post-table-body');
-
-  firebase.database().ref('categories').once('value').then(function(snapshot) {
-    var categories = snapshot.val();
-
-    for (var postId in posts) {
-      if (posts.hasOwnProperty(postId)) {
-        var post = posts[postId];
-        var row = tableBody.insertRow(-1);
-        var titleCell = row.insertCell(0);
-        var authorCell = row.insertCell(1);
-        var contentCell = row.insertCell(2);
-        var dateCell = row.insertCell(3);
-        var categoryCell = row.insertCell(4);
-
-        titleCell.innerText = post.postTitle;
-        authorCell.innerText = post.postAuthor;
-        contentCell.innerText = post.postContent;
-        dateCell.innerText = post.postDate;
-
-        var categoryId = post.categoryId;
-        var categoryName = categories[categoryId].categoryName;
-        categoryCell.innerText = categoryName;
-      }
-    }
-  });
-});
-
+var tableBody = document.getElementById("post-table-body");
+        for (var postId in posts) {
+          if (posts.hasOwnProperty(postId)) {
+            var post = posts[postId];
+            var row = tableBody.insertRow(-1);
+            var titleCell = row.insertCell(0);
+            var authorCell = row.insertCell(1);
+            var contentCell = row.insertCell(2);
+            var dateCell = row.insertCell(3);
+            var categoryCell = row.insertCell(4);
+            titleCell.innerText = post.postTitle;
+            authorCell.innerText = post.postAuthor;
+            contentCell.innerText = post.postContent;
+            dateCell.innerText = post.postDate;
+            categoryCell.innerText = post.categories.category1;
+          }
+        }
+      });
+      
     </script>
   </body>
 </html>
