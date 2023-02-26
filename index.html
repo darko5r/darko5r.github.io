@@ -52,10 +52,11 @@
           $("<td>").text(post.postContent).appendTo(row);
           $("<td>").text(post.postDate).appendTo(row);
           var categoryRef = firebase.database().ref("categories/" + post.postCategory);
-          categoryRef.once("value", function(snapshot) {
-            var category = snapshot.val();
-            $("<td>").text(category.categoryName).appendTo(row);
-          });
+categoryRef.once("value", function(snapshot) {
+  var category = snapshot.val();
+  var categoryCell = row.insertCell(4);
+  categoryCell.innerText = category.categoryName;
+});
           row.appendTo("#post-table-body");
         });
       });
