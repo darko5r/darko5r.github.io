@@ -59,31 +59,25 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
-  var postsRef = firebase.database().ref("posts");
-
-postsRef.on("value", function(snapshot) {
   var tableBody = document.getElementById("post-table-body");
-  tableBody.innerHTML = "";
 
-  snapshot.forEach(function(childSnapshot) {
-    var postId = childSnapshot.key;
-    var post = childSnapshot.val();
-    var row = tableBody.insertRow(-1);
-    var titleCell = row.insertCell(0);
-    var authorCell = row.insertCell(1);
-    var contentCell = row.insertCell(2);
-    var dateCell = row.insertCell(3);
-    var categoryCell = row.insertCell(4);
-
-    titleCell.innerText = post.postTitle;
-    authorCell.innerText = post.postAuthor;
-    contentCell.innerText = post.postContent;
-    dateCell.innerText = post.postDate;
-
-    var categoryRef = firebase.database().ref("categories/" + post.categories.category1);
-    categoryRef.once("value", function(categorySnapshot) {
-      var categoryName = categorySnapshot.val().categoryName;
-      categoryCell.innerText = categoryName;
+database.ref("posts").once("value").then(function(postsSnapshot) {
+  database.ref("categories").once("value").then(function(categoriesSnapshot) {
+    postsSnapshot.forEach(function(postSnapshot) {
+      var post = postSnapshot.val();
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      titleCell.innerText = post.postTitle;
+      authorCell.innerText = post.postAuthor;
+      contentCell.innerText = post.postContent;
+      dateCell.innerText = post.postDate;
+      var categoryId = post.categories.category1;
+      var category = categoriesSnapshot.child(categoryId).val();
+      categoryCell.innerText = category.categoryName;
     });
   });
 });
