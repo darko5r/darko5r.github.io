@@ -2,28 +2,17 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Posts</title>
+    <title>My Github Pages Website</title>
   </head>
   <body>
-    <h1>My Posts</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Content</th>
-          <th>Date</th>
-          <th>Category</th>
-        </tr>
-      </thead>
-      <tbody id="post-table-body"></tbody>
-    </table>
-    
+    <h1>My Links</h1>
+    <ul id="links-list"></ul>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       // Initialize Firebase
-       var firebaseConfig = {
+      var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
         databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
@@ -32,7 +21,7 @@
         messagingSenderId: "906101390805",
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
-      };
+        };
       firebase.initializeApp(firebaseConfig);
       
       // Reference to the links in the Firebase Database
@@ -48,8 +37,6 @@
           $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
         });
       });
-      
-      </script>
-      
+    </script>      
   </body>
 </html>
