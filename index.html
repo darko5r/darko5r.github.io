@@ -7,9 +7,26 @@
   <body>
     <h1>My Links</h1>
     <ul id="links-list"></ul>
+
+    <h1>My Posts</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>Date</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody id="post-table">
+      </tbody>
+    </table>
+
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
       // Initialize Firebase
       var firebaseConfig = {
@@ -21,9 +38,9 @@
         messagingSenderId: "906101390805",
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
-        };
+      };
       firebase.initializeApp(firebaseConfig);
-      
+
       // Reference to the links in the Firebase Database
       var linksRef = firebase.database().ref("links");
 
@@ -37,26 +54,24 @@
           $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
         });
       });
-    </script>
-    
-    <script>     
-  const postsRef = firebase.database().ref('posts');
-  const tableBody = document.querySelector('#post-table tbody');
-  postsRef.on('value', (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const post = childSnapshot.val();
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${post.postTitle}</td>
-        <td>${post.postAuthor}</td>
-        <td>${post.postContent}</td>
-        <td>${post.postDate}</td>
-        <td>${post.categories.category1}</td>
-      `;
-      tableBody.appendChild(row);
-    });
-  });
-</script>
 
+      // Reference to the posts in the Firebase Database
+      const postsRef = firebase.database().ref('posts');
+      const tableBody = document.querySelector('#post-table tbody');
+      postsRef.on('value', (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const post = childSnapshot.val();
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${post.postTitle}</td>
+            <td>${post.postAuthor}</td>
+            <td>${post.postContent}</td>
+            <td>${post.postDate}</td>
+            <td>${post.categories.category1}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      });
+    </script>
   </body>
 </html>
