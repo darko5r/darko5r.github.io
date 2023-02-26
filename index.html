@@ -34,24 +34,19 @@
         messagingSenderId: "906101390805",
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
-        };
+      };
       firebase.initializeApp(firebaseConfig);
       
-      // Reference to the links in the Firebase Database
-      var linksRef = firebase.database().ref("links");
+      // Reference to the posts in the Firebase Database
+      var postsRef = firebase.database().ref("posts");
 
-      // Read the links from the Firebase Database
-      linksRef.on("value", function(snapshot) {
-        // Get the links data
-        var links = snapshot.val();
+      // Read the posts from the Firebase Database
+      postsRef.on("value", function(snapshot) {
+        // Get the posts data
+        var posts = snapshot.val();
 
-        // Loop through the links and add them to the list
-        $.each(links, function(key, link) {
-          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
-        });
-      });
-      
-      var tableBody = document.getElementById("post-table-body");
+        // Loop through the posts and add them to the table
+        var tableBody = document.getElementById("post-table-body");
         for (var postId in posts) {
           if (posts.hasOwnProperty(postId)) {
             var post = posts[postId];
@@ -65,11 +60,10 @@
             authorCell.innerText = post.postAuthor;
             contentCell.innerText = post.postContent;
             dateCell.innerText = post.postDate;
-            categoryCell.innerText = post.categories.category1;
+            categoryCell.innerText = post.categories.category1.categoryName;
           }
         }
       });
-      
     </script>      
   </body>
 </html>
