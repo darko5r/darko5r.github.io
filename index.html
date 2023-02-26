@@ -59,9 +59,12 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
-  var tableBody = document.getElementById("post-table-body");
-database.ref("posts").once("value", function(snapshot) {
+  var postsRef = firebase.database().ref('posts');
+
+postsRef.once('value', function(snapshot) {
   var posts = snapshot.val();
+  var tableBody = document.getElementById('post-table-body');
+
   for (var postId in posts) {
     if (posts.hasOwnProperty(postId)) {
       var post = posts[postId];
@@ -71,18 +74,17 @@ database.ref("posts").once("value", function(snapshot) {
       var contentCell = row.insertCell(2);
       var dateCell = row.insertCell(3);
       var categoryCell = row.insertCell(4);
+
       titleCell.innerText = post.postTitle;
       authorCell.innerText = post.postAuthor;
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
-      // Fetch the category object from categories node using the category ID
-      database.ref("categories/" + post.categories.category1).once("value", function(categorySnapshot) {
+
+      var categoryId = Object.keys(post.categories)[0];
+      var categoryRef = firebase.database().ref('categories').child(categoryId);
+      categoryRef.once('value', function(categorySnapshot) {
         var category = categorySnapshot.val();
-        if (category) {
-          categoryCell.innerText = category.categoryName;
-        } else {
-          categoryCell.innerText = "N/A";
-        }
+        categoryCell.innerText = category.categoryName;
       });
     }
   }
