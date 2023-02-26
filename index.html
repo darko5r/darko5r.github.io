@@ -59,12 +59,12 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
-  var tableBody = document.getElementById("post-table-body");
-
-database.ref("posts").once("value").then(function(postsSnapshot) {
-  database.ref("categories").once("value").then(function(categoriesSnapshot) {
-    postsSnapshot.forEach(function(postSnapshot) {
-      var post = postSnapshot.val();
+ var tableBody = document.getElementById("post-table-body");
+database.ref("posts").on("value", function(snapshot) {
+  var posts = snapshot.val();
+  for (var postId in posts) {
+    if (posts.hasOwnProperty(postId)) {
+      var post = posts[postId];
       var row = tableBody.insertRow(-1);
       var titleCell = row.insertCell(0);
       var authorCell = row.insertCell(1);
@@ -75,11 +75,9 @@ database.ref("posts").once("value").then(function(postsSnapshot) {
       authorCell.innerText = post.postAuthor;
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
-      var categoryId = post.categories.category1;
-      var category = categoriesSnapshot.child(categoryId).val();
-      categoryCell.innerText = category.categoryName;
-    });
-  });
+      categoryCell.innerText = post.categories.category1;
+    }
+  }
 });
     </script>
   </body>
