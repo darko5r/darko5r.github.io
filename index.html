@@ -59,31 +59,32 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
- var tableBody = document.getElementById("post-table-body");
+ var postsRef = firebase.database().ref('posts');
+var categoriesRef = firebase.database().ref('categories');
 
-firebase.database().ref('posts').on('value', function(snapshot) {
-  snapshot.forEach(function(childSnapshot) {
-    var post = childSnapshot.val();
-    var row = tableBody.insertRow(-1);
-    var titleCell = row.insertCell(0);
-    var authorCell = row.insertCell(1);
-    var contentCell = row.insertCell(2);
-    var dateCell = row.insertCell(3);
-    var categoryCell = row.insertCell(4);
+var tableBody = document.getElementById("post-table-body");
 
-    titleCell.innerText = post.postTitle;
-    authorCell.innerText = post.postAuthor;
-    contentCell.innerText = post.postContent;
-    dateCell.innerText = post.postDate;
-
-    var categoryId = post.categories.category1;
-    firebase.database().ref('categories').child(categoryId).once('value', function(categorySnapshot) {
-      var category = categorySnapshot.val();
-      if (category) {
-        categoryCell.innerText = category.categoryName;
-      } else {
-        categoryCell.innerText = 'N/A';
-      }
+postsRef.once('value', function(snapshot) {
+  snapshot.forEach(function(postSnapshot) {
+    var post = postSnapshot.val();
+    var postId = postSnapshot.key;
+    
+    // Retrieve the category name from the "categories" table
+    categoriesRef.child(post.categories.category1).once('value', function(categorySnapshot) {
+      var categoryName = categorySnapshot.child("categoryName").val();
+      
+      // Add a row to the table with the post and category information
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      titleCell.innerText = post.postTitle;
+      authorCell.innerText = post.postAuthor;
+      contentCell.innerText = post.postContent;
+      dateCell.innerText = post.postDate;
+      categoryCell.innerText = categoryName;
     });
   });
 });
