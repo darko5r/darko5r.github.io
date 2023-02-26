@@ -55,23 +55,22 @@
         });
       });
 
-      // Reference to the posts in the Firebase Database
       const postsRef = firebase.database().ref('posts');
-      const tableBody = document.querySelector('#post-table tbody');
-      postsRef.on('value', (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          const post = childSnapshot.val();
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${post.postTitle}</td>
-            <td>${post.postAuthor}</td>
-            <td>${post.postContent}</td>
-            <td>${post.postDate}</td>
-            <td>${post.categories.category1}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      });
+const tableBody = document.querySelector('#post-table tbody');
+postsRef.on('value', (snapshot) => {
+  snapshot.forEach((childSnapshot) => {
+    const post = childSnapshot.val();
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${post.postTitle}</td>
+      <td>${post.postAuthor}</td>
+      <td>${post.postContent}</td>
+      <td>${post.postDate}</td>
+      <td>${post.category1}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+});
     </script>
   </body>
 </html>
