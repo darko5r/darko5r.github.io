@@ -10,6 +10,19 @@
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <h1>My Posts</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>Date</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody id="post-table-body"></tbody>
+    </table>
     <script>
       // Initialize Firebase
       var firebaseConfig = {
@@ -37,6 +50,26 @@
           $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
         });
       });
+      
+      var tableBody = document.getElementById("post-table-body");
+        for (var postId in posts) {
+          if (posts.hasOwnProperty(postId)) {
+            var post = posts[postId];
+            var row = tableBody.insertRow(-1);
+            var titleCell = row.insertCell(0);
+            var authorCell = row.insertCell(1);
+            var contentCell = row.insertCell(2);
+            var dateCell = row.insertCell(3);
+            var categoryCell = row.insertCell(4);
+            titleCell.innerText = post.postTitle;
+            authorCell.innerText = post.postAuthor;
+            contentCell.innerText = post.postContent;
+            dateCell.innerText = post.postDate;
+            categoryCell.innerText = post.categories.category1;
+          }
+        }
+      });
+      
     </script>      
   </body>
 </html>
