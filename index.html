@@ -74,7 +74,7 @@ postsRef.on("value", function(snapshot) {
       authorCell.innerText = post.postAuthor;
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
-      categoryCell.innerText = post.categoryName;
+      categoryCell.innerText = post.categories.category1;
     }
   }
 });
