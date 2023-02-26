@@ -44,24 +44,43 @@
         var posts = snapshot.val();
 
         // Loop through the posts and add them to the table
-        var tableBody = document.getElementById("post-table-body");
-        for (var postId in posts) {
-          if (posts.hasOwnProperty(postId)) {
-            var post = posts[postId];
-            var row = tableBody.insertRow(-1);
-            var titleCell = row.insertCell(0);
-            var authorCell = row.insertCell(1);
-            var contentCell = row.insertCell(2);
-            var dateCell = row.insertCell(3);
-            var categoryCell = row.insertCell(4);
-            titleCell.innerText = post.postTitle;
-            authorCell.innerText = post.postAuthor;
-            contentCell.innerText = post.postContent;
-            dateCell.innerText = post.postDate;
-            categoryCell.innerText = post.categories.category1;
-          }
-        }
-      });
+        
+        const categoriesRef = firebase.database().ref('categories');
+const postsRef = firebase.database().ref('posts');
+const tableBody = document.querySelector('#post-table tbody');
+
+// Retrieve the categories from the Firebase Realtime Database
+categoriesRef.on('value', (snapshot) => {
+  const categories = {}; // Store the categories data as an object
+
+  snapshot.forEach((childSnapshot) => {
+    const category = childSnapshot.val();
+    const categoryId = category.categoryid;
+
+    categories[categoryId] = category; // Add the category data to the categories object
+  });
+
+  // Retrieve the posts from the Firebase Realtime Database
+  postsRef.on('value', (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const post = childSnapshot.val();
+      const categoryId = post.categories.category1; // Get the category ID for this post
+
+      // Use the category ID to retrieve the corresponding category data from the categories object
+      const category = categories[categoryId];
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${post.postTitle}</td>
+        <td>${post.postAuthor}</td>
+        <td>${post.postContent}</td>
+        <td>${post.postDate}</td>
+        <td>${category ? category.categoryName : ''}</td> <!-- Show the category name if it exists -->
+      `;
+      tableBody.appendChild(row);
+    });
+  });
+});              
     </script>
   </body>
 </html>
