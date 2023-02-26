@@ -60,7 +60,7 @@ categoriesRef.once('value', snapshot => {
 // Retrieve the posts with the corresponding category
         
   var tableBody = document.getElementById("post-table-body");
-database.ref("posts").on("value", function(snapshot) {
+database.ref("posts").once("value", function(snapshot) {
   var posts = snapshot.val();
   for (var postId in posts) {
     if (posts.hasOwnProperty(postId)) {
@@ -75,7 +75,15 @@ database.ref("posts").on("value", function(snapshot) {
       authorCell.innerText = post.postAuthor;
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
-      categoryCell.innerText = post.categories.category1.categoryName;
+      // Fetch the category object from categories node using the category ID
+      database.ref("categories/" + post.categories.category1).once("value", function(categorySnapshot) {
+        var category = categorySnapshot.val();
+        if (category) {
+          categoryCell.innerText = category.categoryName;
+        } else {
+          categoryCell.innerText = "N/A";
+        }
+      });
     }
   }
 });
