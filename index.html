@@ -59,28 +59,33 @@ categoriesRef.once('value', snapshot => {
 
 // Retrieve the posts with the corresponding category
         
- var tableBody = document.getElementById("post-table-body");
+firebase.database().ref('posts').once('value').then(function(snapshot) {
+  var posts = snapshot.val();
+  var tableBody = document.getElementById('post-table-body');
 
-firebase.database().ref("posts").once("value", function(snapshot) {
-  snapshot.forEach(function(postSnapshot) {
-    var post = postSnapshot.val();
-    var row = tableBody.insertRow(-1);
-    var titleCell = row.insertCell(0);
-    var authorCell = row.insertCell(1);
-    var contentCell = row.insertCell(2);
-    var dateCell = row.insertCell(3);
-    var categoryCell = row.insertCell(4);
+  firebase.database().ref('categories').once('value').then(function(snapshot) {
+    var categories = snapshot.val();
 
-    titleCell.innerText = post.postTitle;
-    authorCell.innerText = post.postAuthor;
-    contentCell.innerText = post.postContent;
-    dateCell.innerText = post.postDate;
+    for (var postId in posts) {
+      if (posts.hasOwnProperty(postId)) {
+        var post = posts[postId];
+        var row = tableBody.insertRow(-1);
+        var titleCell = row.insertCell(0);
+        var authorCell = row.insertCell(1);
+        var contentCell = row.insertCell(2);
+        var dateCell = row.insertCell(3);
+        var categoryCell = row.insertCell(4);
 
-    var categoryId = post.categories.category1;
-    firebase.database().ref("categories").child(categoryId).once("value", function(categorySnapshot) {
-      var categoryName = categorySnapshot.val().categoryName;
-      categoryCell.innerText = categoryName;
-    });
+        titleCell.innerText = post.postTitle;
+        authorCell.innerText = post.postAuthor;
+        contentCell.innerText = post.postContent;
+        dateCell.innerText = post.postDate;
+
+        var categoryId = post.categoryId;
+        var categoryName = categories[categoryId].categoryName;
+        categoryCell.innerText = categoryName;
+      }
+    }
   });
 });
 
