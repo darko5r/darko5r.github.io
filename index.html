@@ -60,10 +60,10 @@ categoriesRef.once('value', snapshot => {
 // Retrieve the posts with the corresponding category
         
  var tableBody = document.getElementById("post-table-body");
-database.ref("posts").once("value", function(snapshot) {
-  snapshot.forEach(function(childSnapshot) {
-    var post = childSnapshot.val();
-    var postId = childSnapshot.key;
+
+firebase.database().ref("posts").once("value", function(snapshot) {
+  snapshot.forEach(function(postSnapshot) {
+    var post = postSnapshot.val();
     var row = tableBody.insertRow(-1);
     var titleCell = row.insertCell(0);
     var authorCell = row.insertCell(1);
@@ -71,17 +71,14 @@ database.ref("posts").once("value", function(snapshot) {
     var dateCell = row.insertCell(3);
     var categoryCell = row.insertCell(4);
 
-    // Retrieve the category name from the categories table
-    var categoryId = post.categories.category1;
-    database.ref("categories/" + categoryId).once("value", function(snapshot) {
-      var category = snapshot.val();
-      var categoryName = category.categoryName;
+    titleCell.innerText = post.postTitle;
+    authorCell.innerText = post.postAuthor;
+    contentCell.innerText = post.postContent;
+    dateCell.innerText = post.postDate;
 
-      // Set the cell values
-      titleCell.innerText = post.postTitle;
-      authorCell.innerText = post.postAuthor;
-      contentCell.innerText = post.postContent;
-      dateCell.innerText = post.postDate;
+    var categoryId = post.categories.category1;
+    firebase.database().ref("categories").child(categoryId).once("value", function(categorySnapshot) {
+      var categoryName = categorySnapshot.val().categoryName;
       categoryCell.innerText = categoryName;
     });
   });
