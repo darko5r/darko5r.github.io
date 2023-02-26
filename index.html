@@ -68,13 +68,10 @@ firebase.database().ref('posts').once('value', function(snapshot) {
     var authorCell = row.insertCell(1);
     var contentCell = row.insertCell(2);
     var dateCell = row.insertCell(3);
-    var categoryCell = row.insertCell(4);
     titleCell.innerText = post.postTitle;
     authorCell.innerText = post.postAuthor;
     contentCell.innerText = post.postContent;
     dateCell.innerText = post.postDate;
-    firebase.database().ref('categories').child(post.categories.category1).once('value', function(categorySnapshot) {
-      categoryCell.innerText = categorySnapshot.val().categoryName;
     });
   });
 });
