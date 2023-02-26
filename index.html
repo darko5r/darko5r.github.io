@@ -24,22 +24,7 @@
         };
       firebase.initializeApp(firebaseConfig);
 
-      // Reference to the links in the Firebase Database
-      var linksRef = firebase.database().ref("links");
-
-      // Read the links from the Firebase Database
-      linksRef.on("value", function(snapshot) {
-        // Get the links data
-        var links = snapshot.val();
-
-        // Loop through the links and add them to the list
-        $.each(links, function(key, link) {
-          $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
-        });
-      });
-    </script>
-    
-    <script>
+      
   const postsRef = firebase.database().ref('posts');
   const tableBody = document.querySelector('#post-table tbody');
   postsRef.on('value', (snapshot) => {
