@@ -5,11 +5,17 @@
     <title>My Github Pages Website</title>
   </head>
   <body>
+    
+    <div class="header">This is my Header<br />
     <h1>My Links</h1>
     <ul id="links-list"></ul>
+    </div>
+    
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <div class="content">This is my Content <br />
     <h1>My Posts</h1>
     <table>
       <thead>
@@ -23,6 +29,8 @@
       </thead>
       <tbody id="post-table-body"></tbody>
     </table>
+    </div>  
+      
     <script>
       // Initialize Firebase
       var firebaseConfig = {
