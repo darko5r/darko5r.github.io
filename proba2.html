@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Firebase Realtime Database App</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
+    <script>
+      // Initialize the Firebase app
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+
+      // Get a reference to the posts table
+      const postsRef = firebase.database().ref("posts");
+
+      // Retrieve all the posts and display them on the page
+      postsRef.once("value", function(snapshot) {
+        const posts = snapshot.val();
+
+        // Get a reference to the categories table
+        const categoriesRef = firebase.database().ref("categories");
+
+        // Loop through all the posts and display them
+        Object.keys(posts).forEach(function(postKey) {
+          const post = posts[postKey];
+
+          // Get the category key for the post
+          const categoryKey = post.categories;
+
+          // Get the category name for the category key
+          const categoryRef = categoriesRef.child(categoryKey).child("categoryName");
+          categoryRef.once("value", function(snapshot) {
+            const categoryName = snapshot.val();
+
+            // Create a new post element and append it to the page
+            const postElement = document.createElement("div");
+            postElement.innerHTML = `
+              <h2>${post.postTitle}</h2>
+              <p>Category: ${categoryName}</p>
+              <p>Author: ${post.postAuthor}</p>
+              <p>Date: ${post.postDate}</p>
+              <p>${post.postContent}</p>
+            `;
+            document.body.appendChild(postElement);
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>My Firebase Realtime Database App</h1>
+  </body>
+</html>
