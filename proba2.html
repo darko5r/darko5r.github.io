@@ -1,34 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Firebase Realtime Database Example</title>
-	<!-- Firebase JavaScript SDK -->
-	<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
-</head>
-<body>
-	<h1>Posts</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>Author</th>
-				<th>Content</th>
-				<th>Date</th>
-				<th>Category</th>
-			</tr>
-		</thead>
-		<tbody id="post-table-body">
-		</tbody>
-	</table>
-	<hr>
-	<h1>Categories</h1>
-	<ul id="category-list">
-	</ul>
+  <head>
+    <meta charset="UTF-8">
+    <title>Posts by Category</title>
+  </head>
+  <body>
+    <h1>Posts by Category</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Content</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="post-table-body"></tbody>
+    </table>
 
-	<!-- Firebase configuration -->
-	<script>
-	   // Initialize the Firebase app
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+
+    <!-- Your web app's Firebase configuration -->
+    <script>
+      // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -39,45 +35,49 @@
         appId: "1:906101390805:web:871c51f2486921f443115c",
         measurementId: "G-MY3P2TWN4L"
       };
-	  firebase.initializeApp(firebaseConfig);
-	</script>
+      
+      firebase.initializeApp(firebaseConfig);
 
-	<!-- Code to retrieve posts -->
-	<script>
-		// Reference to the posts in the Firebase Database
-		var postsRef = firebase.database().ref("posts");
+      // Reference to the posts in the Firebase Database
+      var postsRef = firebase.database().ref("posts");
+      var categoriesRef = firebase.database().ref("categories");
 
-		// Read the posts from the Firebase Database
-		postsRef.on("value", function(snapshot) {
-		  // Get the posts data
-		  var posts = snapshot.val();
-
-		  // Loop through the posts and add them to the table
-		  var tableBody = document.getElementById("post-table-body");
-		  for (var postId in posts) {
-		    if (posts.hasOwnProperty(postId)) {
-		      var post = posts[postId];
-		      var row = tableBody.insertRow(-1);
-		      var titleCell = row.insertCell(0);
-		      var authorCell = row.insertCell(1);
-		      var contentCell = row.insertCell(2);
-		      var dateCell = row.insertCell(3);
-		      var categoryCell = row.insertCell(4);
-		      titleCell.innerText = post.postTitle;
-		      authorCell.innerText = post.postAuthor;
-		      contentCell.innerText = post.postContent;
-		      dateCell.innerText = post.postDate;
-
-		      // Get the category for this post
-		      var categoryId = Object.keys(post.categories)[0];
-		      var categoryRef = firebase.database().ref("categories/" + categoryId);
-		      categoryRef.on("value", function(categorySnapshot) {
-		        var category = categorySnapshot.val();
-		        categoryCell.innerText = category.categoryName;
-		      });
-		    }
-		  }
-		});
-	</script>
+      // Read the posts from the Firebase Database for a given category
+      categoriesRef.child("category1").child("posts").on("value", function(snapshot) {
+        // Get the posts data
+        var postIds = Object.keys(snapshot.val());
+        var numPosts = postIds.length;
+        var loadedPosts = 0;
+        var posts = {};
+        
+        for (var i = 0; i < numPosts; i++) {
+          var postId = postIds[i];
+          postsRef.child(postId).on("value", function(postSnapshot) {
+            // Add the post to the posts object
+            posts[postId] = postSnapshot.val();
+            
+            // Check if all posts have been loaded and add them to the table
+            loadedPosts++;
+            if (loadedPosts === numPosts) {
+              var tableBody = document.getElementById("post-table-body");
+              for (var postId in posts) {
+                if (posts.hasOwnProperty(postId)) {
+                  var post = posts[postId];
+                  var row = tableBody.insertRow(-1);
+                  var titleCell = row.insertCell(0);
+                  var authorCell = row.insertCell(1);
+                  var contentCell = row.insertCell(2);
+                  var dateCell = row.insertCell(3);
+                  titleCell.innerText = post.postTitle;
+                  authorCell.innerText = post.postAuthor;
+                  contentCell.innerText = post.postContent;
+                  dateCell.innerText = post.postDate;
+                }
+              }
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
