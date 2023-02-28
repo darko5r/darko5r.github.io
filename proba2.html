@@ -60,7 +60,7 @@ postsRef.on("value", function(snapshot) {
       // Retrieve categoryName from categories object
       for (var categoryId in post.categories) {
         if (post.categories.hasOwnProperty(categoryId)) {
-          categoryCell.innerText = post.categories[categoryId].categoryName;
+          categoryCell.innerText = post.categories.category1.categoryName;
           break; // Only retrieve the first category name
         }
       }
