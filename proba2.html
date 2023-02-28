@@ -59,11 +59,14 @@ postsRef.on("value", function(snapshot) {
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
 
-      // Get the category name from the categories table using the category key in the posts table
+      // Get the category names from the categories table using the category keys in the posts table
       for (var categoryId in post.categories) {
         if (post.categories.hasOwnProperty(categoryId)) {
           categoriesRef.child(categoryId).child("categoryName").once("value", function(snapshot) {
-            categoryCell.innerText += snapshot.val() + " ";
+            var categoryName = snapshot.val();
+            if (categoryName) {
+              categoryCell.innerText += categoryName + " ";
+            }
           });
         }
       }
