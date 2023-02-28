@@ -34,21 +34,27 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      // Retrieve category name for each post
-database.ref('posts').once('value', function(snapshot) {
-  snapshot.forEach(function(childSnapshot) {
-    var post = childSnapshot.val();
-    var postTitle = post.postTitle;
-    var postCategories = post.categories;
-    for (var categoryId in postCategories) {
-      if (postCategories[categoryId]) {
-        database.ref('categories/' + categoryId).once('value', function(categorySnapshot) {
-          var categoryName = categorySnapshot.child('categoryName').val();
-          console.log(postTitle + ': ' + categoryName);
+      // Retrieve posts data from Firebase
+firebase.database().ref('posts').once('value').then(function(snapshot) {
+  var posts = snapshot.val();
+  // Loop through each post
+  for (var postId in posts) {
+    var post = posts[postId];
+    // Loop through each category in the post
+    for (var categoryId in post.categories) {
+      // Check if the category is set to true
+      if (post.categories[categoryId]) {
+        // Retrieve the category data from Firebase
+        firebase.database().ref('categories/' + categoryId).once('value').then(function(snapshot) {
+          var category = snapshot.val();
+          // Retrieve the category name
+          var categoryName = category.categoryName;
+          // Do something with the category name, such as displaying it on the page
+          console.log(categoryName);
         });
       }
     }
-  });
+  }
 });
                           
     </script>
