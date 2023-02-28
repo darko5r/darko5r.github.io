@@ -18,41 +18,40 @@
       };
       firebase.initializeApp(firebaseConfig);
 
-      // Get a reference to the posts table
-      const postsRef = firebase.database().ref("posts");
+     // Get a reference to the posts table
+const postsRef = firebase.database().ref("posts");
 
-      // Retrieve all the posts and display them on the page
-      postsRef.once("value", function(snapshot) {
-        const posts = snapshot.val();
+// Retrieve all the posts and display them on the page
+postsRef.once("value", function(snapshot) {
+  const posts = snapshot.val();
 
-        // Get a reference to the categories table
-        const categoriesRef = firebase.database().ref("categories");
+  // Get a reference to the categories table
+  const categoriesRef = firebase.database().ref("categories");
 
-        // Loop through all the posts and display them
-        Object.keys(posts).forEach(function(postKey) {
-          const post = posts[postKey];
+  // Loop through all the posts and display them
+  Object.keys(posts).forEach(function(postKey) {
+    const post = posts[postKey];
 
-          // Get the category key for the post
-          const categoryKey = post.categories;
+    // Get the category key for the post
+    const categoryKey = post.categories;
 
-          // Get the category name for the category key
-          const categoryRef = categoriesRef.child(categoryKey).child("categoryName");
-          categoryRef.once("value", function(snapshot) {
-            const categoryName = snapshot.val();
+    // Get the category name for the category key
+    categoriesRef.child(categoryKey).once("value", function(snapshot) {
+      const categoryName = snapshot.child("categoryName").val();
 
-            // Create a new post element and append it to the page
-            const postElement = document.createElement("div");
-            postElement.innerHTML = `
-              <h2>${post.postTitle}</h2>
-              <p>Category: ${categoryName}</p>
-              <p>Author: ${post.postAuthor}</p>
-              <p>Date: ${post.postDate}</p>
-              <p>${post.postContent}</p>
-            `;
-            document.body.appendChild(postElement);
-          });
-        });
-      });
+      // Create a new post element and append it to the page
+      const postElement = document.createElement("div");
+      postElement.innerHTML = `
+        <h2>${post.postTitle}</h2>
+        <p>Category: ${categoryName}</p>
+        <p>Author: ${post.postAuthor}</p>
+        <p>Date: ${post.postDate}</p>
+        <p>${post.postContent}</p>
+      `;
+      document.body.appendChild(postElement);
+    });
+  });
+});
     </script>
   </head>
   <body>
