@@ -32,18 +32,11 @@ postsRef.once("value", function(snapshot) {
   Object.keys(posts).forEach(function(postKey) {
     const post = posts[postKey];
 
-    // Get the category key for the post
-    const categoryKey = post.categories;
-
-    // Get the category name for the category key
-    categoriesRef.child(categoryKey).once("value", function(snapshot) {
-      const categoryName = snapshot.child("categoryName").val();
 
       // Create a new post element and append it to the page
       const postElement = document.createElement("div");
       postElement.innerHTML = `
         <h2>${post.postTitle}</h2>
-        <p>Category: ${categoryName}</p>
         <p>Author: ${post.postAuthor}</p>
         <p>Date: ${post.postDate}</p>
         <p>${post.postContent}</p>
