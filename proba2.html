@@ -59,7 +59,7 @@ postsRef.on("value", function(snapshot) {
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
 
-      // Get the category key from the categories object within the post object
+      // Get the category key from the post object
       var categoryKey = Object.keys(post.categories)[0];
 
       // Get the category name from the categories table using the category key in the posts table
