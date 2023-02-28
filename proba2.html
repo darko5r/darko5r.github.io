@@ -34,39 +34,40 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      // Get a reference to the posts table
-const postsRef = firebase.database().ref("posts");
+      // Reference to the posts in the Firebase Database
+var postsRef = firebase.database().ref("posts");
 
-// Retrieve all the posts and display them on the page
-postsRef.once("value", function(snapshot) {
-  const posts = snapshot.val();
+// Read the posts from the Firebase Database
+postsRef.on("value", function(snapshot) {
+  // Get the posts data
+  var posts = snapshot.val();
 
-  // Get a reference to the categories table
-  const categoriesRef = firebase.database().ref("categories");
+  // Reference to the categories in the Firebase Database
+  var categoriesRef = firebase.database().ref("categories");
 
-  // Loop through all the posts and display them
-  Object.keys(posts).forEach(function(postKey) {
-    const post = posts[postKey];
+  // Loop through the posts and add them to the table
+  var tableBody = document.getElementById("post-table-body");
+  for (var postId in posts) {
+    if (posts.hasOwnProperty(postId)) {
+      var post = posts[postId];
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      titleCell.innerText = post.postTitle;
+      authorCell.innerText = post.postAuthor;
+      contentCell.innerText = post.postContent;
+      dateCell.innerText = post.postDate;
 
-    // Get the category key for the post
-    const categoryId = post.categoryid;
-
-    // Get the category name for the category key
-    categoriesRef.child(categoryId).once("value", function(snapshot) {
-      const categoryName = snapshot.child("categoryName").val();
-
-      // Create a new post element and append it to the page
-      const postElement = document.createElement("div");
-      postElement.innerHTML = `
-        <h2>${post.postTitle}</h2>
-        <p>Category: ${categoryName}</p>
-        <p>Author: ${post.postAuthor}</p>
-        <p>Date: ${post.postDate}</p>
-        <p>${post.postContent}</p>
-      `;
-      document.body.appendChild(postElement);
-    });
-  });
+      // Get the category name from the categories table using the category key in the posts table
+      var categoryKey = post.categories.category1;
+      categoriesRef.child(categoryKey).child("categoryName").once("value", function(snapshot) {
+        categoryCell.innerText = snapshot.val();
+      });
+    }
+  }
 });
 
       
