@@ -34,27 +34,18 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      // Retrieve posts data from Firebase
-firebase.database().ref('posts').once('value').then(function(snapshot) {
-  var posts = snapshot.val();
-  // Loop through each post
-  for (var postId in posts) {
-    var post = posts[postId];
-    // Loop through each category in the post
-    for (var categoryId in post.categories) {
-      // Check if the category is set to true
-      if (post.categories[categoryId]) {
-        // Retrieve the category data from Firebase
-        firebase.database().ref('categories/' + categoryId).once('value').then(function(snapshot) {
-          var category = snapshot.val();
-          // Retrieve the category name
-          var categoryName = category.categoryName;
-          // Do something with the category name, such as displaying it on the page
-          console.log(categoryName);
-        });
-      }
-    }
-  }
+      // Get a reference to the Firebase Realtime Database
+const database = firebase.database();
+
+// Define the path to the category in the database
+const categoryPath = 'categories/category1/categoryName';
+
+// Retrieve the category name from the database
+database.ref(categoryPath).once('value').then((snapshot) => {
+  const categoryName = snapshot.val();
+  console.log(categoryName); // This will log 'about'
+}).catch((error) => {
+  console.error(error);
 });
                           
     </script>
