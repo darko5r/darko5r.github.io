@@ -34,10 +34,8 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      // Reference to the posts in the Firebase Database
-var postsRef = firebase.database().ref("posts");
-
-// Read the posts from the Firebase Database
+      
+      // Read the posts from the Firebase Database
 postsRef.on("value", function(snapshot) {
   // Get the posts data
   var posts = snapshot.val();
@@ -60,16 +58,20 @@ postsRef.on("value", function(snapshot) {
       authorCell.innerText = post.postAuthor;
       contentCell.innerText = post.postContent;
       dateCell.innerText = post.postDate;
-      
-      // Get the category name from the categories table using the categoryId in the posts table
-      var categoryId = post.category1;
-      categoriesRef.child(categoryId).child("categoryName").once("value", function(snapshot) {
-        categoryCell.innerText = snapshot.val();
-      });
+
+      // Get the category name from the categories table using the category key in the posts table
+      for (var categoryId in post.categories) {
+        if (post.categories.hasOwnProperty(categoryId)) {
+          categoriesRef.child(categoryId).child("categoryName").once("value", function(snapshot) {
+            categoryCell.innerText += snapshot.val() + ", ";
+          });
+        }
+      }
     }
   }
 });
-
+      
+     
       
     </script>
   </body>
