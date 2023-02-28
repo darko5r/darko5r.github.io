@@ -34,42 +34,23 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      
-      // Read the posts from the Firebase Database
-postsRef.on("value", function(snapshot) {
-  // Get the posts data
-  var posts = snapshot.val();
-
-  // Reference to the categories in the Firebase Database
-  var categoriesRef = firebase.database().ref("categories");
-
-  // Loop through the posts and add them to the table
-  var tableBody = document.getElementById("post-table-body");
-  for (var postId in posts) {
-    if (posts.hasOwnProperty(postId)) {
-      var post = posts[postId];
-      var row = tableBody.insertRow(-1);
-      var titleCell = row.insertCell(0);
-      var authorCell = row.insertCell(1);
-      var contentCell = row.insertCell(2);
-      var dateCell = row.insertCell(3);
-      var categoryCell = row.insertCell(4);
-      titleCell.innerText = post.postTitle;
-      authorCell.innerText = post.postAuthor;
-      contentCell.innerText = post.postContent;
-      dateCell.innerText = post.postDate;
-
-      // Get the category name from the categories table using the category key in the posts table
-      var categoryKey = Object.keys(post.categories)[0];
-      categoriesRef.child(categoryKey).child("categoryName").once("value", function(snapshot) {
-        categoryCell.innerText = snapshot.val();
-      });
+      // Retrieve category name for each post
+database.ref('posts').once('value', function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var post = childSnapshot.val();
+    var postTitle = post.postTitle;
+    var postCategories = post.categories;
+    for (var categoryId in postCategories) {
+      if (postCategories[categoryId]) {
+        database.ref('categories/' + categoryId).once('value', function(categorySnapshot) {
+          var categoryName = categorySnapshot.child('categoryName').val();
+          console.log(postTitle + ': ' + categoryName);
+        });
+      }
     }
-  }
+  });
 });
-      
-     
-      
+                          
     </script>
   </body>
 </html>
