@@ -34,18 +34,38 @@
       };
       firebase.initializeApp(firebaseConfig);
       
-      // Get a reference to the Firebase Realtime Database
-const database = firebase.database();
+      // Reference to the posts in the Firebase Database
+var postsRef = firebase.database().ref("posts");
 
-// Define the path to the category in the database
-const categoryPath = 'categories/category1/categoryName';
+// Read the posts from the Firebase Database
+postsRef.on("value", function(snapshot) {
+  // Get the posts data
+  var posts = snapshot.val();
 
-// Retrieve the category name from the database
-database.ref(categoryPath).once('value').then((snapshot) => {
-  const categoryName = snapshot.val();
-  console.log(categoryName); // This will log 'about'
-}).catch((error) => {
-  console.error(error);
+  // Loop through the posts and add them to the table
+  var tableBody = document.getElementById("post-table-body");
+  for (var postId in posts) {
+    if (posts.hasOwnProperty(postId)) {
+      var post = posts[postId];
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      titleCell.innerText = post.postTitle;
+      authorCell.innerText = post.postAuthor;
+      contentCell.innerText = post.postContent;
+      dateCell.innerText = post.postDate;
+      // Retrieve categoryName from categories object
+      for (var categoryId in post.categories) {
+        if (post.categories.hasOwnProperty(categoryId)) {
+          categoryCell.innerText = post.categories[categoryId].categoryName;
+          break; // Only retrieve the first category name
+        }
+      }
+    }
+  }
 });
                           
     </script>
