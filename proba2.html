@@ -71,11 +71,15 @@
           var contentCell = row.insertCell(2);
           var dateCell = row.insertCell(3);
           var categoryCell = row.insertCell(4);
+          var imageCell = row.insertCell(5);
+          var mediaCell = row.insertCell(6);
           titleCell.innerText = post.postTitle;
           authorCell.innerText = post.postAuthor;
           contentCell.innerText = post.postContent;
           dateCell.innerText = post.postDate;
           categoryCell.innerText = categoryData.categoryName;
+          imageCell.innerText = post.postImage;
+          mediaCell.innerText = post.postMedia;
         }
       }
     });
