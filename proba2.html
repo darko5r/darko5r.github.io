@@ -80,8 +80,8 @@
           contentCell.innerText = post.postContent;
           dateCell.innerText = post.postDate;
           categoryCell.innerText = categoryData.categoryName;
-          imageCell.innerText = post.postImage;
-          mediaCell.innerText = post.postMedia;
+          imageCell.innerHTML = '<img src="' + post.postImage + '" alt="post image">';
+          mediaCell.innerHTML = '<video src="' + post.postMedia + '" controls></video>';
         }
       }
     });
