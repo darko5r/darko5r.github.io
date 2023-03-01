@@ -59,6 +59,15 @@
         posts.push(postId);
       }
     }
+    
+    function extractVideoID(url) {
+    var videoID = "";
+    var match = url.match(/[?&]v=([^&]+)/);
+    if (match) {
+      videoID = match[1];
+    }
+    return videoID;
+  }
 
     // Read the posts data and add them to the table
     postsRef.once("value", function(snapshot) {
@@ -81,7 +90,7 @@
           dateCell.innerText = post.postDate;
           categoryCell.innerText = categoryData.categoryName;
           imageCell.innerHTML = '<img src="' + post.postImage + '" alt="post image">';
-          mediaCell.innerHTML = '<video src="' + post.postMedia + '" controls></video>';
+          mediaCell.innerHTML = '<iframe width="560" height="315" src="' + 'https://www.youtube.com/embed/' + extractVideoID(post.postMedia) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
         }
       }
     });
