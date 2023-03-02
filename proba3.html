@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Blog Index</title>
+  </head>
+  <body>
+    <!-- Import the Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script>
+      // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID",
+        measurementId: "YOUR_MEASUREMENT_ID"
+      };
+    
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <!-- Add a list to display the posts -->
+    <ul id="post-list">
+    </ul>
+
+    <!-- Read the posts from the Firebase Database -->
+    <script>
+      var database = firebase.database();
+      var postsRef = database.ref("posts");
+      var categoriesRef = database.ref("categories");
+
+      categoriesRef.child("category1").once("value", function(snapshot) {
+        // Get the category data
+        var categoryData = snapshot.val();
+
+        // Get the posts for this category
+        var posts = [];
+        for (var postId in categoryData.posts) {
+          if (categoryData.posts.hasOwnProperty(postId)) {
+            posts.push(postId);
+          }
+        }
+
+        // Read the posts data and add them to the list
+        postsRef.once("value", function(snapshot) {
+          var postsData = snapshot.val();
+          var postList = document.getElementById("post-list");
+          for (var postId in postsData) {
+            if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
+              var post = postsData[postId];
+              var li = document.createElement("li");
+              var a = document.createElement("a");
+              var img = document.createElement("img");
+              var p = document.createElement("p");
+              var readMore = document.createElement("a");
+              var text = document.createTextNode(post.postContent.substring(0, 250));
+              a.href = "proba2.html?id=" + postId;
+              a.innerText = post.postTitle;
+              img.src = post.postImage;
+              img.alt = "post image";
+              readMore.href = "post.html?id=" + postId;
+              readMore.innerText = "Read more";
+              p.appendChild(text);
+              li.appendChild(a);
+              li.appendChild(img);
+              li.appendChild(p);
+              li.appendChild(readMore);
+              postList.appendChild(li);
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
