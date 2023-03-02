@@ -6,10 +6,10 @@
   </head>
   <body>
     <!-- Import the Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
-    <script>
-       // Initialize Firebase
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+<script>
+ // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
         authDomain: "blog-25253.firebaseapp.com",
@@ -21,60 +21,49 @@
         measurementId: "G-MY3P2TWN4L"
       };
     
-      firebase.initializeApp(firebaseConfig);
-    </script>
+  firebase.initializeApp(firebaseConfig);
+</script>
 
-    <!-- Add a list to display the posts -->
-    <ul id="post-list">
-    </ul>
+<!-- Add a container to hold the posts -->
+<div id="post-container"></div>
 
-    <!-- Read the posts from the Firebase Database -->
-    <script>
-      var database = firebase.database();
-      var postsRef = database.ref("posts");
-      var categoriesRef = database.ref("categories");
+<!-- Read the posts from the Firebase Database -->
+<script>
+  var database = firebase.database();
+  var postsRef = database.ref("posts");
+  var categoriesRef = database.ref("categories");
 
-      categoriesRef.child("category1").once("value", function(snapshot) {
-        // Get the category data
-        var categoryData = snapshot.val();
+  categoriesRef.child("category1").once("value", function(snapshot) {
+    // Get the category data
+    var categoryData = snapshot.val();
 
-        // Get the posts for this category
-        var posts = [];
-        for (var postId in categoryData.posts) {
-          if (categoryData.posts.hasOwnProperty(postId)) {
-            posts.push(postId);
-          }
+    // Get the posts for this category
+    var posts = [];
+    for (var postId in categoryData.posts) {
+      if (categoryData.posts.hasOwnProperty(postId)) {
+        posts.push(postId);
+      }
+    }
+
+    // Read the posts data and generate HTML code for each post
+    postsRef.once("value", function(snapshot) {
+      var postsData = snapshot.val();
+      var postContainer = document.getElementById("post-container");
+      for (var postId in postsData) {
+        if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
+          var post = postsData[postId];
+          var postHTML = '<div class="post">';
+          postHTML += '<img src="' + post.postImage + '" alt="post image">';
+          postHTML += '<h2><a href="proba2.html?id=' + postId + '">' + post.postTitle + '</a></h2>';
+          var content = post.postContent.split(" ").splice(0, 250).join(" ");
+          postHTML += '<p>' + content + '...</p>';
+          postHTML += '<a href="proba2.html?id=' + postId + '">Read more</a>';
+          postHTML += '</div>';
+          postContainer.innerHTML += postHTML;
         }
-
-        // Read the posts data and add them to the list
-        postsRef.once("value", function(snapshot) {
-          var postsData = snapshot.val();
-          var postList = document.getElementById("post-list");
-          for (var postId in postsData) {
-            if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
-              var post = postsData[postId];
-              var li = document.createElement("li");
-              var a = document.createElement("a");
-              var img = document.createElement("img");
-              var p = document.createElement("p");
-              var readMore = document.createElement("a");
-              var text = document.createTextNode(post.postContent.substring(0, 250));
-              a.href = "proba2.html?id=" + postId;
-              a.innerText = post.postTitle;
-              img.src = post.postImage;
-              img.alt = "post image";
-              readMore.href = "proba2.html?id=" + postId;
-              readMore.innerText = "Read more";
-              p.appendChild(text);
-              li.appendChild(a);
-              li.appendChild(img);
-              li.appendChild(p);
-              li.appendChild(readMore);
-              postList.appendChild(li);
-            }
-          }
-        });
-      });
-    </script>
+      }
+    });
+  });
+</script>               
   </body>
 </html>
