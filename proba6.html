@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Blog Index</title>
+  </head>
+  <body>
+
+    <!-- Import the Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script>
+       // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <!-- Add a section to display the posts -->
+    <section id="posts">
+      <h1>Recent Posts</h1>
+      <ul id="post-list"></ul>
+    </section>
+
+    <!-- Add a section to display related posts -->
+    <section id="related-posts">
+      <h2>Related Posts</h2>
+      <ul id="related-post-list"></ul>
+    </section>
+
+    <!-- Read the posts from the Firebase Database -->
+    <script>
+      var database = firebase.database();
+      var postsRef = database.ref("posts");
+
+      // Function to extract the first 250 words of a post
+      function extractSummary(content) {
+        return content.split(" ").slice(0, 250).join(" ");
+      }
+
+      // Function to create the HTML for a post
+      function createPostHTML(post) {
+        return `
+          <li>
+            <h2><a href="post.html?id=${post.id}">${post.postTitle}</a></h2>
+            <p>${extractSummary(post.postContent)}...</p>
+            <a href="post.html?id=${post.id}">Read more</a>
+          </li>
+        `;
+      }
+
+      // Function to create the HTML for a related post
+      function createRelatedPostHTML(post) {
+        return `
+          <li>
+            <h3><a href="post.html?id=${post.id}">${post.postTitle}</a></h3>
+            <p>${extractSummary(post.postContent)}...</p>
+          </li>
+        `;
+      }
+
+      // Read the posts data and add them to the page
+      postsRef.once("value", function(snapshot) {
+        var postsData = snapshot.val();
+        var postList = document.getElementById("post-list");
+
+        // Create an array of posts sorted by date (newest first)
+        var postsArray = Object.keys(postsData).map(function(key) {
+          return { id: key, ...postsData[key] };
+        }).sort(function(a, b) {
+          return new Date(b.postDate) - new Date(a.postDate);
+        });
+
+        // Create the HTML for the posts
+        var postHTML = postsArray.map(createPostHTML).join("");
+        postList.innerHTML = postHTML;
+
+        // Get the ID of the first post
+        var firstPostId = postsArray[0].id;
+
+        // Get the category of the first post
+        var firstPostCategory = postsArray[0].postCategory;
+        
+        
+        // Filter the posts by category (excluding the first post)
+  var relatedPosts = [];
+  for (var postId in postsData) {
+    if (postsData.hasOwnProperty(postId) && postId !== firstPostId && postsData[postId].postCategory === firstPostCategory) {
+      relatedPosts.push(postId);
+    }
+  }
+
+  // Add the related posts section
+  var relatedPostsSection = document.createElement("section");
+  relatedPostsSection.classList.add("related-posts");
+
+  // Add a title to the related posts section
+  var relatedPostsTitle = document.createElement("h2");
+  relatedPostsTitle.innerText = "Related Posts";
+  relatedPostsSection.appendChild(relatedPostsTitle);
+
+  // Add a container for the related posts
+  var relatedPostsContainer = document.createElement("div");
+  relatedPostsContainer.classList.add("related-posts-container");
+  relatedPostsSection.appendChild(relatedPostsContainer);
+
+  // Add up to three related posts
+  var numRelatedPosts = Math.min(3, relatedPosts.length);
+  for (var i = 0; i < numRelatedPosts; i++) {
+    var relatedPostId = relatedPosts[i];
+    var relatedPost = postsData[relatedPostId];
+
+    // Create a link to the related post
+    var relatedPostLink = document.createElement("a");
+    relatedPostLink.href = "post.html?id=" + relatedPostId;
+
+    // Create a container for the related post
+    var relatedPostContainer = document.createElement("div");
+    relatedPostContainer.classList.add("related-post");
+
+    // Add the related post image
+    var relatedPostImage = document.createElement("img");
+    relatedPostImage.src = relatedPost.postImage;
+    relatedPostImage.alt = "Related post image";
+    relatedPostContainer.appendChild(relatedPostImage);
+
+    // Add the related post title
+    var relatedPostTitle = document.createElement("h3");
+    relatedPostTitle.innerText = relatedPost.postTitle;
+    relatedPostContainer.appendChild(relatedPostTitle);
+
+    // Add the related post excerpt
+    var relatedPostExcerpt = document.createElement("p");
+    relatedPostExcerpt.innerText = relatedPost.postContent.substring(0, 250) + "...";
+    relatedPostContainer.appendChild(relatedPostExcerpt);
+
+    // Add the related post link
+    var relatedPostReadMore = document.createElement("a");
+    relatedPostReadMore.innerText = "Read More";
+    relatedPostReadMore.href = "post.html?id=" + relatedPostId;
+    relatedPostContainer.appendChild(relatedPostReadMore);
+
+    relatedPostLink.appendChild(relatedPostContainer);
+    relatedPostsContainer.appendChild(relatedPostLink);
+  }
+
+  // Add the related posts section to the main container
+  mainContainer.appendChild(relatedPostsSection);
+   </script>
+  </body>
+</html>
