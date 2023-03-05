@@ -69,32 +69,31 @@
     return videoID;
   }
 
-    // Read the posts data and add them to the table
-    postsRef.once("value", function(snapshot) {
-      var postsData = snapshot.val();
+    
+    // Get the post1 data
+    var post1Ref = database.ref("posts/post1");
+    post1Ref.once("value", function(snapshot) {
+      var post1Data = snapshot.val();
       var tableBody = document.getElementById("post-table-body");
-      for (var postId in postsData) {
-        if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
-          var post = postsData[postId];
-          var row = tableBody.insertRow(-1);
-          var titleCell = row.insertCell(0);
-          var authorCell = row.insertCell(1);
-          var contentCell = row.insertCell(2);
-          var dateCell = row.insertCell(3);
-          var categoryCell = row.insertCell(4);
-          var imageCell = row.insertCell(5);
-          var mediaCell = row.insertCell(6);
-          titleCell.innerText = post.postTitle;
-          authorCell.innerText = post.postAuthor;
-          contentCell.innerText = post.postContent;
-          dateCell.innerText = post.postDate;
-          categoryCell.innerText = categoryData.categoryName;
-          imageCell.innerHTML = '<img src="' + post.postImage + '" alt="post image">';
-          mediaCell.innerHTML = '<iframe width="560" height="315" src="' + 'https://www.youtube.com/embed/' + extractVideoID(post.postMedia) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-        }
-      }
+      var row = tableBody.insertRow(-1);
+      var titleCell = row.insertCell(0);
+      var authorCell = row.insertCell(1);
+      var contentCell = row.insertCell(2);
+      var dateCell = row.insertCell(3);
+      var categoryCell = row.insertCell(4);
+      var imageCell = row.insertCell(5);
+      var mediaCell = row.insertCell(6);
+      titleCell.innerText = post1Data.postTitle;
+      authorCell.innerText = post1Data.postAuthor;
+      contentCell.innerText = post1Data.postContent;
+      dateCell.innerText = post1Data.postDate;
+      categoryCell.innerText = categoryData.categoryName;
+      imageCell.innerHTML = '<img src="' + post1Data.postImage + '" alt="post image">';
+      mediaCell.innerHTML = '<iframe width="560" height="315" src="' + 'https://www.youtube.com/embed/' + extractVideoID(post1Data.postMedia) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
     });
   });
+    
+    
  </script>
   </body>
 </html>
