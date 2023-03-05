@@ -41,6 +41,22 @@
         font-size: 24px;
         font-weight: bold;
         margin-right: 10px;
+        margin-left: 10px;
+      }
+      
+      /* Style navigation links */
+      nav ul {
+        display: flex;
+        list-style-type: none;
+      }
+      
+      nav ul li {
+        margin: 0 10px;
+      }
+      
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
       }
       
       /* Style login and register links */
@@ -56,6 +72,7 @@
         border-radius: 5px;
         border: none;
         margin-right: 10px;
+        width: 200px;
       }
       
       /* Style content area */
@@ -77,18 +94,37 @@
   <body>
     <div class="container">
       <header>
-        <div style="width: 33.33%; text-align: center;">First Third</div>
-        <div style="width: 33.33%; text-align: center;">Second Third</div>
-        <div style="width: 33.33%; text-align: center;">Third Third</div>
-        <div style="width: 33.33%; height: 50%; background-color: #555;"></div>
-      </header>
-      <main>
-        <h1>Welcome to my website</h1>
-        <p>This is the content area</p>
-      </main>
-      <footer>
-        <p>Copyright © 2023 My Website</p>
-      </footer>
-    </div>
+        <div style="width: 33.33%; display: flex; align-items: center;">
+          <img class="logo" src="https://via.placeholder.com/50x50" alt="Logo">
+        </div>
+        <div style="width: 33.33%; display: flex; justify-content: center;">
+          <nav>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div style="width: 33.33%; display: flex; align-items: center; justify-content: flex-end;">
+          <a class="login" href="#">Log in</a>
+          <a class="register" href="#">Register</a>
+          <input type="text" id="search" placeholder="Search...">
+        </div>
+        <div style="width: 33.33%; display: flex; align-items: center; justify-content: flex-end;">
+        <a class="login" href="#">Log in</a>
+        <a class="register" href="#">Register</a>
+        <input type="text" id="search" placeholder="Search..." style="width: 200px; margin-right: 10px;">
+        </div>
+        </header>
+  <main>
+    <h1>Welcome to my website</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus orci eget ante facilisis iaculis. Pellentesque posuere lectus enim, in venenatis nunc dignissim ac. Proin interdum sapien eget ipsum vulputate, ac lobortis purus malesuada. Duis tempor quam nec justo iaculis, at dapibus magna pharetra. Donec eu nisi orci. </p>
+  </main>
+  <footer>
+    <p>&copy; 2023 My Website</p>
+  </footer>
+</div>
+
   </body>
-</html>
+</html>      
