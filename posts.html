@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Posts by Category</title>
+  </head>
+  <body>
+
+<!-- Import the Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+<script>
+ // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+    
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<!-- Add a table to display the posts -->
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Content</th>
+      <th>Date</th>
+      <th>Category</th>
+      <th>Image</th>
+      <th>Media</th>
+    </tr>
+  </thead>
+  <tbody id="post-table-body">
+  </tbody>
+</table>
+
+<!-- Read the posts from the Firebase Database -->
+<script>
+  var database = firebase.database();
+  var postsRef = database.ref("posts");
+  var categoriesRef = database.ref("categories");
+
+  categoriesRef.child("category1").once("value", function(snapshot) {
+    // Get the category data
+    var categoryData = snapshot.val();
+
+    // Get the posts for this category
+    var posts = [];
+    for (var postId in categoryData.posts) {
+      if (categoryData.posts.hasOwnProperty(postId)) {
+        posts.push(postId);
+      }
+    }
+    
+    function extractVideoID(url) {
+    var videoID = "";
+    var match = url.match(/[?&]v=([^&]+)/);
+    if (match) {
+      videoID = match[1];
+    }
+    return videoID;
+  }
+
+    // Read the posts data and add them to the table
+    postsRef.once("value", function(snapshot) {
+      var postsData = snapshot.val();
+      var tableBody = document.getElementById("post-table-body");
+      for (var postId in postsData) {
+        if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
+          var post = postsData[postId];
+          var row = tableBody.insertRow(-1);
+          var titleCell = row.insertCell(0);
+          var authorCell = row.insertCell(1);
+          var contentCell = row.insertCell(2);
+          var dateCell = row.insertCell(3);
+          var categoryCell = row.insertCell(4);
+          var imageCell = row.insertCell(5);
+          var mediaCell = row.insertCell(6);
+          titleCell.innerText = post.postTitle;
+          authorCell.innerText = post.postAuthor;
+          contentCell.innerText = post.postContent;
+          dateCell.innerText = post.postDate;
+          categoryCell.innerText = categoryData.categoryName;
+          imageCell.innerHTML = '<img src="' + post.postImage + '" alt="post image">';
+          mediaCell.innerHTML = '<iframe width="560" height="315" src="' + 'https://www.youtube.com/embed/' + extractVideoID(post.postMedia) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+        }
+      }
+    });
+  });
+ </script>
+  </body>
+</html>
