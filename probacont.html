@@ -102,6 +102,7 @@
   <body>
     <div class="container">
       <header>
+        <ul id="links-list"></ul>
         <div style="width: 33.33%; display: flex; align-items: center;">
           <img class="logo" src="https://via.placeholder.com/50x50" alt="Logo">
         </div>
@@ -119,6 +120,41 @@
           <a class="register" href="#">Register</a>
           <input type="text" id="search" placeholder="Search...">
         </div>
+        
+            <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+       
+    <script>
+      // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+      
+      // Reference to the links in the Firebase Database
+var linksRef = firebase.database().ref("links");
+
+// Read the links from the Firebase Database
+linksRef.on("value", function(snapshot) {
+  // Get the links data
+  var links = snapshot.val();
+
+  // Loop through the links and add them to the list
+  $.each(links, function(key, link) {
+    $("#links-list").append("<li><a href='" + link.url + "'>" + key + "</a></li>");
+  });
+});
+
+        </script>
       </header>
       <main>
         <h1>Welcome to my website!</h1>
