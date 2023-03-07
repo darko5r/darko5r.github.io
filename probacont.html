@@ -18,21 +18,29 @@
       }
       
       header {
-       background-color: #fff;
-       color: #333;
-       padding: 10px;
-       display: flex;
-       justify-content: space-between;
-       align-items: center;
-       border-top: 10px solid #ccc;
-       border-left: 10px solid #ccc;
-       border-bottom: 1px solid #ccc;
-       border-bottom-left-radius: 50%;
-       border-bottom-right-radius: 50%;
-       border-top-right-radius: 0;
-       border-image: repeating-linear-gradient(to bottom, #ccc 0, #ccc 10%, #ffd 10%, #ffd 20%) 1 100%;
-       background: linear-gradient(to bottom, #fff 0, #fff calc(50% - 2px), transparent calc(50% - 2px), transparent 50%, #fff 50%, #fff calc(100% - 2px), transparent calc(100% - 2px), transparent 100%);
-     }
+  background-color: #fff;
+  color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-bottom: 10px solid #ccc;
+  border-bottom-left-radius: 50% 10px;
+  border-bottom-right-radius: 50% 10px;
+  position: relative; /* add position relative for pseudo element */
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  border-top: 10px solid transparent;
+  border-right: 20px solid #333;
+  border-bottom: 10px solid transparent;
+}
          
       
       /* Style navigation area */
