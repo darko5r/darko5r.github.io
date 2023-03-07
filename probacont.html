@@ -29,17 +29,17 @@
   border-bottom: 10px solid #ccc;
   border-bottom-left-radius: 50% 10px;
   border-bottom-right-radius: 50% 10px;
-  position: relative; /* add position relative for pseudo element */
+  position: relative;
 }
 
 header::after {
   content: "";
   position: absolute;
-  top: -5px;
+  top: 5px;
   right: -10px;
-  border-top: 10px solid transparent;
-  border-right: 20px solid #333;
-  border-bottom: 10px solid transparent;
+  border-top: 25px solid transparent;
+  border-left: 10px solid #ccc;
+  border-bottom: 25px solid transparent;
 }
          
       
