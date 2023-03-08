@@ -90,17 +90,19 @@
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     outline: none;
  }
-
-  #search:focus {
-    box-shadow: inset 0 0 0 2px darkgray;
- }
       
-  #search:hover,
-  #search:focus {
+  #search:hover {
   background-color: #808081;
   padding: 8px;
   cursor: pointer;
-}
+ }
+
+  #search:focus {
+    box-shadow: inset 0 0 0 2px darkgray;
+    background-color: #808081;
+    padding: 8px;
+ }
+      
 
   /* Style content area */
   main {
