@@ -175,21 +175,11 @@
               image.src = post.postImage;
               image.alt = "Post image";
               image.classList.add("post-image");
+              content.innerText = post.postContent.substring(0, 250) + "...";
+              content.style.width = "488px";  // set the width of the content element
+           
               
-              const post1Content = document.createElement("p");
-              post1Content.classList.add("post1-content"); // add unique class for post1 content
-              post1Content.innerText = post1.postContent.substring(0, 250) + "...";
-              post1Content.style.width = "488px";
-              post1Content.style.wordWrap = "break-word";
-
-              // create content element for post2
-              const post2Content = document.createElement("p");
-              post2Content.classList.add("post2-content"); // add unique class for post2 content
-              post2Content.innerText = post2.postContent.substring(0, 250) + "...";
-              post2Content.style.width = "488px";
-              post2Content.style.wordWrap = "break-word";
-              
-             
+                                       
               // Set the read more link
               readMoreLink.innerText = "Read more";
               readMoreLink.href = postPageMap[postId];
