@@ -154,44 +154,113 @@
         // add more postId to page mappings as needed
         }
 
-    // Read the posts data for post1 and add it to the list
-    postsRef.child("post1").once("value", function(snapshot) {
-      var post = snapshot.val();
-      if (post) {
-        var postDiv = document.createElement("div");
-        var titleLink = document.createElement("a");
-        var image = document.createElement("img");
-        var content = document.createElement("p");
-        var readMoreLink = document.createElement("a");
-        var hr = document.createElement("hr");
-        
-        // Set the post title, image, and excerpt
-        titleLink.innerText = post.postTitle;
-        titleLink.href = postPageMap.post1;
-        titleLink.className = "post-title";
-        image.src = post.postImage;
-        image.alt = "Post image";
-        image.classList.add("post-image");
-        content.innerText = post.postContent.substring(0, 250) + "...";
-        content.style.width = "488px";  // set the width of the content element
-        // Set the read more link
-        readMoreLink.innerText = "Read more";
-        readMoreLink.href = postPageMap.post1;
-                  
-        // Add the post content to the postDiv
-        postDiv.appendChild(image);
-        postDiv.appendChild(titleLink);
-        postDiv.appendChild(content);
-        postDiv.appendChild(readMoreLink);
-        postDiv.appendChild(hr);
-                  
-        // Add the postDiv to the postList
-        var postList = document.getElementById("post-list");
-        postList.appendChild(postDiv);
-      }
+    // Read the posts data and add them to the list
+    postsRef.once("value", function(snapshot) {
+      var postsData = snapshot.val();
+      var postList = document.getElementById("post-list");
+      var category = "";
+      var counter = 0;
+      for (var postId in postsData) {
+        if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
+          var post = postsData[postId];
+          
+          // If this is post1, store its category
+          if (postId === "post1") {
+            category = post.category;
+          }
+          
+          // If this post has the same category as post1, add it to the list under post1
+          if (post.category === category && postId !== "post1") {
+            // Create a new div for the post
+            var sameCategoryPostDiv = document.createElement("div");
+            sameCategoryPostDiv.className = "same-category-post";
+            
+            // Create a link to the post page
+            var sameCategoryPostLink = document.createElement("a");
+            sameCategoryPostLink.innerText = post.postTitle;
+            sameCategoryPostLink.href = postPageMap[postId];
+            sameCategoryPostLink.className = "same-category-post-link";
+            
+            // Add the link to the div
+            sameCategoryPostDiv.appendChild(sameCategoryPostLink);
+            
+            // Add the div to the postList
+            postList.appendChild(sameCategoryPostDiv);
+            
+            // Increment the counter
+            counter++;
+            
+            // If we have displayed the maximum number of same-category posts, stop looping
+            if (counter === 3) {
+              break;
+            }
+          }
+          
+          // If this is post1, display its details
+          if (postId === "post1") {
+            var postDiv = document.createElement("div");
+            var titleLink = document.createElement("a");
+            var image = document.createElement("img");
+            var content = document.createElement("p");
+            var readMoreLink = document.createElement("a");
+            var hr = document.createElement("hr");
+            
+            // Set the post title, image, and excerpt
+titleLink.innerText = post.postTitle;
+titleLink.href = postPageMap[postId];
+titleLink.className = "post-title";
+image.src = post.postImage;
+image.alt = "Post image";
+image.classList.add("post-image");
+content.innerText = post.postContent.substring(0, 250) + "...";
+content.style.width = "488px";  // set the width of the content element
+
+// Set the read more link
+readMoreLink.innerText = "Read more";
+readMoreLink.href = postPageMap[postId];
+
+// Add the post content to the postDiv
+postDiv.appendChild(image);
+postDiv.appendChild(titleLink);
+postDiv.appendChild(content);
+postDiv.appendChild(readMoreLink);
+
+// Find and add related posts
+var relatedPosts = [];
+for (var relatedPostId in categoryData.posts) {
+  if (relatedPostId !== postId && categoryData.posts.hasOwnProperty(relatedPostId)) {
+    relatedPosts.push(relatedPostId);
+  }
+}
+if (relatedPosts.length > 0) {
+  var hrRelated = document.createElement("hr");
+  var relatedTitle = document.createElement("h3");
+  relatedTitle.innerText = "Related Posts:";
+  postList.appendChild(hrRelated);
+  postList.appendChild(relatedTitle);
+  var relatedList = document.createElement("ul");
+  postList.appendChild(relatedList);
+  for (var i = 0; i < Math.min(relatedPosts.length, 3); i++) {
+    var relatedPostId = relatedPosts[i];
+    var relatedPost = postsData[relatedPostId];
+    var relatedLink = document.createElement("a");
+    relatedLink.innerText = relatedPost.postTitle;
+    relatedLink.href = postPageMap[relatedPostId];
+    var relatedItem = document.createElement("li");
+    relatedItem.appendChild(relatedLink);
+    relatedList.appendChild(relatedItem);
+  }
+}
+
+// Add the postDiv to the postList
+postList.appendChild(postDiv);
+postList.appendChild(hr);
+            
+           }
     });
   });
-</script>
+</script> 
+  
     </main>
   </body>
 </html>
