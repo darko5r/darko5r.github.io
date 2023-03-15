@@ -140,86 +140,58 @@
     // Get the category data
     var categoryData = snapshot.val();
 
-    // Get the first post for this category
-    var firstPostId = Object.keys(categoryData.posts)[0];
-
-    // Read the first post data
-    postsRef.child(firstPostId).once("value", function(snapshot) {
-      var firstPostData = snapshot.val();
-      
-      var postPageMap = {
+    // Get the posts for this category
+    var posts = [];
+    for (var postId in categoryData.posts) {
+      if (categoryData.posts.hasOwnProperty(postId)) {
+        posts.push(postId);
+      }
+    }
+    
+    var postPageMap = {
         "post1": "proba2.html",
         "post2": "proba6.html",
         // add more postId to page mappings as needed
-      }
-      
-      // Create the first post div
-      var firstPostDiv = document.createElement("div");
-      var titleLink = document.createElement("a");
-      var image = document.createElement("img");
-      var content = document.createElement("p");
-      var readMoreLink = document.createElement("a");
-      var hr = document.createElement("hr");
-      
-      // Set the first post title, image, and content
-      titleLink.innerText = firstPostData.postTitle;
-      titleLink.href = postPageMap[firstPostId];
-      titleLink.className = "post-title";
-      image.src = firstPostData.postImage;
-      image.alt = "Post image";
-      image.classList.add("post-image");
-      content.innerText = firstPostData.postContent;
-      content.style.width = "488px"; // set the width of the content element
-      content.style.wordWrap = "break-word"; // break the content into multiple lines when it exceeds the width
-      readMoreLink.innerText = "Read more";
-      readMoreLink.href = postPageMap[firstPostId];
-      
-      // Add the first post content to the firstPostDiv
-      firstPostDiv.appendChild(image);
-      firstPostDiv.appendChild(titleLink);
-      firstPostDiv.appendChild(content);
-      firstPostDiv.appendChild(readMoreLink);
-      firstPostDiv.appendChild(hr);
-      
-      // Add the firstPostDiv to the post list
-      var postList = document.getElementById("post-list");
-      postList.appendChild(firstPostDiv);
-      
-      // Get the related post titles for this category
-      var relatedPostIds = Object.keys(categoryData.posts).slice(1);
-      var relatedPostTitles = [];
-      for (var i = 0; i < relatedPostIds.length; i++) {
-        var postId = relatedPostIds[i];
-        postsRef.child(postId).child("postTitle").once("value", function(snapshot) {
-          relatedPostTitles.push(snapshot.val());
-          
-          // Add the related post titles to the relatedPostDiv
-          if (relatedPostTitles.length == relatedPostIds.length) {
-            var relatedPostDiv = document.createElement("div");
-            relatedPostDiv.style.marginTop = "30px"; // add some margin between the first post and related posts
-            
-            // Add the related post titles to the relatedPostDiv
-            for (var j = 0; j < relatedPostTitles.length; j++) {
-              var relatedPostTitleLink = document.createElement("a");
-              relatedPostTitleLink.innerText = relatedPostTitles[j];
-              relatedPostTitleLink.href = postPageMap[relatedPostIds[j]];
-              relatedPostTitleLink.className = "related-post-title";
-              relatedPostDiv.appendChild(relatedPostTitleLink);
-              
-              if (j < relatedPostTitles.length - 1) {
-                  relatedPostsDiv.appendChild(document.createTextNode(", "));
-                }
-              }
-              
-              // Append the related post titles to the post div
-              postDiv.appendChild(relatedPostsTitle);
-              postDiv.appendChild(relatedPostsDiv);
-            }
-          }
-        });
-      });
-    </script>
+        }
 
+    // Read the posts data for post1 and add it to the list
+    postsRef.child("post1").once("value", function(snapshot) {
+      var post = snapshot.val();
+      if (post) {
+        var postDiv = document.createElement("div");
+        var titleLink = document.createElement("a");
+        var image = document.createElement("img");
+        var content = document.createElement("p");
+        var readMoreLink = document.createElement("a");
+        var hr = document.createElement("hr");
+        
+        // Set the post title, image, and excerpt
+        titleLink.innerText = post.postTitle;
+        titleLink.href = postPageMap.post1;
+        titleLink.className = "post-title";
+        image.src = post.postImage;
+        image.alt = "Post image";
+        image.classList.add("post-image");
+        content.innerText = post.postContent.substring(0, 250) + "...";
+        content.style.width = "488px";  // set the width of the content element
+        // Set the read more link
+        readMoreLink.innerText = "Read more";
+        readMoreLink.href = postPageMap.post1;
+                  
+        // Add the post content to the postDiv
+        postDiv.appendChild(image);
+        postDiv.appendChild(titleLink);
+        postDiv.appendChild(content);
+        postDiv.appendChild(readMoreLink);
+        postDiv.appendChild(hr);
+                  
+        // Add the postDiv to the postList
+        var postList = document.getElementById("post-list");
+        postList.appendChild(postDiv);
+      }
+    });
+  });
+</script>
     </main>
   </body>
 </html>
