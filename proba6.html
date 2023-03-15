@@ -2,10 +2,224 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Blog</title>
   </head>
   <body>
+  <main>
+    <style>
+      
+  /* Style content area */
+  main {
+    max-width: 1366px;
+    margin: 0 auto;
+    padding: 20px;
+  }  
+      
+    /* Style the post list container */
+#post-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
 
-    
+/* Style the post div */
+.post {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Add hover effect to the post div */
+.post:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the post title link */
+.post a {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+/* Style the post image */
+.post img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Style the post content */
+.post p {
+  padding: 10px;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #666;
+}
+
+/* Style the read more link */
+.post a:last-child {
+  display: block;
+  padding: 10px;
+  background-color: #f5f5f5;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Add hover effect to the read more link */
+.post a:last-child:hover {
+  background-color: #ddd;
+}
+
+/* Style the hr separator */
+.post hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0;
+}
+      
+.post-image {
+  display: block;
+  width: 488px;
+  height: 268px;
+  margin-bottom: 10px;
+}
+
+.post-title {
+  display: block; /* set the title to display as a block element */
+  font-size: 24px; /* set the desired font size */
+  font-weight: bold; /* set the desired font weight */
+}
+      
+
+ </style>
+      
+    <!-- Import the Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script>
+       // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <h1>Welcome to my blog</h1>
+
+    <!-- Display a list of posts -->
+    <div id="post-list"></div>
+
+    <script>
+  var database = firebase.database();
+  var postsRef = database.ref("posts");
+  var categoriesRef = database.ref("categories");
+
+  categoriesRef.child("category1").once("value", function(snapshot) {
+    // Get the category data
+    var categoryData = snapshot.val();
+
+    // Get the first post for this category
+    var firstPostId = Object.keys(categoryData.posts)[0];
+
+    // Read the first post data
+    postsRef.child(firstPostId).once("value", function(snapshot) {
+      var firstPostData = snapshot.val();
+      
+      var postPageMap = {
+        "post1": "proba2.html",
+        "post2": "proba6.html",
+        // add more postId to page mappings as needed
+      }
+      
+      // Create the first post div
+      var firstPostDiv = document.createElement("div");
+      var titleLink = document.createElement("a");
+      var image = document.createElement("img");
+      var content = document.createElement("p");
+      var readMoreLink = document.createElement("a");
+      var hr = document.createElement("hr");
+      
+      // Set the first post title, image, and content
+      titleLink.innerText = firstPostData.postTitle;
+      titleLink.href = postPageMap[firstPostId];
+      titleLink.className = "post-title";
+      image.src = firstPostData.postImage;
+      image.alt = "Post image";
+      image.classList.add("post-image");
+      content.innerText = firstPostData.postContent;
+      content.style.width = "488px"; // set the width of the content element
+      content.style.wordWrap = "break-word"; // break the content into multiple lines when it exceeds the width
+      readMoreLink.innerText = "Read more";
+      readMoreLink.href = postPageMap[firstPostId];
+      
+      // Add the first post content to the firstPostDiv
+      firstPostDiv.appendChild(image);
+      firstPostDiv.appendChild(titleLink);
+      firstPostDiv.appendChild(content);
+      firstPostDiv.appendChild(readMoreLink);
+      firstPostDiv.appendChild(hr);
+      
+      // Add the firstPostDiv to the post list
+      var postList = document.getElementById("post-list");
+      postList.appendChild(firstPostDiv);
+      
+      // Get the related post titles for this category
+      var relatedPostIds = Object.keys(categoryData.posts).slice(1);
+      var relatedPostTitles = [];
+      for (var i = 0; i < relatedPostIds.length; i++) {
+        var postId = relatedPostIds[i];
+        postsRef.child(postId).child("postTitle").once("value", function(snapshot) {
+          relatedPostTitles.push(snapshot.val());
+          
+          // Add the related post titles to the relatedPostDiv
+          if (relatedPostTitles.length == relatedPostIds.length) {
+            var relatedPostDiv = document.createElement("div");
+            relatedPostDiv.style.marginTop = "30px"; // add some margin between the first post and related posts
+            
+            // Add the related post titles to the relatedPostDiv
+            for (var j = 0; j < relatedPostTitles.length; j++) {
+              var relatedPostTitleLink = document.createElement("a");
+              relatedPostTitleLink.innerText = relatedPostTitles[j];
+              relatedPostTitleLink.href = postPageMap[relatedPostIds[j]];
+              relatedPostTitleLink.className = "related-post-title";
+              relatedPostDiv.appendChild(relatedPostTitleLink);
+              
+              if (j < relatedPostTitles.length - 1) {
+                  relatedPostsDiv.appendChild(document.createTextNode(", "));
+                }
+              }
+              
+              // Append the related post titles to the post div
+              postDiv.appendChild(relatedPostsTitle);
+              postDiv.appendChild(relatedPostsDiv);
+            }
+          }
+        });
+      });
+    </script>
+
+    </main>
   </body>
 </html>
