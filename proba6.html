@@ -148,7 +148,7 @@
         posts.push(postId);
       }
     }
-
+    
     var postPageMap = {
         "post1": "proba2.html",
         "post2": "proba6.html",
@@ -159,61 +159,55 @@
     postsRef.once("value", function(snapshot) {
       var postsData = snapshot.val();
       var postList = document.getElementById("post-list");
-      for (var postId in postsData) {
-        if (postsData.hasOwnProperty(postId) && posts.includes(postId)) {
-          var post = postsData[postId];
-          var postDiv = document.createElement("div");
-          var titleLink = document.createElement("a");
-          var image = document.createElement("img");
-          var content = document.createElement("p");
-          var readMoreLink = document.createElement("a");
-          var hr = document.createElement("hr");
-          var otherPostsDiv = document.createElement("div"); // Create a new div for the other post titles
-
-          // Set the post title, image, and excerpt
-          titleLink.innerText = post.postTitle;
-          titleLink.href = postPageMap[postId];
-          titleLink.className = "post-title";
-          image.src = post.postImage;
-          image.alt = "Post image";
-          image.classList.add("post-image");
-          content.innerText = post.postContent.substring(0, 250) + "...";
-          content.style.width = "488px";  // set the width of the content element
-
-          // Set the read more link
-          readMoreLink.innerText = "Read more";
-          readMoreLink.href = postPageMap[postId];
-
-          // Add the post content to the postDiv
-          postDiv.appendChild(image);
-          postDiv.appendChild(titleLink);
-          postDiv.appendChild(content);
-          postDiv.appendChild(readMoreLink);
-          postDiv.appendChild(hr);
-
-          // Add the other post titles to the otherPostsDiv
-          var count = 0;
-          for (var otherPostId in postsData) {
-            if (postsData.hasOwnProperty(otherPostId) && posts.includes(otherPostId) && otherPostId !== postId) {
-              var otherPost = postsData[otherPostId];
-              var otherTitleLink = document.createElement("a");
-              otherTitleLink.innerText = otherPost.postTitle;
-              otherTitleLink.href = postPageMap[otherPostId];
-              otherTitleLink.className = "post-title";
-              otherPostsDiv.appendChild(otherTitleLink);
-              count++;
-              if (count >= 3) break; // Show only up to 3 post titles
-            }
-          }
-          postDiv.appendChild(otherPostsDiv);
-
-          // Add the postDiv to the postList
-          postList.appendChild(postDiv);
-        }
+      var postDiv = document.createElement("div");
+      var titleLink = document.createElement("a");
+      var image = document.createElement("img");
+      var content = document.createElement("p");
+      var hr = document.createElement("hr");
+      
+      // Set the post title, image, and excerpt
+      titleLink.innerText = postsData.post1.postTitle;
+      titleLink.href = postPageMap["post1"];
+      titleLink.className = "post-title";
+      image.src = postsData.post1.postImage;
+      image.alt = "Post image";
+      image.classList.add("post-image");
+      content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
+      content.style.width = "488px";  // set the width of the content element
+      
+      // Add the post content to the postDiv
+      postDiv.appendChild(image);
+      postDiv.appendChild(titleLink);
+      postDiv.appendChild(content);
+      postDiv.appendChild(hr);
+      
+      // Create a list for the other posts
+      var otherPostsList = document.createElement("ul");
+      otherPostsList.className = "other-posts-list";
+      
+      // Create title links for the other posts of the same category
+      for (var i = 1; i < posts.length && i < 4; i++) {
+        var postId = posts[i];
+        var post = postsData[postId];
+        var otherPostItem = document.createElement("li");
+        var otherPostTitleLink = document.createElement("a");
+        
+        otherPostTitleLink.innerText = post.postTitle;
+        otherPostTitleLink.href = postPageMap[postId];
+        
+        otherPostItem.appendChild(otherPostTitleLink);
+        otherPostsList.appendChild(otherPostItem);
       }
+      
+      // Add the other posts list to the postDiv
+      postDiv.appendChild(otherPostsList);
+      
+      // Add the postDiv to the postList
+      postList.appendChild(postDiv);
     });
   });
-</script>  
+</script>
+
   
     </main>
   </body>
