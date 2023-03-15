@@ -176,6 +176,8 @@
               image.alt = "Post image";
               image.classList.add("post-image");
               content.innerText = post.postContent.substring(0, 250) + "...";
+              content.style.width = "488px";  // set the width of the content element
+              content.style.wordWrap = "break-word";  // break the content into multiple lines when it exceeds the width
 
               // Set the read more link
               readMoreLink.innerText = "Read more";
