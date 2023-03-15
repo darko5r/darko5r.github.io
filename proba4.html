@@ -98,6 +98,12 @@
   height: 268px;
   margin-bottom: 10px;
 }
+
+.post-title {
+  display: block; /* set the title to display as a block element */
+  font-size: 24px; /* set the desired font size */
+  font-weight: bold; /* set the desired font weight */
+}
       
 
  </style>
@@ -165,6 +171,7 @@
               // Set the post title, image, and excerpt
               titleLink.innerText = post.postTitle;
               titleLink.href = postPageMap[postId];
+              titleLink.className = "post-title";
               image.src = post.postImage;
               image.alt = "Post image";
               image.classList.add("post-image");
