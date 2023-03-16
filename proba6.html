@@ -167,7 +167,7 @@
     // Read the posts data and add them to the list
     postsRef.once("value", function(snapshot) {
       var postsData = snapshot.val();
-      var postList = document.getElementById("post-list");
+      var postList = document.getElementById("post-list2");
       var postDiv = document.createElement("div");
       var titleLink = document.createElement("a");
       var image = document.createElement("img");
@@ -176,9 +176,9 @@
       
       // Set the post title, image, and excerpt
       titleLink.innerText = postsData.post1.postTitle;
-      titleLink.href = postPageMap["post1"];
+      titleLink.href = postPageMap["post5"];
       titleLink.className = "post-title";
-      image.src = postsData.post1.postImage;
+      image.src = postsData.post5.postImage;
       image.alt = "Post image";
       image.classList.add("post-image");
       content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
