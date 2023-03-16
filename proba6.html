@@ -147,32 +147,31 @@
     });
   });
       
-      categoriesRef.child("category2").once("value", function(snapshot) {
+      var postList2 = document.createElement("div");
+postList2.id = "post-list-2";
+document.getElementById("category2").appendChild(postList2);
+
+categoriesRef.child("category2").once("value", function(snapshot) {
   snapshot.forEach(function(childSnapshot) {
     var childKey = childSnapshot.key;
     var childData = childSnapshot.val();
-
-    // Create a new div for each post and set its class to "post"
     var postDiv = document.createElement("div");
+    postDiv.id = childKey;
     postDiv.className = "post";
 
-    // Create a new h2 element for the post title and set its text to the post title
-    var titleElement = document.createElement("h2");
-    var titleText = document.createTextNode(childData.title);
-    titleElement.appendChild(titleText);
+    var postTitle = document.createElement("h2");
+    postTitle.innerHTML = childData.postTitle;
+    postDiv.appendChild(postTitle);
 
-    // Create a new p element for the post content and set its text to the post content
-    var contentElement = document.createElement("p");
-    var contentText = document.createTextNode(childData.content);
-    contentElement.appendChild(contentText);
+    var postContent = document.createElement("p");
+    postContent.innerHTML = childData.postContent;
+    postDiv.appendChild(postContent);
 
-    // Append the title and content elements to the post div
-    postDiv.appendChild(titleElement);
-    postDiv.appendChild(contentElement);
+    var postImage = document.createElement("img");
+    postImage.src = childData.postImage;
+    postDiv.appendChild(postImage);
 
-    // Append the post div to the post list element
-    var postList = document.getElementById("postList2");
-    postList.appendChild(postDiv);
+    document.getElementById("post-list-2").appendChild(postDiv);
   });
 });
 
