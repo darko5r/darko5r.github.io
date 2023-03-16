@@ -105,14 +105,8 @@
   font-weight: bold; /* set the desired font weight */
 }
       
-      /* Style the table */
-table {
- 
-}
-
-/* Style the table cell */
-table td {
-
+ .post-list {
+   border-right: 1px solid gray;
 }
       
  </style>
@@ -138,18 +132,8 @@ table td {
     <h1>Welcome to my blog</h1>
 
     <!-- Display a list of posts -->
-    <table style="border-right: 1px solid gray;">
-  <tbody>
-    <tr>
-      <td>
     <div id="post-list"></div>
-        </td>
-    </tr>
-  </tbody>
-</table>
-
-    
-    
+              
     <script>
   var database = firebase.database();
   var postsRef = database.ref("posts");
