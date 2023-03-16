@@ -145,76 +145,35 @@
       postList.appendChild(postDiv);
     });
   });
+      
+      categoriesRef.child("category2").once("value", function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
 
+    // Create a new div for each post and set its class to "post"
+    var postDiv = document.createElement("div");
+    postDiv.className = "post";
 
-  categoriesRef.child("category2").once("value", function(snapshot) {
-    // Get the category data
-    var categoryData = snapshot.val();
+    // Create a new h2 element for the post title and set its text to the post title
+    var titleElement = document.createElement("h2");
+    var titleText = document.createTextNode(childData.title);
+    titleElement.appendChild(titleText);
 
-    // Get the posts for this category
-    var posts = [];
-    for (var postId in categoryData.posts) {
-      if (categoryData.posts.hasOwnProperty(postId)) {
-        posts.push(postId);
-      }
-    }
-    
-    var postPageMap = {
-        "post5": "proba5.html",
-        // add more postId to page mappings as needed
-    }
+    // Create a new p element for the post content and set its text to the post content
+    var contentElement = document.createElement("p");
+    var contentText = document.createTextNode(childData.content);
+    contentElement.appendChild(contentText);
 
-    // Read the posts data and add them to the list
-    postsRef.once("value", function(snapshot) {
-      var postsData = snapshot.val();
-      var postList = document.getElementById("post-list2");
-      var postDiv = document.createElement("div");
-      var titleLink = document.createElement("a");
-      var image = document.createElement("img");
-      var content = document.createElement("p");
-      var hr = document.createElement("hr");
-      
-      // Set the post title, image, and excerpt
-      titleLink.innerText = postsData.post1.postTitle;
-      titleLink.href = postPageMap["post5"];
-      titleLink.className = "post-title";
-      image.src = postsData.post5.postImage;
-      image.alt = "Post image";
-      image.classList.add("post-image");
-      content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
-      content.style.width = "488px";  // set the width of the content element
-      
-      // Add the post content to the postDiv
-      postDiv.appendChild(image);
-      postDiv.appendChild(titleLink);
-      postDiv.appendChild(content);
-      postDiv.appendChild(hr);
-      
-      // Create a list for the other posts
-      var otherPostsList = document.createElement("ul");
-      otherPostsList.className = "other-posts-list";
-      
-      // Create title links for the other posts of the same category
-      for (var i = 1; i < posts.length && i < 4; i++) {
-        var postId = posts[i];
-        var post = postsData[postId];
-        var otherPostItem = document.createElement("li");
-        var otherPostTitleLink = document.createElement("a");
-        
-        otherPostTitleLink.innerText = post.postTitle;
-        otherPostTitleLink.href = postPageMap[postId];
-        
-        otherPostItem.appendChild(otherPostTitleLink);
-        otherPostsList.appendChild(otherPostItem);
-      }
-      
-      // Add the other posts list to the postDiv
-      postDiv.appendChild(otherPostsList);
-      
-      // Add the postDiv to the postList
-      postList.appendChild(postDiv);
-    });
+    // Append the title and content elements to the post div
+    postDiv.appendChild(titleElement);
+    postDiv.appendChild(contentElement);
+
+    // Append the post div to the post list element
+    var postList = document.getElementById("postList2");
+    postList.appendChild(postDiv);
   });
+});
 
 
 </script>
