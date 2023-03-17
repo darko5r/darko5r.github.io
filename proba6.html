@@ -13,26 +13,22 @@
          main {
           max-width: 1366px;
           margin: 0 auto;
-          padding: 2px;
+          padding: 20px;
         }  
       
       /* Style the post list container */
-         #post-list {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-between;
-          gap: 0px;
-          padding: 0px;
-          background-color: #f9f9f9;
-          max-width: 38%; 
-          float: left; 
-        }
       
-         #post-list2 {
-          float: right;
-          width: 38%;
-          margin-left: 2px;
-        }
+      
+         .post-list-wrapper {
+          display: flex;
+          justify-content: space-between;
+       }
+
+         #post-list,
+          #post-list2 {
+          width: 38%; /* adjust as needed */
+       }
+         
 
       /* Style the hr separator */
          .post hr {
@@ -82,6 +78,15 @@
     <h1>Welcome to my blog</h1>
 
     <!-- Display a list of posts -->
+    <div class="post-list-wrapper">
+      <div id="post-list">
+        <!-- firebase -->
+      </div>
+      <div id="post-list2">
+        <!-- firebase -->
+      </div>
+   </div>
+
     <div id="post-list"></div>
     <div id="post-list2"></div>
               
