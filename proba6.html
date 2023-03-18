@@ -22,13 +22,27 @@
          .post-list-wrapper {
           display: flex;        
        }
-
-         #post-list,
-          #post-list2 {
-          width: 38%; /* adjust as needed */
-       }
       
-        #post-list2::before {
+      
+         #post-list {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 0px;
+          padding: 0px;
+          background-color: #f9f9f9;
+          max-width: 38%;
+          float: left;
+       }
+
+         #post-list2 {
+          float: right;
+          width: 38%;
+          margin-left: 2px;
+          position: relative; /* add a relative position to the container */
+       }
+
+         #post-list2::before {
           content: '';
           position: absolute; /* position the pseudo-element absolutely */
           top: 0;
