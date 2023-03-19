@@ -45,11 +45,10 @@
          #post-list2::before {
           content: '';
           position: absolute; /* position the pseudo-element absolutely */
-          top: 10px; /* 2px shorter from the top */
-          bottom: 10px; /* 2px shorter from the bottom */
-          height: calc(100% - 20px); /* set the height of the pseudo-element */
+          top: 50%;
+          height: calc(100% - 4px); /* set the height of the pseudo-element */
           left: -6px; /* position the pseudo-element on the left side of #post-list2 */
-          height: 100%;
+          margin-top: -50%;
           width: 1px; /* set the width of the pseudo-element to act as a line */
           background-color: #ddd; /* set the color of the line */         
        }
