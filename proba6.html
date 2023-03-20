@@ -134,6 +134,38 @@
   var database = firebase.database();
   var postsRef = database.ref("posts");
   var categoriesRef = database.ref("categories");
+      
+      
+  // Retrieve the most read posts
+  postsRef.orderByChild("views").limitToLast(5).once("value", function(snapshot) {
+    var mostReadPosts = snapshot.val();
+
+    // Create a list of the post IDs
+    var mostReadPostIds = [];
+    for (var postId in mostReadPosts) {
+      if (mostReadPosts.hasOwnProperty(postId)) {
+        mostReadPostIds.push(postId);
+      }
+    }
+
+    // Get the posts data for the most read posts
+    var mostReadPostsData = {};
+    for (var i = 0; i < mostReadPostIds.length; i++) {
+      var postId = mostReadPostIds[i];
+      mostReadPostsData[postId] = postsData[postId];
+    }
+
+    // Add the most read posts to the page
+    var mostReadList = document.getElementById("most-read-list");
+    for (var i = 0; i < mostReadPostIds.length; i++) {
+      var postId = mostReadPostIds[i];
+      var post = mostReadPostsData[postId];
+      var postDiv = document.createElement("div");
+      var titleLink = document.createElement("a");
+      var image = document.createElement("img");
+      var content = document.createElement("p");
+      var hr = document.createElement("hr");
+      
 
   categoriesRef.child("category1").once("value", function(snapshot) {
     // Get the category data
