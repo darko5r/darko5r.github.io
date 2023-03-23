@@ -273,6 +273,43 @@
       postList.appendChild(postDiv);
     });
   });
+      
+      
+      // Read the posts data and add them to the list
+postsRef.once("value", function(snapshot) {
+  var postsData = snapshot.val();
+
+  // Convert the posts object to an array
+  var postsArray = [];
+  for (var postId in postsData) {
+    if (postsData.hasOwnProperty(postId)) {
+      postsArray.push(postsData[postId]);
+    }
+  }
+
+  // Sort the posts by read count in descending order
+  postsArray.sort(function(a, b) {
+    return b.readCount - a.readCount;
+  });
+
+  // Display the top 5 posts
+  for (var i = 0; i < 5 && i < postsArray.length; i++) {
+    var post = postsArray[i];
+    // ...
+    // Create the postDiv and add the post content to it
+    // ...
+    postList.appendChild(postDiv);
+  }
+
+  // Display the rest of the posts
+  for (var i = 5; i < postsArray.length; i++) {
+    var post = postsArray[i];
+    // ...
+    // Create the postDiv and add the post content to it
+    // ...
+    postList.appendChild(postDiv);
+  }
+});
 
 
 </script>
