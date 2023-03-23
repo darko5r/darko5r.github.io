@@ -273,6 +273,17 @@
       postList.appendChild(postDiv);
     });
   });
+      
+      var postsRef = firebase.database().ref('posts');
+postsRef.orderByChild('readCount').limitToLast(10).on('value', function(snapshot) {
+  var posts = snapshot.val();
+  var postTitles = '';
+  for (var postId in posts) {
+    var post = posts[postId];
+    postTitles += '<li>' + post.title + '</li>';
+  }
+  document.getElementById('most-viewed-posts').innerHTML = '<ul>' + postTitles + '</ul>';
+});
                                                  
 </script>
 
