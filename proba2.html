@@ -91,26 +91,18 @@
       imageCell.innerHTML = '<img src="' + post1Data.postImage + '" alt="post image">';
       mediaCell.innerHTML = '<iframe width="560" height="315" src="' + 'https://www.youtube.com/embed/' + extractVideoID(post1Data.postMedia) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
    
-                       
+      // Increment readCount when the post is viewed
+      var postRef = firebase.database().ref('posts/post1');
+      postRef.transaction(function(post) {
+      if (post) {
+        post.readCount = (post.readCount || 0) + 1;
+      }
+      return post;
     });
   });
-      
- </script>
+});
+                 
     
-    
-    <script>
-      // Get a reference to the current post
-var postRef = firebase.database().ref('posts/' + currentPost);
-
-// Increment the read count only if the current post is post1
-if (currentPost === "post1") {
-  postRef.transaction(function(post) {
-    if (post) {
-      post.readCount = (post.readCount || 0) + 1;
-    }
-    return post;
-  });
-}
     </script>
   </body>
 </html>
