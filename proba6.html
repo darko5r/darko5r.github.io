@@ -275,9 +275,13 @@
   });
       
       
-      // Update the read count for a post in the database
-function updateReadCount(postId) {
-  var postRef = firebase.database().ref('posts/' + postId);
+      var currentPost = "post1";
+      
+      // Get a reference to the current post
+var postRef = firebase.database().ref('posts/' + currentPost);
+
+// Increment the read count only if the current post is post1
+if (currentPost === "post1") {
   postRef.transaction(function(post) {
     if (post) {
       post.readCount = (post.readCount || 0) + 1;
@@ -285,10 +289,7 @@ function updateReadCount(postId) {
     return post;
   });
 }
-
-  updateReadCount('post1'); // Replace 'post1' with the actual post ID
-                   
-
+                                  
 </script>
 
   
