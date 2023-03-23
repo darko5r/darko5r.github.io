@@ -125,10 +125,15 @@
       <div id="post-list2">
         <!-- firebase -->
       </div>
+      <div id="top-posts">
+       <!-- Top posts will be displayed here -->
+      </div>
    </div>
 
     <div id="post-list"></div>
     <div id="post-list2"></div>
+    <div id="top-posts"></div>
+
               
     <script>
   var database = firebase.database();
@@ -274,17 +279,20 @@
     });
   });
       
-      var postsRef = firebase.database().ref('posts');
-postsRef.orderByChild('readCount').limitToLast(10).on('value', function(snapshot) {
-  var posts = snapshot.val();
-  var postTitles = '';
-  for (var postId in posts) {
-    var post = posts[postId];
-    postTitles += '<li>' + post.title + '</li>';
-  }
-  document.getElementById('most-viewed-posts').innerHTML = '<ul>' + postTitles + '</ul>';
-});
-                                                 
+      // Retrieve top posts by readCount
+var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(3);
+topPostsRef.on('value', function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
+    console.log(childKey, childData);
+    // Display the post on the page
+    var postElement = document.createElement('div');
+    postElement.innerHTML = '<h2>' + childData.title + '</h2><p>' + childData.content + '</p><p>Read count: ' + childData.readCount + '</p>';
+    document.getElementById('top-posts').appendChild(postElement);
+  });
+});           
+      
 </script>
 
   
