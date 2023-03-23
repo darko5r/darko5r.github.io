@@ -288,7 +288,7 @@ topPostsRef.on('value', function(snapshot) {
     console.log(childKey, childData);
     // Display the post on the page
     var postElement = document.createElement('div');
-    postElement.innerHTML = '<h2>' + childData.title + '</h2><p>' + childData.content + '</p><p>Read count: ' + childData.readCount + '</p>';
+    postElement.innerHTML = '<h2>' + childData.postTitle + '</h2><p>' + childData.postContent + '</p><p>Read count: ' + childData.readCount + '</p>';
     document.getElementById('top-posts').appendChild(postElement);
   });
 });           
