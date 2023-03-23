@@ -278,9 +278,9 @@
       postList.appendChild(postDiv);
     });
   });
-      
+                     
       // Retrieve top posts by readCount
-var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(3);
+var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
 topPostsRef.on('value', function(snapshot) {
   snapshot.forEach(function(childSnapshot) {
     var childKey = childSnapshot.key;
@@ -290,6 +290,11 @@ topPostsRef.on('value', function(snapshot) {
     var postElement = document.createElement('div');
     postElement.innerHTML = '<h2>' + childData.postTitle + '</h2><p>' + childData.postContent + '</p><p>Read count: ' + childData.readCount + '</p>';
     document.getElementById('top-posts').appendChild(postElement);
+    
+    // Sort the posts by readCount in descending order
+  posts.sort(function(a, b) {
+    return b.readCount - a.readCount;
+  });
   });
 });           
       
