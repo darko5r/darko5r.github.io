@@ -287,37 +287,7 @@ function updateReadCount(postId) {
 }
 
   updateReadCount('post1'); // Replace 'post1' with the actual post ID
-
-              
-      
-      // Get a reference to the posts node in the database
-var postsRef = firebase.database().ref("posts");
-
-// Query the posts and sort them by read count in descending order
-postsRef.orderByChild("readCount").limitToLast(5).on("value", function(snapshot) {
-
-  // Get the posts data and convert it to an array
-  var postsData = snapshot.val();
-  var postsArray = [];
-  for (var postId in postsData) {
-    if (postsData.hasOwnProperty(postId)) {
-      postsArray.push(postsData[postId]);
-    }
-  }
-
-  // Reverse the array to get the posts in descending order of read count
-  postsArray.reverse();
-
-  // Display the top 5 posts
-  for (var i = 0; i < 5 && i < postsArray.length; i++) {
-    var post = postsArray[i];
-    // ...
-    // Create the postDiv and add the post content to it
-    // ...
-    postList.appendChild(postDiv);
-  }
-});
-
+                   
 
 </script>
 
