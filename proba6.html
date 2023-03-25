@@ -296,7 +296,7 @@ topPostsRef.on('value', function(snapshot) {
   // Display the posts on the page
   postsArray.forEach(function(childData) {
     var postElement = document.createElement('div');
-    postElement.innerHTML = '<h2>' + childData.postTitle + '</h2><p>' + childData.postContent + '</p><p>Read count: ' + childData.readCount + '</p>';
+    postElement.innerHTML = '<h2>' + childData.postTitle + '</h2><p>Read count: ' + childData.readCount + '</p>';
     document.getElementById('top-posts').appendChild(postElement);    
   });
 });
