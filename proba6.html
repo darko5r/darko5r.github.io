@@ -280,7 +280,6 @@
   });
       
       
-      
       // Retrieve top posts by readCount in descending order
 var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
 topPostsRef.on('value', function(snapshot) {
@@ -297,17 +296,15 @@ topPostsRef.on('value', function(snapshot) {
   // Display the posts on the page
   postsArray.forEach(function(childData) {
     var postElement = document.createElement('div');
-    var postTitleLink = document.createElement('a');
-    postTitleLink.href = '/posts/' + childData.postId;
-    postTitleLink.innerHTML = childData.postTitle;
-    postElement.appendChild(postTitleLink);
-    var readCountElement = document.createElement('p');
-    readCountElement.innerHTML = 'Read count: ' + childData.readCount;
-    postElement.appendChild(readCountElement);
-    document.getElementById('top-posts').appendChild(postElement);    
+    var postLink = document.createElement('a');
+    postLink.href = postPageMap[childData.postId];
+    postLink.textContent = childData.postTitle;
+    postElement.appendChild(postLink);
+    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
+    document.getElementById('top-posts').appendChild(postElement);
   });
 });
-                                                 
+                                                         
 </script>
 
   
