@@ -298,9 +298,11 @@ topPostsRef.on('value', function(snapshot) {
     var postElement = document.createElement('div');
     var postLink = document.createElement('a');
     postLink.href = postPageMap[childData.postId];
-    postLink.textContent = childData.postTitle;
+    postLink.innerHTML = childData.postTitle;
     postElement.appendChild(postLink);
-    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
+    var readCountElement = document.createElement('p');
+    readCountElement.innerHTML = 'Read count: ' + childData.readCount;
+    postElement.appendChild(readCountElement);
     document.getElementById('top-posts').appendChild(postElement);
   });
 });
