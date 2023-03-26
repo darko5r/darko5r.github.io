@@ -280,13 +280,14 @@
   });
       
       
-          var postPageMap = {
-        "post1": "proba2.html",
-        "post2": "proba6.html",
-        // add more postId to page mappings as needed
-    }
       
-    // Retrieve top posts by readCount in descending order
+      var postPageMap = {
+  "post1": "proba2.html",
+  "post2": "proba6.html",
+  // add more postId to page mappings as needed
+};
+
+// Retrieve top posts by readCount in descending order
 var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
@@ -310,6 +311,7 @@ topPostsRef.on('value', function(snapshot) {
     document.getElementById('top-posts').appendChild(postElement);    
   });
 });
+          
 
                                                          
 </script>
