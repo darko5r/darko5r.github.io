@@ -304,7 +304,7 @@ topPostsRef.on('value', function(snapshot) {
   postsArray.forEach(function(childData) {
     var postElement = document.createElement('div');
     var postLink = document.createElement('a');
-    postLink.href = postPageMap[childData.postId];
+    postLink.href = postPageMap[childData.postId];  // need to implement real links
     postLink.textContent = childData.postTitle;
     postElement.appendChild(postLink);
     postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
