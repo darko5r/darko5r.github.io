@@ -286,34 +286,33 @@
   "post2": "proba6.html",
   // add more postId to page mappings as needed
 };
-
-// Retrieve top posts by readCount in descending order
+      
+      
+   // Retrieve top posts by readCount in descending order
 var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
   snapshot.forEach(function(childSnapshot) {
-    var childKey = childSnapshot.key;
     var childData = childSnapshot.val();
-    console.log(childKey, childData);
-    // Add the post to the array
+    childData.key = childSnapshot.key;
     postsArray.push(childData);
   });
-  // Reverse the array to show posts in descending order
-  postsArray.reverse();
-  // Display the posts on the page
-  postsArray.forEach(function(childData) {
-    var postElement = document.createElement('div');
-    var postLink = document.createElement('a');
-    postLink.href = postPageMap[childData.postId];  // need to implement real links
-    postLink.textContent = childData.postTitle;
-    postElement.appendChild(postLink);
-    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
-    document.getElementById('top-posts').appendChild(postElement);    
-  });
-});
-          
 
-                                                         
+  // Render the top posts list
+  var topPostsList = document.getElementById("top-posts-list");
+  for (var i = 0; i < postsArray.length; i++) {
+    var post = postsArray[i];
+    var postItem = document.createElement("li");
+    var postTitleLink = document.createElement("a");
+    
+    postTitleLink.innerText = post.postTitle;
+    postTitleLink.href = "post.html?id=" + post.key;
+    
+    postItem.appendChild(postTitleLink);
+    topPostsList.appendChild(postItem);
+  }
+});   
+                                                                  
 </script>
 
   
