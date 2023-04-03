@@ -227,9 +227,8 @@
           // add more postId to page mappings as needed
         }
 
-        // Read the posts data and add them to the list   // TODO: add 2nd image to firebase, set image size, ->
-                                                          // -> make room for recent and most viewed posts, make them clickable links
-        postsRef.once("value", function(snapshot) {
+        // Read the posts data and add them to the list   // TODO: add 2nd image to firebase, set image size, ->                                                    
+        postsRef.once("value", function(snapshot) {       // -> make room for recent and most viewed posts headings <h2></h2>, make them clickable links 
         var postsData = snapshot.val();
         var postList = document.getElementById("post-list2");
         var postDiv = document.createElement("div");
