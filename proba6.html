@@ -259,8 +259,8 @@
         }
 
         // Read the posts data and add them to the list   // TODO: add 2nd image to firebase, set image size, ->                                                    
-        postsRef.once("value", function(snapshot) {       // -> make room for recent and most viewed posts headings <h2></h2>, make them clickable links 
-        var postsData = snapshot.val();                  
+        postsRef.once("value", function(snapshot) {       // -> make room for recent and most viewed posts headings <h2></h2>, make them clickable links ->
+        var postsData = snapshot.val();                   // -> change link color to black
         var postList = document.getElementById("post-list2");
         var postDiv = document.createElement("div");
         var titleLink = document.createElement("a");
