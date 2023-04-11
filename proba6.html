@@ -8,6 +8,112 @@
   <body>
   <main>
     
+    <style>
+      
+      /* Style content area */
+         main {
+          max-width: 1366px;
+          margin: 0 auto;
+          padding: 20px;
+        }  
+      
+      /* Style the post list container */
+      
+      
+         .post-list-wrapper {
+          display: flex;        
+       }
+      
+      
+         #post-list {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 0px;
+          padding: 0px;
+          background-color: #f9f9f9;
+          max-width: 38%;
+          float: left;
+          margin-right: 6px;
+       }
+
+         #post-list2 {
+          float: right;
+          width: 28%;
+          position: relative;
+       }
+      
+         #post-list2::before {
+          content: '';
+          position: absolute;
+          top: 20px;
+          bottom: 20px;
+          left: -6px;
+          width: 1px;
+          height: calc(100% - 40px);
+          background-color: #ddd;
+          animation: line-animation 1s ease-in-out infinite;
+       }
+      
+        #post-list2::after {
+         content: '';
+         position: absolute;
+         top: 20px;
+         bottom: 20px;
+         right: -6px;
+         width: 1px;
+         height: calc(100% - 40px);
+         background-color: #ddd;
+         animation: line-animation 1s ease-in-out infinite;
+      }
+
+       @keyframes line-animation {
+         0% {
+         height: 0;
+         top: 50%;
+      }
+         50% {
+         height: 50%;
+         top: 25%;
+      }
+         100% {
+         height: 100%;
+         top: 0%;
+      }
+     }
+      
+       /*  #top-posts div {
+          margin-left: 12px;
+        } */
+
+         /* Style the hr separator */
+         hr {
+          border: none;
+          border-top: 1px solid red !important;
+          margin: 0;
+        }      
+      
+      
+         .post-image {
+          display: block;
+          width: 488px;
+          height: 268px;
+          margin-bottom: 10px;
+        }
+
+         .post-title {
+          display: block; /* set the title to display as a block element */
+          font-size: 24px; 
+          font-weight: bold;
+        } 
+      
+         body {
+          margin: 0;
+          padding: 0;
+        }
+      
+    </style>
+    
       
     <!-- Import the Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
