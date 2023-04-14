@@ -295,7 +295,7 @@
           });
          });
       
-            
+                             
       
          // Define a variable to store the post IDs and their corresponding URLs
 var postPageMap = {
@@ -306,26 +306,13 @@ var postPageMap = {
   "post5": "proba7.html"
 };
 
-// Define a function to update the read count for a post
-function updateReadCount(postId) {
-  // Get the current read count for the post
-  firebase.database().ref('posts/' + postId + '/readCount').once('value', function(snapshot) {
-    var currentReadCount = snapshot.val();
-    // Increment the read count by 1
-    var updatedReadCount = currentReadCount + 1;
-    // Update the read count in the database
-    firebase.database().ref('posts/' + postId + '/readCount').set(updatedReadCount);
-  });
-}
-
 // Retrieve top posts by readCount in descending order
 var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
   snapshot.forEach(function(childSnapshot) {
-    var childKey = childSnapshot.key;
     var childData = childSnapshot.val();
-    childData.postId = childKey; // Add the postId to the childData object
+    childData.postId = childSnapshot.key; // Set the postId using the childSnapshot key
     // Add the post to the array
     postsArray.push(childData);
   });
@@ -335,34 +322,12 @@ topPostsRef.on('value', function(snapshot) {
   postsArray.forEach(function(childData) {
     var postElement = document.createElement('div');
     var postLink = document.createElement('a');
-    postLink.href = postPageMap[childData.postId]; // Get the URL for the post
+    postLink.href = postPageMap[childData.postId];  // need to implement real links
     postLink.textContent = childData.postTitle;
     postElement.appendChild(postLink);
-    postElement.innerHTML += '<p>Read count: <span id="' + childData.postId + '-read-count">' + childData.readCount + '</span></p>';
-    document.getElementById('top-posts').appendChild(postElement);
+    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
+    document.getElementById('top-posts').appendChild(postElement);    
   });
-});
-
-// Add event listeners to update the read count when a post is viewed
-document.getElementById('post1').addEventListener('click', function() {
-  updateReadCount('post1');
-  window.location.href = postPageMap['post1'];
-});
-document.getElementById('post2').addEventListener('click', function() {
-  updateReadCount('post2');
-  window.location.href = postPageMap['post2'];
-});
-document.getElementById('post3').addEventListener('click', function() {
-  updateReadCount('post3');
-  window.location.href = postPageMap['post3'];
-});
-document.getElementById('post4').addEventListener('click', function() {
-  updateReadCount('post4');
-  window.location.href = postPageMap['post4'];
-});
-document.getElementById('post5').addEventListener('click', function() {
-  updateReadCount('post5');
-  window.location.href = postPageMap['post5'];
 });
               
       
