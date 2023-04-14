@@ -295,39 +295,42 @@
           });
          });
       
+            
       
-      
-         var postPageMap = {
-          "post1": "proba2.html",
-          "post2": "proba4.html",
-          // add more postId to page mappings as needed
-          };
-      
-      
-         // Retrieve top posts by readCount in descending order
-         var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
-         topPostsRef.on('value', function(snapshot) {
-         var postsArray = [];
-         snapshot.forEach(function(childSnapshot) {
-          var childKey = childSnapshot.key;
-          var childData = childSnapshot.val();
-          childData.postId = childKey; // Add the postId to the childData object
-         // Add the post to the array
-         postsArray.push(childData);
-         });
-         // Reverse the array to show posts in descending order
-         postsArray.reverse();
-         // Display the posts on the page
-         postsArray.forEach(function(childData) {
-          var postElement = document.createElement('div');
-          var postLink = document.createElement('a');
-          postLink.href = postPageMap[childData.postId];  // need to implement real links
-          postLink.textContent = childData.postTitle;
-          postElement.appendChild(postLink);
-          postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
-          document.getElementById('top-posts').appendChild(postElement);    
-          });
-         }); 
+         // Define the mapping of post IDs to page URLs
+var postPageMap = {
+  "post1": "proba2.html",
+  "post2": "proba4.html",
+  "post3": "proba5.html",
+  "post4": "proba6.html",
+  "post5": "proba7.html"
+  // add more postId to page mappings as needed
+};
+
+// Listen for changes to the posts table
+firebase.database().ref('posts').on('value', function(snapshot) {
+  var postsArray = [];
+  snapshot.forEach(function(childSnapshot) {
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
+    childData.postId = childKey; // Add the postId to the childData object
+    // Add the post to the array
+    postsArray.push(childData);
+  });
+  // Reverse the array to show posts in descending order
+  postsArray.reverse();
+  // Display the posts on the page
+  postsArray.forEach(function(childData) {
+    var postElement = document.createElement('div');
+    var postLink = document.createElement('a');
+    postLink.href = postPageMap[childData.postId];  // get the page URL from the mapping
+    postLink.textContent = childData.postTitle;
+    postElement.appendChild(postLink);
+    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
+    document.getElementById('top-posts').appendChild(postElement);    
+  });
+});
+              
       
       </script>  
     </main>
