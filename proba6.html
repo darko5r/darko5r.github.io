@@ -183,15 +183,15 @@
        var image = document.createElement("img");
        var content = document.createElement("p");
        var hr = document.createElement("hr");
-      
+       
        // Set the post title, image, and excerpt
-       titleLink.innerText = postsData.post1.postTitle;
-       titleLink.href = postPageMap["post1"];
+       titleLink.innerText = post.postTitle;
+       titleLink.href = postPageMap[postId];
        titleLink.className = "post-title";
-       image.src = postsData.post1.postImage;
+       image.src = post.postImage;
        image.alt = "Post image";
        image.classList.add("post-image");
-       content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
+       content.innerText = post.postContent.substring(0, 250) + "...";
        content.style.width = "488px";  // set the width of the content element
       
        // Add the post content to the postDiv
