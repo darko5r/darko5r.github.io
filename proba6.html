@@ -331,6 +331,26 @@ topPostsRef.on('value', function(snapshot) {
     document.getElementById('top-posts').appendChild(postElement);    
   });
 });
+      
+      // Increment the readCount property for the post
+var postId = "post1"; // replace with actual postId
+var postRef = firebase.database().ref("posts/" + postId);
+postRef.transaction(function(post) {
+  if (post) {
+    post.readCount = (post.readCount || 0) + 1;
+  }
+  return post;
+}, function(error, committed, snapshot) {
+  if (error) {
+    console.error("Transaction failed abnormally!", error);
+  } else if (!committed) {
+    console.warn("Transaction aborted - post already removed.");
+  } else {
+    console.log("Post readCount incremented.");
+    // Store the updated readCount value in the database
+    postRef.update({readCount: snapshot.val().readCount});
+  }
+});
               
       
       </script>  
