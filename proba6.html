@@ -338,23 +338,34 @@ var postId = window.location.href.split('/').pop();
 // Replace any query string parameters
 postId = postId.split('?')[0];
 
-// Increment the readCount property for the post
-var postRef = firebase.database().ref("posts/" + postId);
-postRef.transaction(function(post) {
-  if (post) {
-    post.readCount = (post.readCount || 0) + 1;
-  }
-  return post;
-}, function(error, committed, snapshot) {
-  if (error) {
-    console.error("Transaction failed abnormally!", error);
-  } else if (!committed) {
-    console.warn("Transaction aborted - post already removed.");
-  } else {
-    console.log("Post readCount incremented.");
-    // Store the updated readCount value in the database
-    postRef.update({readCount: snapshot.val().readCount});
-  }
+// Get a reference to the posts node in your Firebase database
+var postsRef = firebase.database().ref("posts");
+
+// Loop through each post and update the read count
+postsRef.once("value", function(postsSnapshot) {
+  postsSnapshot.forEach(function(postSnapshot) {
+    // Get the post ID and reference
+    var postId = postSnapshot.key;
+    var postRef = firebase.database().ref("posts/" + postId);
+
+    // Increment the read count for the post
+    postRef.transaction(function(post) {
+      if (post) {
+        post.readCount = (post.readCount || 0) + 1;
+      }
+      return post;
+    }, function(error, committed, snapshot) {
+      if (error) {
+        console.error("Transaction failed abnormally!", error);
+      } else if (!committed) {
+        console.warn("Transaction aborted - post already removed.");
+      } else {
+        console.log("Post readCount incremented.");
+        // Store the updated readCount value in the database
+        postRef.update({readCount: snapshot.val().readCount});
+      }
+    });
+  });
 });
               
       
