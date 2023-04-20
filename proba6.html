@@ -184,6 +184,24 @@
        var content = document.createElement("p");
        var hr = document.createElement("hr");
        
+       // Get the other posts list
+var otherPostsList = postDiv.querySelector(".other-posts-list");
+
+// Loop through the child anchor elements of the other posts list
+otherPostsList.querySelectorAll("a").forEach(function(otherPostTitleLink) {
+  // Add the click event listener to each anchor element
+  otherPostTitleLink.addEventListener("click", function(event) {
+    event.preventDefault();  // prevent the link from navigating
+    var postId = otherPostTitleLink.href.split("#")[1];  // get the post ID from the link href
+    var postRef = postsRef.child(postId);
+
+    // Increment the read count for the post
+    postRef.child("readCount").transaction(function(currentReadCount) {
+      return (currentReadCount || 0) + 1;
+    });
+  });
+});
+       
        // Set the post title, image, and excerpt
        titleLink.innerText = postsData.post1.postTitle;
        titleLink.href = postPageMap["post1"];
