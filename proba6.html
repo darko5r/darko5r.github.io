@@ -308,67 +308,37 @@ var postPageMap = {
   "post5": "proba7.html"
 };
       
-      // Retrieve top posts by readCount in descending order
-var topPostsRef = firebase.database().ref('posts').orderByChild('readCount').limitToLast(5);
-topPostsRef.on('value', function(snapshot) {
+      // Get a reference to the posts node in your Firebase database
+var postsRef = firebase.database().ref("posts");
+
+// Retrieve top posts by readCount in descending order
+var topPostsRef = postsRef.orderByChild("readCount").limitToLast(5);
+
+topPostsRef.on("value", function(snapshot) {
   var postsArray = [];
+
   snapshot.forEach(function(childSnapshot) {
     var childData = childSnapshot.val();
     childData.postId = childSnapshot.key; // Set the postId using the childSnapshot key
     // Add the post to the array
     postsArray.push(childData);
   });
+
   // Reverse the array to show posts in descending order
   postsArray.reverse();
+
   // Display the posts on the page
   postsArray.forEach(function(childData) {
-    var postElement = document.createElement('div');
-    var postLink = document.createElement('a');
-    postLink.href = postPageMap[childData.postId];  // need to implement real links
+    var postElement = document.createElement("div");
+    var postLink = document.createElement("a");
+    postLink.href = postPageMap[childData.postId]; // need to implement real links
     postLink.textContent = childData.postTitle;
     postElement.appendChild(postLink);
-    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
-    document.getElementById('top-posts').appendChild(postElement);    
+    postElement.innerHTML += "<p>Read count: " + childData.readCount + "</p>";
+    document.getElementById("top-posts").appendChild(postElement);
   });
 });
-
-      
-      // Get the post ID from the URL
-var postId = window.location.href.split('/').pop();
-
-// Replace any query string parameters
-postId = postId.split('?')[0];
-
-// Get a reference to the posts node in your Firebase database
-var postsRef = firebase.database().ref("posts");
-
-// Loop through each post and update the read count
-postsRef.once("value", function(postsSnapshot) {
-  postsSnapshot.forEach(function(postSnapshot) {
-    // Get the post ID and reference
-    var postId = postSnapshot.key;
-    var postRef = firebase.database().ref("posts/" + postId);
-
-    // Increment the read count for the post
-    postRef.transaction(function(post) {
-      if (post) {
-        post.readCount = (post.readCount || 0) + 1;
-      }
-      return post;
-    }, function(error, committed, snapshot) {
-      if (error) {
-        console.error("Transaction failed abnormally!", error);
-      } else if (!committed) {
-        console.warn("Transaction aborted - post already removed.");
-      } else {
-        console.log("Post readCount incremented.");
-        // Store the updated readCount value in the database
-        postRef.update({readCount: snapshot.val().readCount});
-      }
-    });
-  });
-});
-              
+                   
       
       </script>  
     </main>
