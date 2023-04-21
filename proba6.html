@@ -333,7 +333,7 @@ function updateReadCount(postId) {
   });
 }
 
-// Display the top posts on the page
+// Display the top posts on the page // readCount works only for post1
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
   snapshot.forEach(function(childSnapshot) {
