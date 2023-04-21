@@ -333,7 +333,7 @@ function updateReadCount(postId) {
   });
 }
 
-// Display the top posts on the page // readCount works only for post1
+// Display the top posts on the page // edit: readCount works only for post1, need to be fixed and TODO the pages from page map
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
   snapshot.forEach(function(childSnapshot) {
