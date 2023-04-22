@@ -297,9 +297,9 @@
           });
          });
       
-                             
       
-         // Define a variable to store the post IDs and their corresponding URLs
+      
+      // Define a variable to store the post IDs and their corresponding URLs
 var postPageMap = {
   "post1": "proba2.html",
   "post2": "proba4.html",
@@ -308,7 +308,7 @@ var postPageMap = {
   "post5": "proba7.html"
 };
       
-      // Get a reference to the posts node in your Firebase database
+// Get a reference to the posts node in your Firebase database
 var postsRef = firebase.database().ref("posts");
 
 // Retrieve top posts by readCount in descending order
@@ -333,7 +333,7 @@ function updateReadCount(postId) {
   });
 }
 
-// Display the top posts on the page // edit: readCount works only for post1, need to be fixed and TODO the pages from page map
+// Display the top posts on the page
 topPostsRef.on('value', function(snapshot) {
   var postsArray = [];
   snapshot.forEach(function(childSnapshot) {
@@ -347,16 +347,19 @@ topPostsRef.on('value', function(snapshot) {
   postsArray.forEach(function(childData) {
     var postElement = document.createElement('div');
     var postLink = document.createElement('a');
-    postLink.href = postPageMap[childData.postId];  // need to implement real links
+    postLink.href = postPageMap[childData.postId];
     postLink.textContent = childData.postTitle;
-    postLink.addEventListener('click', function() {
-      updateReadCount(childData.postId);
+    postLink.setAttribute('postId', childData.postId); // add postId attribute
+    postLink.addEventListener('click', function(event) {
+      var postId = event.target.getAttribute('postId');
+      updateReadCount(postId); // pass postId to updateReadCount function
     });
     postElement.appendChild(postLink);
     postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
     topPostsDiv.appendChild(postElement);    
   });
-});                           
+});
+                                                
       
       </script>  
     </main>
