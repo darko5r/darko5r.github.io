@@ -152,19 +152,11 @@
 
               
     <script>
-     var database = firebase.database();
-var postsRef = database.ref("posts");
-var categoriesRef = database.ref("categories");
-
-var postPageMap = {  // map more links
-  "post1": "proba2.html",
-  "post2": "proba4.html",
-  // add more postId to page mappings as needed
-}
-
-// Read the posts data and add them to the list
+     // Read the posts data and add them to the list
 postsRef.once("value", function(snapshot) {
   var postsData = snapshot.val();
+  var promises = [];
+  
   for (var postId in postsData) {
     if (postsData.hasOwnProperty(postId)) {
       var post = postsData[postId];
@@ -191,9 +183,13 @@ postsRef.once("value", function(snapshot) {
       postDiv.appendChild(content);
       postDiv.appendChild(hr);    
 
+      // Add the other posts list to the postDiv
+      var otherPostsList = document.createElement("ul");
+      otherPostsList.className = "other-posts-list";
+
       // Get the other posts for this category
       var categoryId = post.categoryId;
-      categoriesRef.child(categoryId).child("posts").once("value", function(snapshot) {
+      var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
         var categoryPostsData = snapshot.val();
         var otherPosts = [];
         for (var otherPostId in categoryPostsData) {
@@ -202,8 +198,6 @@ postsRef.once("value", function(snapshot) {
           }
         }
         // Create title links for the other posts of the same category
-        var otherPostsList = document.createElement("ul");
-        otherPostsList.className = "other-posts-list";
         for (var i = 0; i < otherPosts.length && i < 3; i++) {
           var otherPostId = otherPosts[i];
           var otherPost = postsData[otherPostId];
@@ -216,13 +210,22 @@ postsRef.once("value", function(snapshot) {
           otherPostItem.appendChild(otherPostTitleLink);
           otherPostsList.appendChild(otherPostItem);
         }
-        postDiv.appendChild(otherPostsList);
       });
+      
+      promises.push(promise);
+
+      postDiv.appendChild(otherPostsList);
 
       // Add the postDiv to the postList
       postList.appendChild(postDiv);
     }
   }
+
+  Promise.all(promises).then(function() {
+    console.log("All promises resolved");
+  }).catch(function(error) {
+    console.log(error);
+  });
 });
            
       // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ postlist2      
