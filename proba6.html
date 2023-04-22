@@ -173,32 +173,44 @@
         "post2": "proba4.html",
         // add more postId to page mappings as needed
      }
-
+     
+     
+     
      // Read the posts data and add them to the list
-     postsRef.once("value", function(snapshot) {
-       var postsData = snapshot.val();
-       var postList = document.getElementById("post-list");
-       var postDiv = document.createElement("div");
-       var titleLink = document.createElement("a");
-       var image = document.createElement("img");
-       var content = document.createElement("p");
-       var hr = document.createElement("hr");
-       
-       // Set the post title, image, and excerpt
-       titleLink.innerText = postsData.post1.postTitle;
-       titleLink.href = postPageMap["post1"];
-       titleLink.className = "post-title";
-       image.src = postsData.post1.postImage;
-       image.alt = "Post image";
-       image.classList.add("post-image");
-       content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
-       content.style.width = "488px";  // set the width of the content element
-           
-       // Add the post content to the postDiv
-       postDiv.appendChild(image);
-       postDiv.appendChild(titleLink);
-       postDiv.appendChild(content);
-       postDiv.appendChild(hr);
+postsRef.once("value", function(snapshot) {
+  var postsData = snapshot.val();
+  var postList = document.getElementById("post-list");
+
+  for (var postId in postsData) {
+    if (postsData.hasOwnProperty(postId)) {
+      var postData = postsData[postId];
+      var postDiv = document.createElement("div");
+      var titleLink = document.createElement("a");
+      var image = document.createElement("img");
+      var content = document.createElement("p");
+      var hr = document.createElement("hr");
+      
+      // Set the post title, image, and excerpt
+      titleLink.innerText = postData.postTitle;
+      titleLink.href = postPageMap[postId];
+      titleLink.className = "post-title";
+      image.src = postData.postImage;
+      image.alt = "Post image";
+      image.classList.add("post-image");
+      content.innerText = postData.postContent.substring(0, 250) + "...";
+      content.style.width = "488px";  // set the width of the content element
+          
+      // Add the post content to the postDiv
+      postDiv.appendChild(image);
+      postDiv.appendChild(titleLink);
+      postDiv.appendChild(content);
+      postDiv.appendChild(hr);
+     
+      // Add the postDiv to the postList
+      postList.appendChild(postDiv);
+
+     
+      
       
        // Create a list for the other posts
        var otherPostsList = document.createElement("ul");
