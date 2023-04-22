@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Blog</title>
+  </head>
+  <body>
+  <main>
+    
+    <style>
+      
+      /* Style content area */
+         main {
+          max-width: 1366px;
+          margin: 0 auto;
+          padding: 20px;
+        }  
+      
+      /* Style the post list container */
+      
+      
+         .post-list-wrapper {
+          display: flex;        
+       }
+      
+      
+         #post-list {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 0px;
+          padding: 0px;
+          background-color: #f9f9f9;
+          max-width: 38%;
+          float: left;
+          margin-right: 6px;
+       }
+
+         #post-list2 {
+          float: right;
+          width: 28%;
+          position: relative;
+       }
+      
+      
+       #post-list2::before {
+          content: '';
+          position: absolute;
+          top: 20px;
+          bottom: 20px;
+          left: -6px;
+          width: 1px;
+          height: calc(100% - 40px);
+          background-color: #ddd;
+          animation: line-animation 1s ease-in-out infinite;
+       }
+      
+        #post-list2::after {
+         content: '';
+         position: absolute;
+         top: 20px;
+         bottom: 20px;
+         right: -6px;
+         width: 1px;
+         height: calc(100% - 40px);
+         background-color: #ddd;
+         animation: line-animation 1s ease-in-out infinite;
+      }
+
+       @keyframes line-animation {
+         0% {
+         height: 0;
+         top: 50%;
+      }
+         50% {
+         height: 50%;
+         top: 25%;
+      }
+         100% {
+         height: 100%;
+         top: 0%;
+      }
+     }
+                   
+        #top-posts div {
+          margin-left: 12px;
+          position: relative;
+        } 
+
+         /* Style the hr separator */
+         hr {
+          border: none;
+          border-top: 1px solid red !important;
+          margin: 0;
+        }      
+      
+      
+         .post-image {
+          display: block;
+          width: 488px;
+          height: 268px;
+          margin-bottom: 10px;
+        }
+
+         .post-title {
+          display: block; /* set the title to display as a block element */
+          font-size: 24px; 
+          font-weight: bold;
+        } 
+      
+         body {
+          margin: 0;
+          padding: 0;
+        }
+      
+    </style>
+    
+      
+    <!-- Import the Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script>
+       // Initialize Firebase
+      var firebaseConfig = {
+        apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
+        authDomain: "blog-25253.firebaseapp.com",
+        databaseURL: "https://blog-25253-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "blog-25253",
+        storageBucket: "blog-25253.appspot.com",
+        messagingSenderId: "906101390805",
+        appId: "1:906101390805:web:871c51f2486921f443115c",
+        measurementId: "G-MY3P2TWN4L"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <h1>The blog is under construction</h1>
+
+    <!-- Display a list of posts -->
+    <div class="post-list-wrapper">
+      <div id="post-list">
+        <!-- firebase -->
+      </div>
+      <div id="post-list2">
+        <!-- firebase -->
+      </div>
+      <div id="top-posts">
+       <!-- Top posts will be displayed here -->
+      </div>
+   </div>
+
+              
+    <script>
+     var database = firebase.database();
+     var postsRef = database.ref("posts");
+     var categoriesRef = database.ref("categories");
+                
+     categoriesRef.child("category1").once("value", function(snapshot) {
+     // Get the category data
+     var categoryData = snapshot.val();
+
+     // Get the posts for this category
+     var posts = [];
+     for (var postId in categoryData.posts) {
+       if (categoryData.posts.hasOwnProperty(postId)) {
+         posts.push(postId);
+       }
+     }
+    
+     var postPageMap = {  // map more links
+        "post1": "proba2.html",
+        "post2": "proba4.html",
+        // add more postId to page mappings as needed
+     }
+     
+     // Read the posts data and add them to the list
+     postsRef.once("value", function(snapshot) {
+       var postsData = snapshot.val();
+       var postList = document.getElementById("post-list");
+       var postDiv = document.createElement("div");
+       var titleLink = document.createElement("a");
+       var image = document.createElement("img");
+       var content = document.createElement("p");
+       var hr = document.createElement("hr");
+       
+       // Set the post title, image, and excerpt
+       titleLink.innerText = postsData.post1.postTitle;
+       titleLink.href = postPageMap["post1"];
+       titleLink.className = "post-title";
+       image.src = postsData.post1.postImage;
+       image.alt = "Post image";
+       image.classList.add("post-image");
+       content.innerText = postsData.post1.postContent.substring(0, 250) + "...";
+       content.style.width = "488px";  // set the width of the content element
+           
+       // Add the post content to the postDiv
+       postDiv.appendChild(image);
+       postDiv.appendChild(titleLink);
+       postDiv.appendChild(content);
+       postDiv.appendChild(hr);    
+      
+       // Create a list for the other posts
+       var otherPostsList = document.createElement("ul");
+       otherPostsList.className = "other-posts-list";
+      
+       // Create title links for the other posts of the same category
+       for (var i = 1; i < posts.length && i < 4; i++) {
+         var postId = posts[i];
+         var post = postsData[postId];
+         var otherPostItem = document.createElement("li");
+         var otherPostTitleLink = document.createElement("a");
+        
+         otherPostTitleLink.innerText = post.postTitle;
+         otherPostTitleLink.href = postPageMap[postId];
+        
+         otherPostItem.appendChild(otherPostTitleLink);
+         otherPostsList.appendChild(otherPostItem);
+        }
+      
+       // Add the other posts list to the postDiv
+       postDiv.appendChild(otherPostsList);
+      
+       // Add the postDiv to the postList
+       postList.appendChild(postDiv);
+        });
+       });
+      
+       categoriesRef.child("category2").once("value", function(snapshot) {
+       // Get the category data
+       var categoryData = snapshot.val();
+
+       // Get the posts for this category
+       var posts = [];
+        for (var postId in categoryData.posts) {
+         if (categoryData.posts.hasOwnProperty(postId)) {
+            posts.push(postId);
+         }
+        }  
+      
+      // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ postlist2
+    
+        var postPageMap = {
+          "post5": "proba5.html",
+          // add more postId to page mappings as needed 
+        }
+
+        // Read the posts data and add them to the list   // TODO: add 2nd image to firebase, set image size, ->                                                    
+        postsRef.once("value", function(snapshot) {       // -> make room for recent and most viewed posts headings <h2></h2>, make them clickable links ->
+        var postsData = snapshot.val();                   // -> change link color to black
+        var postList = document.getElementById("post-list2");
+        var postDiv = document.createElement("div");
+        var titleLink = document.createElement("a");
+        var image = document.createElement("img");
+        var content = document.createElement("p");
+        var hr = document.createElement("hr");
+      
+        // Set the post title, image, and excerpt
+        titleLink.innerText = postsData.post5.postTitle;
+        titleLink.href = postPageMap["post5"];
+        titleLink.className = "post-title";
+        image.src = postsData.post5.postImage;
+        image.alt = "Post image";
+        image.classList.add("post-image");
+        content.innerText = postsData.post5.postContent.substring(0, 250) + "...";
+        content.style.width = "488px";  // set the width of the content element
+      
+        // Add the post content to the postDiv
+        postDiv.appendChild(image);
+        postDiv.appendChild(titleLink);
+        postDiv.appendChild(content);
+        postDiv.appendChild(hr);
+      
+        // Create a list for the other posts
+        var otherPostsList = document.createElement("ul");
+        otherPostsList.className = "other-posts-list";
+      
+        // Create title links for the other posts of the same category
+        for (var i = 1; i < posts.length && i < 4; i++) {
+          var postId = posts[i];
+          var post = postsData[postId];
+          var otherPostItem = document.createElement("li");
+          var otherPostTitleLink = document.createElement("a");
+        
+          otherPostTitleLink.innerText = post.postTitle;
+          otherPostTitleLink.href = postPageMap[postId];
+        
+          otherPostItem.appendChild(otherPostTitleLink);
+          otherPostsList.appendChild(otherPostItem);
+         }
+      
+         // Add the other posts list to the postDiv
+         postDiv.appendChild(otherPostsList);
+      
+         // Add the postDiv to the postList
+         postList.appendChild(postDiv);
+          });
+         });
+      
+      
+      
+      // Define a variable to store the post IDs and their corresponding URLs
+var postPageMap = {
+  "post1": "proba2.html",
+  "post2": "proba4.html",
+  "post3": "proba5.html",
+  "post4": "proba6.html",
+  "post5": "proba7.html"
+};
+      
+// Get a reference to the posts node in your Firebase database
+var postsRef = firebase.database().ref("posts");
+
+// Retrieve top posts by readCount in descending order
+var topPostsRef = postsRef.orderByChild('readCount').limitToLast(5);
+
+// Function to update read count for a specific post
+function updateReadCount(postId) {
+  var postRef = postsRef.child(postId);
+  postRef.transaction(function(post) {
+    if (post) {
+      post.readCount = (post.readCount || 0) + 1;
+    }
+    return post;
+  }, function(error, committed, snapshot) {
+    if (error) {
+      console.error("Transaction failed abnormally!", error);
+    } else if (!committed) {
+      console.warn("Transaction aborted - post already removed.");
+    } else {
+      console.log("Post readCount incremented.");
+    }
+  });
+}
+
+// Display the top posts on the page
+topPostsRef.on('value', function(snapshot) {
+  var postsArray = [];
+  snapshot.forEach(function(childSnapshot) {
+    var childData = childSnapshot.val();
+    childData.postId = childSnapshot.key;
+    postsArray.push(childData);
+  });
+  postsArray.reverse();
+  var topPostsDiv = document.getElementById('top-posts');
+  topPostsDiv.innerHTML = '';
+  postsArray.forEach(function(childData) {
+    var postElement = document.createElement('div');
+    var postLink = document.createElement('a');
+    postLink.href = postPageMap[childData.postId];
+    postLink.textContent = childData.postTitle;
+    postLink.setAttribute('postId', childData.postId); // add postId attribute
+    postLink.addEventListener('click', function(event) {
+      var postId = event.target.getAttribute('postId');
+      updateReadCount(postId); // pass postId to updateReadCount function
+    });
+    postElement.appendChild(postLink);
+    postElement.innerHTML += '<p>Read count: ' + childData.readCount + '</p>';
+    topPostsDiv.appendChild(postElement);    
+  });
+});
+                                                
+      
+      </script>  
+    </main>
+  </body>
+</html>
