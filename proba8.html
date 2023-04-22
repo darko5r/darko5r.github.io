@@ -191,10 +191,6 @@ postsRef.once("value", function(snapshot) {
       postDiv.appendChild(content);
       postDiv.appendChild(hr);    
 
-      // Add the other posts list to the postDiv
-      var otherPostsList = document.createElement("ul");
-      otherPostsList.className = "other-posts-list";
-
       // Get the other posts for this category
       var categoryId = post.categoryId;
       categoriesRef.child(categoryId).child("posts").once("value", function(snapshot) {
@@ -206,6 +202,8 @@ postsRef.once("value", function(snapshot) {
           }
         }
         // Create title links for the other posts of the same category
+        var otherPostsList = document.createElement("ul");
+        otherPostsList.className = "other-posts-list";
         for (var i = 0; i < otherPosts.length && i < 3; i++) {
           var otherPostId = otherPosts[i];
           var otherPost = postsData[otherPostId];
@@ -218,15 +216,14 @@ postsRef.once("value", function(snapshot) {
           otherPostItem.appendChild(otherPostTitleLink);
           otherPostsList.appendChild(otherPostItem);
         }
+        postDiv.appendChild(otherPostsList);
       });
-
-      postDiv.appendChild(otherPostsList);
 
       // Add the postDiv to the postList
       postList.appendChild(postDiv);
     }
   }
-}); 
+});
            
       // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ postlist2      
          
