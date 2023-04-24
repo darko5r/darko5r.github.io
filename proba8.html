@@ -137,26 +137,38 @@
 
     <h1>The blog is under construction</h1>
 
-    <!-- Display a list of posts -->
-    <div class="post-list-wrapper">
-      <div id="post-list">
-        <!-- firebase -->
-      </div>
-      <div id="post-list2">
-        <!-- firebase -->
-      </div>
-      <div id="top-posts">
-       <!-- Top posts will be displayed here -->
-      </div>
-   </div>
+<!-- Display a list of posts -->
+<div class="post-list-wrapper">
+  <div id="post-list">
+    <!-- firebase -->
+  </div>
+  <div id="post-list2">
+    <!-- firebase -->
+  </div>
+  <div id="top-posts">
+   <!-- Top posts will be displayed here -->
+  </div>
+</div>
 
-              
-    <script>
-     // Read the posts data and add them to the list  // fix retrieving posts
+<script>
+// Initialize Firebase
+var firebaseConfig = {
+  // your Firebase project configuration
+};
+firebase.initializeApp(firebaseConfig);
+
+// Get a reference to the database service
+var database = firebase.database();
+
+// Get references to the "posts" and "categories" nodes
+var postsRef = database.ref("posts");
+var categoriesRef = database.ref("categories");
+
+// Read the posts data and add them to the list
 postsRef.once("value", function(snapshot) {
   var postsData = snapshot.val();
   var promises = [];
-  
+
   for (var postId in postsData) {
     if (postsData.hasOwnProperty(postId)) {
       var post = postsData[postId];
@@ -169,7 +181,7 @@ postsRef.once("value", function(snapshot) {
 
       // Set the post title, image, and excerpt
       titleLink.innerText = post.postTitle;
-      titleLink.href = postPageMap[postId];
+      titleLink.href = window.location.href + "?postId=" + postId;
       titleLink.className = "post-title";
       image.src = post.postImage;
       image.alt = "Post image";
@@ -186,47 +198,39 @@ postsRef.once("value", function(snapshot) {
       // Add the other posts list to the postDiv
       var otherPostsList = document.createElement("ul");
       otherPostsList.className = "other-posts-list";
-
-      // Get the other posts for this category
-      var categoryId = post.categoryId;
-      var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
-        var categoryPostsData = snapshot.val();
-        var otherPosts = [];
-        for (var otherPostId in categoryPostsData) {
-          if (categoryPostsData.hasOwnProperty(otherPostId) && otherPostId !== postId) {
-            otherPosts.push(otherPostId);
-          }
-        }
-        // Create title links for the other posts of the same category
-        for (var i = 0; i < otherPosts.length && i < 3; i++) {
-          var otherPostId = otherPosts[i];
-          var otherPost = postsData[otherPostId];
-          var otherPostItem = document.createElement("li");
-          var otherPostTitleLink = document.createElement("a");
-
-          otherPostTitleLink.innerText = otherPost.postTitle;
-          otherPostTitleLink.href = postPageMap[otherPostId];
-
-          otherPostItem.appendChild(otherPostTitleLink);
-          otherPostsList.appendChild(otherPostItem);
-        }
-      });
       
-      promises.push(promise);
-
-      postDiv.appendChild(otherPostsList);
-
-      // Add the postDiv to the postList
-      postList.appendChild(postDiv);
+      // Get the other posts for this category
+var categoryId = post.categoryid;
+var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
+  var categoryPostsData = snapshot.val();
+  var otherPosts = [];
+  for (var otherPostId in categoryPostsData) {
+    if (categoryPostsData.hasOwnProperty(otherPostId) && otherPostId !== postId) {
+      otherPosts.push(otherPostId);
     }
   }
 
-  Promise.all(promises).then(function() {
-    console.log("All promises resolved");
-  }).catch(function(error) {
-    console.log(error);
-  });
+  // Create title links for the other posts of the same category
+  for (var i = 0; i < otherPosts.length && i < 3; i++) {
+    var otherPostId = otherPosts[i];
+    var otherPost = postsData[otherPostId];
+    var otherPostItem = document.createElement("li");
+    var otherPostTitleLink = document.createElement("a");
+
+    otherPostTitleLink.innerText = otherPost.postTitle;
+    otherPostTitleLink.href = postPageMap[otherPostId];
+
+    otherPostItem.appendChild(otherPostTitleLink);
+    otherPostsList.appendChild(otherPostItem);
+  }
 });
+      
+promises.push(promise);
+
+postDiv.appendChild(otherPostsList);
+
+// Add the postDiv to the postList
+postList.appendChild(postDiv);
            
       // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ make post-list 2     
          
