@@ -168,10 +168,11 @@ var categoriesRef = database.ref("categories");
 postsRef.once("value", function(snapshot) {
   var postsData = snapshot.val();
   var promises = [];
+  var post, postId;
 
-  for (var postId in postsData) {
+  for (postId in postsData) {
     if (postsData.hasOwnProperty(postId)) {
-      var post = postsData[postId];
+      post = postsData[postId];
       var postList = document.getElementById("post-list");
       var postDiv = document.createElement("div");
       var titleLink = document.createElement("a");
@@ -200,43 +201,53 @@ postsRef.once("value", function(snapshot) {
       otherPostsList.className = "other-posts-list";
       
       var postPageMap = {};
-for (var pId in postsData) {
-  var post = postsData[pId];
-  postPageMap[pId] = window.location.href + "?postId=" + pId;
-}
+      for (var pId in postsData) {
+        postPageMap[pId] = window.location.href + "?postId=" + pId;
+      }
       
       // Get the other posts for this category
-var categoryId = post.categoryid;
-var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
-  var categoryPostsData = snapshot.val();
-  var otherPosts = [];
-  for (var otherPostId in categoryPostsData) {
-    if (categoryPostsData.hasOwnProperty(otherPostId) && otherPostId !== postId) {
-      otherPosts.push(otherPostId);
-    }
-  }
+      var categoryId = post.categoryid;
+      var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
+        var categoryPostsData = snapshot.val();
+        var otherPosts = [];
+        for (var otherPostId in categoryPostsData) {
+          if (categoryPostsData.hasOwnProperty(otherPostId) && otherPostId !== postId) {
+            otherPosts.push(otherPostId);
+          }
+        }
+        
+        // Create title links for the other posts of the same category
+for (var i = 0; i < otherPosts.length && i < 3; i++) {
+  var otherPostId = otherPosts[i];
+  var otherPost = postsData[otherPostId];
+  var otherPostItem = document.createElement("li");
+  var otherPostTitleLink = document.createElement("a");
 
-  // Create title links for the other posts of the same category
-  for (var i = 0; i < otherPosts.length && i < 3; i++) {
-    var otherPostId = otherPosts[i];
-    var otherPost = postsData[otherPostId];
-    var otherPostItem = document.createElement("li");
-    var otherPostTitleLink = document.createElement("a");
+  otherPostTitleLink.innerText = otherPost.postTitle;
+  otherPostTitleLink.href = postPageMap[otherPostId];
 
-    otherPostTitleLink.innerText = otherPost.postTitle;
-    otherPostTitleLink.href = postPageMap[otherPostId];
+  otherPostItem.appendChild(otherPostTitleLink);
+  otherPostsList.appendChild(otherPostItem);
+}
 
-    otherPostItem.appendChild(otherPostTitleLink);
-    otherPostsList.appendChild(otherPostItem);
-  }
-});
-      
-promises.push(promise);
-
+// Add the other posts list to the postDiv
 postDiv.appendChild(otherPostsList);
 
 // Add the postDiv to the postList
 postList.appendChild(postDiv);
+});
+
+// Wait for all promises to resolve before adding the posts to the list
+Promise.all(promises).then(function() {
+  // Add the posts to the list
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("post-list").style.display = "block";
+});
+
+// Handle errors
+Promise.all(promises).catch(function(error) {
+  console.log(error);
+});
            
       // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ make post-list 2     
          
