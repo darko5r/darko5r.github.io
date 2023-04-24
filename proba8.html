@@ -199,6 +199,12 @@ postsRef.once("value", function(snapshot) {
       var otherPostsList = document.createElement("ul");
       otherPostsList.className = "other-posts-list";
       
+      var postPageMap = {};
+for (var pId in postsData) {
+  var post = postsData[pId];
+  postPageMap[pId] = window.location.href + "?postId=" + pId;
+}
+      
       // Get the other posts for this category
 var categoryId = post.categoryid;
 var promise = categoriesRef.child(categoryId).child("posts").once("value").then(function(snapshot) {
