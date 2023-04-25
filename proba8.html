@@ -217,39 +217,29 @@ postsRef.once("value", function(snapshot) {
         }
         
         // Create title links for the other posts of the same category
-for (var i = 0; i < otherPosts.length && i < 3; i++) {
-  var otherPostId = otherPosts[i];
-  var otherPost = postsData[otherPostId];
-  var otherPostItem = document.createElement("li");
-  var otherPostTitleLink = document.createElement("a");
+        for (var i = 0; i < otherPosts.length && i < 3; i++) {
+          var otherPostId = otherPosts[i];
+          var otherPost = postsData[otherPostId];
+          var otherPostItem = document.createElement("li");
+          var otherPostTitleLink = document.createElement("a");
 
-  otherPostTitleLink.innerText = otherPost.postTitle;
-  otherPostTitleLink.href = postPageMap[otherPostId];
+          otherPostTitleLink.innerText = otherPost.postTitle;
+          otherPostTitleLink.href = postPageMap[otherPostId];
 
-  otherPostItem.appendChild(otherPostTitleLink);
-  otherPostsList.appendChild(otherPostItem);
-}
+          otherPostItem.appendChild(otherPostTitleLink);
+          otherPostsList.appendChild(otherPostItem);
+        }
 
-// Add the other posts list to the postDiv
-postDiv.appendChild(otherPostsList);
+        // Add the other posts list to the postDiv
+        postDiv.appendChild(otherPostsList);
 
-// Add the postDiv to the postList
-postList.appendChild(postDiv);
-});
-
-// Wait for all promises to resolve before adding the posts to the list
-Promise.all(promises).then(function() {
-  // Add the posts to the list
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("post-list").style.display = "block";
-});
-
-// Handle errors
-Promise.all(promises).catch(function(error) {
-  console.log(error);
-});
-      
+        // Add the postDiv to the postList
+        postList.appendChild(postDiv);
       });
+
+      promises.push(promise);
+    }
+  }
            
       // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ make post-list 2     
          
