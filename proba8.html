@@ -79,46 +79,38 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
   postList.innerHTML = "";
 	
   // Loop through each post
-snapshot.forEach((childSnapshot) => {
-  // Get the post data
-  const postData = childSnapshot.val();
+  snapshot.forEach((childSnapshot) => {
+    // Get the post data
+    const postData = childSnapshot.val();
 
-  // Create a div for the post
-  const postDiv = document.createElement("div");
-  postDiv.className = "post";
+    // Create a div for the post
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
 
-  // Create an image element for the post image
-  const image = document.createElement("img");
-  image.className = "post-image";
-  image.src = postData.postImage;
+    // Create an image element for the post image
+    const image = document.createElement("img");
+    image.className = "post-image";
+    image.src = postData.postImage;
 
-  // Create a link element for the post title
-  const titleLink = document.createElement("a");
-  titleLink.className = "post-title";
-  titleLink.innerText = postData.postTitle;
-  titleLink.href = `proba${childSnapshot.key}.html`;
+    // Create a link element for the post title
+    const titleLink = document.createElement("a");
+    titleLink.className = "post-title";
+    titleLink.innerText = postData.postTitle;
+    titleLink.href = `post.html?postId=${childSnapshot.key}`;
 
-  // Add a click listener to the link to increment the read count
-  titleLink.addEventListener("click", (event) => {
-    event.preventDefault(); // Prevent the default link behavior
-    const postId = childSnapshot.key;
-    const postRef = firebase.database().ref(`posts/${postId}`);
-    postRef.update({ readCount: postData.readCount + 1 });
-    window.location.href = titleLink.href; // Redirect to the post page
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = `${postData.postContent.substring(0, 250)}...`;
+
+    // Add the post content to the postDiv
+    postDiv.appendChild(image);
+    postDiv.appendChild(titleLink);
+    postDiv.appendChild(content);
+
+    // Add the postDiv to the postList
+    postList.appendChild(postDiv);
   });
-
-  // Create a div element for the post content
-  const content = document.createElement("div");
-  content.className = "post-content";
-  content.innerText = `${postData.postContent.substring(0, 250)}...`;
-
-  // Add the post content to the postDiv
-  postDiv.appendChild(image);
-  postDiv.appendChild(titleLink);
-  postDiv.appendChild(content);
-
-  // Add the postDiv to the postList
-  postList.appendChild(postDiv);
-});
+});   
 	      	      	      	            
       </script>  
