@@ -12,7 +12,7 @@
 	<!-- Import the Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
-    <script>
+     <script>
        // Initialize Firebase
       var firebaseConfig = {
         apiKey: "AIzaSyBB00grLIfvhq7EEQV6qiZUZuayP4-GoAg",
@@ -56,7 +56,21 @@
 			// Create a div element for the post title
 			const title = document.createElement("div");
 			title.className = "post-title";
-			title.innerText = postData.postTitle;
+			
+			// Create a link element for the post title
+			const titleLink = document.createElement("a");
+			titleLink.className = "post-title";
+			titleLink.innerText = postData.postTitle;
+			titleLink.href = `post.html?postId=${postId}`;
+
+			// Add click event listener to increment readCount for the post
+			titleLink.addEventListener("click", () => {
+				postRef.child("readCount").transaction((readCount) => {
+					return (readCount || 0) + 1;
+				});
+			});
+
+			title.appendChild(titleLink);
 
 			// Create a div element for the post content
 			const content = document.createElement("div");
