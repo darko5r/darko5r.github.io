@@ -67,17 +67,27 @@
 <script>// break betwwen parts ++++++++++++++++++++++++++++++++++++++++++++++++++++</script>
 
       <script>
-	   // Get a reference to the posts in the database
+	      // Get a reference to the posts in the database
 const postsRef = firebase.database().ref("posts");
 
 // Get a reference to the post list element in the HTML
 const postList = document.getElementById("post-list");
 
+// Function to increment the read count of a post given its ID
+function incrementReadCount(postId) {
+  firebase.database().ref(`posts/${postId}`).transaction((post) => {
+    if (post) {
+      post.readCount = (post.readCount || 0) + 1;
+    }
+    return post;
+  });
+}
+
 // Get all posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) => {
   // Clear the post list
   postList.innerHTML = "";
-	
+  
   // Loop through each post
   snapshot.forEach((childSnapshot) => {
     // Get the post data
@@ -97,6 +107,11 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     titleLink.className = "post-title";
     titleLink.innerText = postData.postTitle;
     titleLink.href = `post.html?postId=${childSnapshot.key}`;
+    titleLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      incrementReadCount(childSnapshot.key);
+      window.location.href = titleLink.href;
+    });
 
     // Create a div element for the post content
     const content = document.createElement("div");
@@ -111,6 +126,6 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});   
-	      	      	      	            
-      </script>  
+});
+	      	      	      	      	      		      	      	      	            
+      </script>
