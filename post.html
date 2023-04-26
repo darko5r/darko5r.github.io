@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My Blog - Post</title>
+	<title>My Blog</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<h1>Post Title</h1>
-	<div id="post-content"></div>
+	<h1>The blog is under construction</h1>
+	<div id="post"></div>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 	<!-- Import the Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
@@ -25,38 +27,49 @@
       firebase.initializeApp(firebaseConfig);
     </script>
 	
-    <script>
-		// Get a reference to the post content element in the HTML
-		const postContent = document.getElementById("post-content");
+	<script>
 
 		// Get the post ID from the URL
-		const urlParams = new URLSearchParams(window.location.search);
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
 		const postId = urlParams.get('postId');
 
 		// Get a reference to the post in the database
-		const postRef = firebase.database().ref("posts").child(postId);
+		const postRef = firebase.database().ref(`posts/${postId}`);
 
-		// Fetch the post data from the database
+		// Get a reference to the post element in the HTML
+		const postElement = document.getElementById("post");
+
+		// Get the post data from the database
 		postRef.on("value", (snapshot) => {
-			// Get the post data
 			const postData = snapshot.val();
 
-			// Set the post title
-			document.title = postData.postTitle;
+			// Create a div for the post
+			const postDiv = document.createElement("div");
+			postDiv.className = "post";
 
 			// Create an image element for the post image
 			const image = document.createElement("img");
 			image.className = "post-image";
 			image.src = postData.postImage;
 
+			// Create a div element for the post title
+			const title = document.createElement("div");
+			title.className = "post-title";
+			title.innerText = postData.postTitle;
+
 			// Create a div element for the post content
 			const content = document.createElement("div");
 			content.className = "post-content";
 			content.innerText = postData.postContent;
 
-			// Add the post content to the postContent element
-			postContent.appendChild(image);
-			postContent.appendChild(content);
+			// Add the post content to the postDiv
+			postDiv.appendChild(image);
+			postDiv.appendChild(title);
+			postDiv.appendChild(content);
+
+			// Add the postDiv to the postElement
+			postElement.appendChild(postDiv);
 		});
 	</script>
 </body>
