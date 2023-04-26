@@ -28,63 +28,65 @@
     </script>
 	
 	<script>
-
 		// Get the post ID from the URL
-		const queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
-		const postId = urlParams.get('postId');
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const postId = urlParams.get('postId');
 
-		// Get a reference to the post in the database
-		const postRef = firebase.database().ref(`posts/${postId}`);
+// Get a reference to the post in the database
+const postRef = firebase.database().ref(`posts/${postId}`);
 
-		// Get a reference to the post element in the HTML
-		const postElement = document.getElementById("post");
+// Get a reference to the post element in the HTML
+const postElement = document.getElementById("post");
 
-		// Get the post data from the database
-		postRef.on("value", (snapshot) => {
-			const postData = snapshot.val();
+// Get the post data from the database
+postRef.on("value", (snapshot) => {
+    const postData = snapshot.val();
 
-			// Create a div for the post
-			const postDiv = document.createElement("div");
-			postDiv.className = "post";
+    // Create a div for the post
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
 
-			// Create an image element for the post image
-			const image = document.createElement("img");
-			image.className = "post-image";
-			image.src = postData.postImage;
+    // Create an image element for the post image
+    const image = document.createElement("img");
+    image.className = "post-image";
+    image.src = postData.postImage;
 
-			// Create a div element for the post title
-			const title = document.createElement("div");
-			title.className = "post-title";
-			
-			// Create a link element for the post title
-			const titleLink = document.createElement("a");
-			titleLink.className = "post-title";
-			titleLink.innerText = postData.postTitle;
-			titleLink.href = `post.html?postId=${postId}`;
+    // Create a div element for the post title
+    const title = document.createElement("div");
+    title.className = "post-title";
+    title.innerText = postData.postTitle;
 
-			// Add click event listener to increment readCount for the post
-			titleLink.addEventListener("click", () => {
-				postRef.child("readCount").transaction((readCount) => {
-					return (readCount || 0) + 1;
-				});
-			});
+    // Create a link element for the post title
+    const titleLink = document.createElement("a");
+    titleLink.className = "post-title";
+    titleLink.innerText = postData.postTitle;
+    titleLink.href = `post.html?postId=${postId}`;
 
-			title.appendChild(titleLink);
+    // Add click event listener to increment readCount for the post
+    titleLink.addEventListener("click", () => {
+        const postRef = firebase.database().ref(`posts/${postId}`);
+        postRef.child("readCount").transaction((readCount) => {
+            return (readCount || 0) + 1;
+        });
+    });
 
-			// Create a div element for the post content
-			const content = document.createElement("div");
-			content.className = "post-content";
-			content.innerText = postData.postContent;
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = postData.postContent;
 
-			// Add the post content to the postDiv
-			postDiv.appendChild(image);
-			postDiv.appendChild(title);
-			postDiv.appendChild(content);
+    // Add the post content to the postDiv
+    postDiv.appendChild(image);
+    postDiv.appendChild(titleLink);
+    postDiv.appendChild(content);
 
-			// Add the postDiv to the postElement
-			postElement.appendChild(postDiv);
-		});
+    // Add the postDiv to the postElement
+    postElement.appendChild(postDiv);
+});
+		
+
+		
 	</script>
 </body>
 </html>
