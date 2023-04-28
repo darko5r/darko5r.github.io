@@ -171,6 +171,30 @@ postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) 
   });
 }); 
 	      
+	// Function to increment the read count of a post given its ID
+function incrementReadCount(postId) {
+  firebase.database().ref(`posts/${postId}`).transaction((post) => {
+    if (post) {
+      post.readCount = (post.readCount || 0) + 1;
+    }
+    return post;
+  });
+}
+
+// Function to create a post link with read count increment
+function createPostLink(postId, postTitle) {
+  const titleLink = document.createElement("a");
+  titleLink.className = "post-title";
+  titleLink.innerText = postTitle;
+  titleLink.href = `post.html?postId=${postId}`;
+  titleLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    incrementReadCount(postId);
+    window.location.href = titleLink.href;
+  });
+  return titleLink;
+}      
+	      
 	// Get the 5 most viewed posts in descending order
 postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
   const mostViewedPostsList = document.createElement("ul");
