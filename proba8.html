@@ -169,6 +169,51 @@ postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
+}); 
+	      
+	// Get the 5 most viewed posts in descending order
+postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
+  // Clear the post list
+  postList.innerHTML = "";
+
+  // Loop through each post
+  snapshot.forEach((childSnapshot) => {
+    // Get the post data
+    const postData = childSnapshot.val();
+
+    // Create a div for the post
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
+
+    // Create an image element for the post image
+    const image = document.createElement("img");
+    image.className = "post-image";
+    image.src = postData.postImage;
+
+    // Create a link element for the post title
+    const titleLink = document.createElement("a");
+    titleLink.className = "post-title";
+    titleLink.innerText = postData.postTitle;
+    titleLink.href = `post.html?postId=${childSnapshot.key}`;
+    titleLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      incrementReadCount(childSnapshot.key);
+      window.location.href = titleLink.href;
+    });
+
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = `${postData.postContent.substring(0, 250)}...`;
+
+    // Add the post content to the postDiv
+    postDiv.appendChild(image);
+    postDiv.appendChild(titleLink);
+    postDiv.appendChild(content);
+
+    // Add the postDiv to the postList
+    postList.appendChild(postDiv);
+  });
 });      
 	      	      	      	      	      		      	      	      	            
       </script>
