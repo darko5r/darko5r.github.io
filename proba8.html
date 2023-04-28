@@ -171,20 +171,20 @@ postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) 
   });
 }); 
 	      
-// Get the 5 most viewed posts in ascending order
-		postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
-		  const mostViewedPostsList = document.createElement("ul");
-		  snapshot.forEach((childSnapshot) => {
-		    const postData = childSnapshot.val();
-		    const postTitle = postData.postTitle;
-		    const listItem = document.createElement("li");
-		    const titleLink = document.createElement("a");
-		    titleLink.innerText = postTitle;
-		    titleLink.href = `post.html?postId=${childSnapshot.key}`;
-		    listItem.appendChild(titleLink);
-		    mostViewedPostsList.appendChild(listItem);
-		  });
-		  document.body.appendChild(mostViewedPostsList);
-		});
-	      		      	      	      	      	      		      	      	      	            
+	// Get the 5 most viewed posts in descending order
+postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
+  const mostViewedPostsList = document.createElement("ul");
+  snapshot.forEach((childSnapshot) => {
+    const postData = childSnapshot.val();
+    const postTitle = postData.postTitle;
+    const listItem = document.createElement("li");
+    const titleLink = document.createElement("a");
+    titleLink.innerText = postTitle;
+    titleLink.href = `post.html?postId=${childSnapshot.key}`;
+    listItem.appendChild(titleLink);
+    mostViewedPostsList.prepend(listItem); // Add each item to the top of the list
+  });
+  document.body.appendChild(mostViewedPostsList);
+});      
+	      	      		      	      	      	      	      		      	      	      	            
       </script>
