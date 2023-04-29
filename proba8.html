@@ -105,14 +105,10 @@ function incrementReadCount(postId) {
   });
 }
 	      
-
 // Get all posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) => {
   // Clear the post list
   postList.innerHTML = "";
-
-  // Flag to check if first post is already added
-  let firstPostAdded = false;
 
   // Loop through each post
   snapshot.forEach((childSnapshot) => {
@@ -123,10 +119,20 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     const postDiv = document.createElement("div");
     postDiv.className = "post";
 
-    // Create an image element for the post image
-    const image = document.createElement("img");
-    image.className = "post-image";
-    image.src = postData.postImage;
+    // Check if this is the first post
+    if (childSnapshot.key === "post1") {
+      // Create an image element for the post image
+      const image = document.createElement("img");
+      image.className = "post-image";
+      image.src = postData.postImage;
+      postDiv.appendChild(image);
+
+      // Create a div element for the post content
+      const content = document.createElement("div");
+      content.className = "post-content";
+      content.innerText = `${postData.postContent.substring(0, 250)}...`;
+      postDiv.appendChild(content);
+    }
 
     // Create a link element for the post title
     const titleLink = document.createElement("a");
@@ -138,28 +144,12 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
       incrementReadCount(childSnapshot.key);
       window.location.href = titleLink.href;
     });
-
-    // Create a div element for the post content
-    const content = document.createElement("div");
-    content.className = "post-content";
-    
-    // If current post is post1, show image and content as well
-    if (childSnapshot.key === "post1" && !firstPostAdded) {
-      content.innerText = postData.postContent;
-      postDiv.appendChild(image);
-      firstPostAdded = true;
-    } else {
-      content.innerText = `${postData.postContent.substring(0, 250)}...`;
-    }
-
-    // Add the post content to the postDiv
     postDiv.appendChild(titleLink);
-    postDiv.appendChild(content);
 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});	      
+});
 
 	      	      	
 // Get all posts from category2
