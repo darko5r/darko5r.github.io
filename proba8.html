@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Blog <index></title>
+	<title>My Blog</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
  <body>
@@ -147,11 +147,33 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     });
     postDiv.appendChild(titleLink);
 
-    // Add the postDiv to the postList
-    postList.appendChild(postDiv);
-  });
-});
+    // Convert postDate and postTime to a Date object
+    const postDateTime = new Date(`${postData.postDate} ${postData.postTime}`);
 
+    // Add the postDiv to the postList based on the postDateTime
+    if (!isNaN(postDateTime.getTime())) {
+      // If postDateTime is a valid Date object
+      let added = false;
+      postList.childNodes.forEach((post) => {
+        // Loop through each post in the postList
+        const postTime = new Date(`${postData.postDate} ${post.dataset.postTime}`);
+        if (postDateTime > postTime) {
+          // If postDateTime is greater than the current post's time, insert the new post before it
+          postList.insertBefore(postDiv, post);
+          added = true;
+          return;
+        }
+      });
+      if (!added) {
+        // If the new post is not added yet, append it to the end of the postList
+        postList.appendChild(postDiv);
+      }
+      // Set the postTime as a dataset attribute for sorting purpose
+      postDiv.dataset.postTime = postData.postTime;
+    }
+  });
+});	      
+	      
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
