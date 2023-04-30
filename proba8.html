@@ -111,32 +111,17 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
   // Clear the post list
   postList.innerHTML = "";
 
-  // Sort the posts by date and time
-  const sortedPosts = [];
-  snapshot.forEach((childSnapshot) => {
-    const postData = childSnapshot.val();
-    const postDate = postData.postDate;
-    const postTime = postData.postTime;
-    const postDateTime = new Date(`${postDate} ${postTime}`);
-    sortedPosts.push({
-      key: childSnapshot.key,
-      data: postData,
-      dateTime: postDateTime.getTime(),
-    });
-  });
-  sortedPosts.sort((a, b) => b.dateTime - a.dateTime);
-
   // Loop through each post
-  sortedPosts.forEach((post) => {
+  snapshot.forEach((childSnapshot) => {
     // Get the post data
-    const postData = post.data;
+    const postData = childSnapshot.val();
 
     // Create a div for the post
     const postDiv = document.createElement("div");
     postDiv.className = "post";
 
     // Check if this is the first post
-    if (post.key === "post1") {
+    if (childSnapshot.key === "post1") {
       // Create an image element for the post image
       const image = document.createElement("img");
       image.className = "post-image";
@@ -154,24 +139,18 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     const titleLink = document.createElement("a");
     titleLink.className = "post-title";
     titleLink.innerText = postData.postTitle;
-    titleLink.href = `post.html?postId=${post.key}`;
+    titleLink.href = `post.html?postId=${childSnapshot.key}`;
     titleLink.addEventListener("click", (event) => {
       event.preventDefault();
-      incrementReadCount(post.key);
+      incrementReadCount(childSnapshot.key);
       window.location.href = titleLink.href;
     });
     postDiv.appendChild(titleLink);
 
-    // Create a div element for the post date
-    const dateDiv = document.createElement("div");
-    dateDiv.className = "post-date";
-    dateDiv.innerText = new Date(post.dateTime).toLocaleString();
-    postDiv.appendChild(dateDiv);
-
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});
+}); 
 	      
 	      	      	
 // Get all posts from category2
