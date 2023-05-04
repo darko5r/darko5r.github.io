@@ -107,22 +107,44 @@ function incrementReadCount(postId) {
 }
 	      
 	      
-// Get all posts from category1
-postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) => {
+// Get the reference to the Firebase database
+const database = firebase.database();
+
+// Get a reference to the "posts" node in the database
+const postsRef = database.ref("posts");
+
+// Get the post list element
+const postList = document.getElementById("post-list");
+
+// Get all posts from category1 ordered by timestamp in descending order
+postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp").on("value", (snapshot) => {
   // Clear the post list
   postList.innerHTML = "";
 
-  // Loop through each post
-  snapshot.forEach((childSnapshot) => {
-    // Get the post data
-    const postData = childSnapshot.val();
+  // Get the array of post objects in descending order
+  const postArray = Object.entries(snapshot.val() || {})
+    .sort(([, a], [, b]) => b.timestamp - a.timestamp);
 
+  // Loop through each post object
+  postArray.forEach(([postId, postData]) => {
     // Create a div for the post
     const postDiv = document.createElement("div");
     postDiv.className = "post";
 
+    // Create a link element for the post title
+    const titleLink = document.createElement("a");
+    titleLink.className = "post-title";
+    titleLink.innerText = postData.postTitle;
+    titleLink.href = `post.html?postId=${postId}`;
+    titleLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      incrementReadCount(postId);
+      window.location.href = titleLink.href;
+    });
+    postDiv.appendChild(titleLink);
+
     // Check if this is the first post
-    if (childSnapshot.key === "post1") {
+    if (postId === "post1") {
       // Create an image element for the post image
       const image = document.createElement("img");
       image.className = "post-image";
@@ -130,29 +152,33 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
       postDiv.appendChild(image);
     }
 
-    // Create a link element for the post title
-    const titleLink = document.createElement("a");
-    titleLink.className = "post-title";
-    titleLink.innerText = postData.postTitle;
-    titleLink.href = `post.html?postId=${childSnapshot.key}`;
-    titleLink.addEventListener("click", (event) => {
-      event.preventDefault();
-      incrementReadCount(childSnapshot.key);
-      window.location.href = titleLink.href;
-    });
-    postDiv.appendChild(titleLink);
-
     // Create a div element for the post content
     const content = document.createElement("div");
     content.className = "post-content";
     content.innerText = `${postData.postContent.substring(0, 250)}...`;
     postDiv.appendChild(content);
 
+    // Create a div element for the post date
+    const dateDiv = document.createElement("div");
+    dateDiv.className = "post-date";
+    const date = new Date(postData.postDate + "T" + postData.postTime);
+    dateDiv.innerText = date.toLocaleDateString();
+    postDiv.appendChild(dateDiv);
+
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});	 	      
-	      	      	   	      
+});
+
+// Function to increment the read count of a post
+function incrementReadCount(postId) {
+  // Get the reference to the post with the given postId
+  const postRef = database.ref(`posts/${postId}`);
+
+  // Atomically increment the readCount of the post by 1
+  postRef.child("readCount").transaction((currentValue) => (currentValue || 0) + 1);
+}
+	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
