@@ -127,14 +127,7 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
       image.className = "post-image";
       image.src = postData.postImage;
       postDiv.appendChild(image);
-	    
-	    
-    // Create a div element for the post content
-      const content = document.createElement("div");
-      content.className = "post-content";
-      content.innerText = `${postData.postContent.substring(0, 250)}...`;
-      postDiv.appendChild(content);
-    }	
+    }
 
     // Create a link element for the post title
     const titleLink = document.createElement("a");
@@ -148,11 +141,17 @@ postsRef.orderByChild("categoryid").equalTo("category1").on("value", (snapshot) 
     });
     postDiv.appendChild(titleLink);
 
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = `${postData.postContent.substring(0, 250)}...`;
+    postDiv.appendChild(content);
+
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-}); 
-	   	      
+});	      
+	      	   	      
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
