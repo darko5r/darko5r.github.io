@@ -107,22 +107,14 @@ function incrementReadCount(postId) {
 }
 	      
 	      
-// Get the reference to the Firebase database
-const database = firebase.database();
-
-// Get a reference to the "posts" node in the database
-const postsRef = database.ref("posts");
-
-// Get the post list element
-const postList = document.getElementById("post-list");
-
 // Get all posts from category1 ordered by timestamp in descending order
-postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp").on("value", (snapshot) => {
+postsRef.orderByChild("timestamp").on("value", (snapshot) => {
   // Clear the post list
   postList.innerHTML = "";
 
   // Get the array of post objects in descending order
   const postArray = Object.entries(snapshot.val() || {})
+    .filter(([, postData]) => postData.categoryid === "category1")
     .sort(([, a], [, b]) => b.timestamp - a.timestamp);
 
   // Loop through each post object
@@ -130,6 +122,15 @@ postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp
     // Create a div for the post
     const postDiv = document.createElement("div");
     postDiv.className = "post";
+
+    // Check if this is the first post
+    if (postId === "post1") {
+      // Create an image element for the post image
+      const image = document.createElement("img");
+      image.className = "post-image";
+      image.src = postData.postImage;
+      postDiv.appendChild(image);
+    }
 
     // Create a link element for the post title
     const titleLink = document.createElement("a");
@@ -142,15 +143,6 @@ postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp
       window.location.href = titleLink.href;
     });
     postDiv.appendChild(titleLink);
-
-    // Check if this is the first post
-    if (postId === "post1") {
-      // Create an image element for the post image
-      const image = document.createElement("img");
-      image.className = "post-image";
-      image.src = postData.postImage;
-      postDiv.appendChild(image);
-    }
 
     // Create a div element for the post content
     const content = document.createElement("div");
@@ -169,15 +161,6 @@ postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp
     postList.appendChild(postDiv);
   });
 });
-
-// Function to increment the read count of a post
-function incrementReadCount(postId) {
-  // Get the reference to the post with the given postId
-  const postRef = database.ref(`posts/${postId}`);
-
-  // Atomically increment the readCount of the post by 1
-  postRef.child("readCount").transaction((currentValue) => (currentValue || 0) + 1);
-}
 	      	        
 	      	      	
 // Get all posts from category2
