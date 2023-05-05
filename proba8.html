@@ -148,36 +148,22 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     postDiv.appendChild(content);
 
     // Create a div element for the post date and time
-    const postDate = document.createElement("div");
-    postDate.className = "post-date";
-    const date = new Date(postData.postDate);
-    const time = postData.postTime;
-    const formattedTime = formatPostTime(time);
-    if (isNaN(date.getTime())) {
-      postDate.innerText = "Invalid Date";
+    const postDateTime = document.createElement("div");
+    postDateTime.className = "post-date-time";
+    const dateTimeString = `${postData.postDate} ${postData.postTime}`;
+    const dateTime = new Date(dateTimeString);
+    if (isNaN(dateTime.getTime())) {
+      postDateTime.innerText = "Invalid Date/Time";
     } else {
-      postDate.innerText = `${date.toDateString()} ${formattedTime}`;
+      const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+      postDateTime.innerText = dateTime.toLocaleString(undefined, options);
     }
-    postDiv.appendChild(postDate);
+    postDiv.appendChild(postDateTime);
 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});
-
-// Helper function to format postTime to include "AM" or "PM"
-function formatPostTime(timeString) {
-  const time = new Date(`1970-01-01T${timeString}`);
-  let hours = time.getHours();
-  let minutes = time.getMinutes();
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  const formattedTime = `${hours}:${minutes} ${ampm}`;
-  return formattedTime;
-}	      
-	      	      	      	      	      	      	      	      	      	      	        
+});	      	      	      	      	      	      	      	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
