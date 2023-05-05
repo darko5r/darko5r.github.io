@@ -141,24 +141,26 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     });
     postDiv.appendChild(titleLink);
 
-    // Create a div element for the post content
-    const content = document.createElement("div");
-    content.className = "post-content";
-    content.innerText = `${postData.postContent.substring(0, 250)}...`;
-    postDiv.appendChild(content);
-
     // Create a div element for the post date and time
-    const postDateTime = document.createElement("div");
-    postDateTime.className = "post-date-time";
-    const dateTimeString = `${postData.postDate} ${postData.postTime}`;
-    const dateTime = new Date(dateTimeString);
-    if (isNaN(dateTime.getTime())) {
-      postDateTime.innerText = "Invalid Date/Time";
-    } else {
-      const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-      postDateTime.innerText = dateTime.toLocaleString(undefined, options);
-    }
-    postDiv.appendChild(postDateTime);
+const postDateTime = document.createElement("div");
+postDateTime.className = "post-date-time";
+const postDateTimeString = `${postData.postDate} ${postData.postTime}`;
+const postDateTimeValue = Date.parse(postDateTimeString);
+
+if (isNaN(postDateTimeValue)) {
+  postDateTime.innerText = "Invalid Date/Time";
+} else {
+  const postDate = new Date(postDateTimeValue);
+  const postTime = new Date(postDateTimeValue);
+  const hours = postTime.getHours();
+  const minutes = postTime.getMinutes().toString().padStart(2, "0");
+  const amPm = hours < 12 ? "AM" : "PM";
+  const formattedTime = `${(hours % 12) || 12}:${minutes} ${amPm}`;
+
+  postDateTime.innerText = `${postDate.toDateString()} ${formattedTime}`;
+}
+
+postDiv.appendChild(postDateTime);
 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
