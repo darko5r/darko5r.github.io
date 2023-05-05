@@ -151,14 +151,14 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     const postDate = document.createElement("div");
     postDate.className = "post-date";
     const date = new Date(postData.postDate);
-    postDate.innerText = date.toDateString();
+    postDate.innerText = isNaN(date) ? "Invalid Date" : date.toDateString();
     postDiv.appendChild(postDate);
 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});
-	      	      	      	        
+});	      
+	      	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
