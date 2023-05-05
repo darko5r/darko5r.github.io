@@ -107,9 +107,7 @@ function incrementReadCount(postId) {
 }
 	      
 // Get the 10 newest posts from category1
-postsRef.orderBy("categoryid/timestamp").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
-  console.log("Snapshot: ", snapshot.val());
-
+postsRef.orderByChild("categoryid").equalTo("category1").orderByChild("timestamp").limitToLast(10).on("value", (snapshot) => {
   // Clear the post list
   postList.innerHTML = "";
 
@@ -117,8 +115,6 @@ postsRef.orderBy("categoryid/timestamp").equalTo("category1").limitToLast(10).on
   snapshot.forEach((childSnapshot) => {
     // Get the post data
     const postData = childSnapshot.val();
-
-    console.log("Post data: ", postData);
 
     // Create a div for the post
     const postDiv = document.createElement("div");
@@ -154,7 +150,7 @@ postsRef.orderBy("categoryid/timestamp").equalTo("category1").limitToLast(10).on
     // Create a div element for the post date
     const postDate = document.createElement("div");
     postDate.className = "post-date";
-    const date = new Date(postData.postDate);
+    const date = new Date(postData.timestamp);
     postDate.innerText = date.toDateString();
     postDiv.appendChild(postDate);
 
