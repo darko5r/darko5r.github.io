@@ -149,14 +149,12 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
 
     // Create a div element for the post date and time
     const postDateTime = document.createElement("div");
-    postDateTime.className = "post-date";
-    const dateTimeString = postData.postDate + " " + postData.postTime;
-    const dateTime = new Date(dateTimeString);
-    if (isNaN(dateTime.getTime())) {
+    postDateTime.className = "post-date-time";
+    const date = new Date(`${postData.postDate} ${postData.postTime}`);
+    if (isNaN(date.getTime())) {
       postDateTime.innerText = "Invalid Date";
     } else {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-      postDateTime.innerText = dateTime.toLocaleString('en-US', options);
+      postDateTime.innerText = date.toLocaleString();
     }
     postDiv.appendChild(postDateTime);
 
@@ -164,7 +162,7 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     postList.appendChild(postDiv);
   });
 });	      
-	      	      	      	      	      	      	      	        
+	      	      	      	      	      	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
