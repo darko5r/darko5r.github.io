@@ -10,6 +10,7 @@
 	<div id="post-list"></div>
 	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 	<script src="app.js"></script>
  </main>
  </body>
@@ -141,31 +142,31 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     });
     postDiv.appendChild(titleLink);
 
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = `${postData.postContent.substring(0, 250)}...`;
+    postDiv.appendChild(content);
+
     // Create a div element for the post date and time
-const postDateTime = document.createElement("div");
-postDateTime.className = "post-date-time";
-const postDateTimeString = `${postData.postDate} ${postData.postTime}`;
-const postDateTimeValue = Date.parse(postDateTimeString);
-
-if (isNaN(postDateTimeValue)) {
-  postDateTime.innerText = "Invalid Date/Time";
-} else {
-  const postDate = new Date(postDateTimeValue);
-  const postTime = new Date(postDateTimeValue);
-  const hours = postTime.getHours();
-  const minutes = postTime.getMinutes().toString().padStart(2, "0");
-  const amPm = hours < 12 ? "AM" : "PM";
-  const formattedTime = `${(hours % 12) || 12}:${minutes} ${amPm}`;
-
-  postDateTime.innerText = `${postDate.toDateString()} ${formattedTime}`;
-}
-
-postDiv.appendChild(postDateTime);
+    const postDateTime = document.createElement("div");
+    postDateTime.className = "post-date-time";
+    
+    const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
+    const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
+    
+    if (postDate === "Invalid date" || postTime === "Invalid date") {
+      postDateTime.innerText = "Invalid Date/Time";
+    } else {
+      postDateTime.innerText = `${postDate} at ${postTime}`;
+    }
+    
+    postDiv.appendChild(postDateTime);
 
     // Add the postDiv to the postList
     postList.appendChild(postDiv);
   });
-});	      	      	      	      	      	      	      	      	      	      	        
+});	      	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
