@@ -149,12 +149,26 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
 
     // Create a div element for the post date and time
     const postDateTime = document.createElement("div");
-    postDateTime.className = "post-date-time";
-    const date = new Date(`${postData.postDate} ${postData.postTime}`);
+    postDateTime.className = "post-date";
+    const date = new Date(postData.postDate);
+    const timeParts = postData.postTime.split(" ");
+    const time = timeParts[0];
+    const ampm = timeParts[1];
+    const hours = Number(time.split(":")[0]);
+    const minutes = Number(time.split(":")[1]);
     if (isNaN(date.getTime())) {
       postDateTime.innerText = "Invalid Date";
     } else {
-      postDateTime.innerText = date.toLocaleString();
+      let hoursDisplay = hours % 12;
+      if (hoursDisplay === 0) {
+        hoursDisplay = 12;
+      }
+      if (ampm === "PM") {
+        hoursDisplay += 12;
+      }
+      const postDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+      const postTime = `${hoursDisplay.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+      postDateTime.innerText = `${postDate} ${postTime}`;
     }
     postDiv.appendChild(postDateTime);
 
@@ -162,7 +176,7 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     postList.appendChild(postDiv);
   });
 });	      
-	      	      	      	      	      	      	      	      	        
+	      	      	      	      	      	      	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
