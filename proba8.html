@@ -107,6 +107,9 @@ function incrementReadCount(postId) {
   });
 }
 	      
+// Create an array to hold the post elements
+const postElements = [];
+
 // Get the 10 newest posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
   // Clear the post list
@@ -163,10 +166,14 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     
     postDiv.appendChild(postDateTime);
 
-    // Add the postDiv to the postList
-    postList.appendChild(postDiv);
+    // Add the postDiv to the postElements array
+    postElements.push(postDiv);
   });
-});	      	      	      	      	        
+
+  // Append all the post elements to the DOM at once
+  postList.append(...postElements);
+});	      
+	      	      	      	        
 	      	      	
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
