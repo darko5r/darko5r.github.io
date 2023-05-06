@@ -109,8 +109,10 @@ function incrementReadCount(postId) {
 // Create an array to hold the post elements
 const postElements = [];
 
-// Get the 10 newest posts from category1
+// Declare the postsRef constant
 const postsRef = firebase.database().ref("posts");
+
+// Get the 10 newest posts from category1
 const category1PostsRef = postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10);
 
 // Check if the posts are already cached in localStorage
@@ -193,7 +195,6 @@ function createPostElement(postData, postKey) {
 
 function renderPosts(posts) {
   // Clear the post list
-  const postList = document.getElementById("post-list");
   postList.innerHTML = "";
 
   // Append all the post elements to the DOM at once
