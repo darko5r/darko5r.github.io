@@ -229,21 +229,20 @@ function createPostLink(postId, postTitle) {
   return titleLink;
 }      
 	      
-	// Get the 5 most viewed posts in descending order
+// Get the 5 most viewed posts in descending order
 postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
   const mostViewedPostsList = document.createElement("ul");
   snapshot.forEach((childSnapshot) => {
     const postData = childSnapshot.val();
     const postTitle = postData.postTitle;
     const listItem = document.createElement("li");
-    const titleLink = document.createElement("a");
-    titleLink.innerText = postTitle;
-    titleLink.href = `post.html?postId=${childSnapshot.key}`;
+    const titleLink = createPostLink(childSnapshot.key, postTitle);
     listItem.appendChild(titleLink);
     mostViewedPostsList.prepend(listItem); // Add each item to the top of the list
   });
   document.body.appendChild(mostViewedPostsList);
-});      
+});	      
+	      	
   // Navigate trough pages with page numbers 	      	      	
 
      </script>	
