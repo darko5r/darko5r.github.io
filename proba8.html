@@ -96,80 +96,72 @@ function incrementReadCount(postId) {
   });
 }
 	      
+// Create an array to hold the post elements
+const postElements = [];
+	      
 // Get the 10 newest posts from category1
-const cachedPosts = localStorage.getItem("category1Posts");
-if (cachedPosts) {
-  postList.innerHTML = cachedPosts;
-} else {
-  postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
-    // Clear the post list
-    postList.innerHTML = "";
+postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
+  // Clear the post list
+  postList.innerHTML = "";
 
-    // Create an array to hold post elements
-    const postElements = [];
+  // Loop through each post
+  snapshot.forEach((childSnapshot) => {
+    // Get the post data
+    const postData = childSnapshot.val();
 
-    // Loop through each post
-    snapshot.forEach((childSnapshot) => {
-      // Get the post data
-      const postData = childSnapshot.val();
+    // Create a div for the post
+    const postDiv = document.createElement("div");
+    postDiv.className = "post";
 
-      // Create a div for the post
-      const postDiv = document.createElement("div");
-      postDiv.className = "post";
+    // Check if this is the first post
+    if (childSnapshot.key === "post1") {
+      // Create an image element for the post image
+      const image = document.createElement("img");
+      image.className = "post-image";
+      image.src = postData.postImage;
+      postDiv.appendChild(image);
+    }
 
-      // Check if this is the first post
-      if (childSnapshot.key === "post1") {
-        // Create an image element for the post image
-        const image = document.createElement("img");
-        image.className = "post-image";
-        image.src = postData.postImage;
-        postDiv.appendChild(image);
-      }
-
-      // Create a link element for the post title
-      const titleLink = document.createElement("a");
-      titleLink.className = "post-title";
-      titleLink.innerText = postData.postTitle;
-      titleLink.href = `post.html?postId=${childSnapshot.key}`;
-      titleLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        incrementReadCount(childSnapshot.key);
-        window.location.href = titleLink.href;
-      });
-      postDiv.appendChild(titleLink);
-
-      // Create a div element for the post content
-      const content = document.createElement("div");
-      content.className = "post-content";
-      content.innerText = `${postData.postContent.substring(0, 250)}...`;
-      postDiv.appendChild(content);
-
-      // Create a div element for the post date and time
-      const postDateTime = document.createElement("div");
-      postDateTime.className = "post-date-time";
-
-      const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
-      const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
-
-      if (postDate === "Invalid date" || postTime === "Invalid date") {
-        postDateTime.innerText = "Invalid Date/Time";
-      } else {
-        postDateTime.innerText = `${postDate} at ${postTime}`;
-      }
-
-      postDiv.appendChild(postDateTime);
-
-      // Add the postDiv to the postElements array
-      postElements.push(postDiv);
+    // Create a link element for the post title
+    const titleLink = document.createElement("a");
+    titleLink.className = "post-title";
+    titleLink.innerText = postData.postTitle;
+    titleLink.href = `post.html?postId=${childSnapshot.key}`;
+    titleLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      incrementReadCount(childSnapshot.key);
+      window.location.href = titleLink.href;
     });
+    postDiv.appendChild(titleLink);
 
-    // Save the post list HTML to localStorage
-    localStorage.setItem("category1Posts", postList.innerHTML);
+    // Create a div element for the post content
+    const content = document.createElement("div");
+    content.className = "post-content";
+    content.innerText = `${postData.postContent.substring(0, 250)}...`;
+    postDiv.appendChild(content);
 
-    // Append all the post elements to the DOM at once
-    postList.append(...postElements);
+    // Create a div element for the post date and time
+    const postDateTime = document.createElement("div");
+    postDateTime.className = "post-date-time";
+    
+    const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
+    const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
+    
+    if (postDate === "Invalid date" || postTime === "Invalid date") {
+      postDateTime.innerText = "Invalid Date/Time";
+    } else {
+      postDateTime.innerText = `${postDate} at ${postTime}`;
+    }
+    
+    postDiv.appendChild(postDateTime);
+
+    // Add the postDiv to the postElements array
+    postElements.push(postDiv);
   });
-}	      
+
+  // Append all the post elements to the DOM at once
+  postList.append(...postElements);
+});
 	      	      	      	      	        
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
