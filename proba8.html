@@ -84,6 +84,10 @@
         measurementId: "G-MY3P2TWN4L"
       };
       firebase.initializeApp(firebaseConfig);
+	    
+      // Set the third-party cookies and local storage to "none"
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+      firebase.database().ref(".info").set({ "useFetchStreams": false });    
     </script>
   
 <script>// break betwwen parts ++++++++++++++++++++++++++++++++++++++++++++++++++++</script>
