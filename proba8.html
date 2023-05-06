@@ -3,77 +3,64 @@
 <head>
 	<title>My Blog</title>
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo=">
-	<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
 </head>
- <body>
- <main>
-        <h1>The blog is under construction</h1> 
+<body>
+<main>
+	<h1>The blog is under construction</h1> 
 	<div id="post-list"></div>
+	<!-- Import the Firebase SDK -->
 	<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
-        <script> //src="https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
-	<script> //src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"> </script>
-	<script> //src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-	<script>// src="app.js"> //remove the ">" from <script></script>
- 	
 
-    
-    <style>
-	    
-    /* Style content area */
-     main {
-      max-width: 1366px;
-      margin: 0 auto;
-      padding: 20px;
-	    
-}      
-      
-     .post {
-	margin-bottom: 20px;
-	border: 1px solid #ddd;
-	padding: 10px;
-}
+	<style>
+		/* Style content area */
+		main {
+			max-width: 1366px;
+			margin: 0 auto;
+			padding: 20px;
+		}
 
-     .post-title {
-	font-size: 20px;
-	font-weight: bold;
-	margin-bottom: 10px;
-}
+		.post {
+			margin-bottom: 20px;
+			border: 1px solid #ddd;
+			padding: 10px;
+		}
 
-      .post-image {
-	width: 100%;
-	max-width: 500px;
-	margin-bottom: 10px;
-}
+		.post-title {
+			font-size: 20px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
 
-      .post-content {
-	margin-bottom: 10px;
-}
+		.post-image {
+			width: 100%;
+			max-width: 500px;
+			margin-bottom: 10px;
+		}
 
-      .other-posts-list {
-	margin-top: 10px;
-	padding-left: 20px;
-}
-	    
-       #post-list {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-between;
-          gap: 0px;
-          padding: 0px;
-          background-color: #f9f9f9;
-          max-width: 38%;
-          float: left;
-          margin-right: 6px;
-       }
-      
-    </style>
-    
-      
-    <!-- Import the Firebase SDK -->
-    <script> // src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"> //already loaded in head</script>
-    <script> // src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"> // already loaded in head</script>
+		.post-content {
+			margin-bottom: 10px;
+		}
+
+		.other-posts-list {
+			margin-top: 10px;
+			padding-left: 20px;
+		}
+
+		#post-list {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			gap: 0px;
+			padding: 0px;
+			background-color: #f9f9f9;
+			max-width: 38%;
+			float: left;
+			margin-right: 6px;
+		}
+	</style>
+ 
     <script>
        // Initialize Firebase
       var firebaseConfig = {
