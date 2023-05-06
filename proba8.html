@@ -193,11 +193,12 @@ function createPostElement(postData, postKey) {
 
 function renderPosts(posts) {
   // Clear the post list
+  const postList = document.getElementById("post-list");
   postList.innerHTML = "";
 
   // Append all the post elements to the DOM at once
   postList.append(...posts);
-}	      
+}
 	      	      	      	      	        
 	      	      	
 // Get all posts from category2
