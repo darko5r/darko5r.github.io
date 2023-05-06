@@ -227,22 +227,27 @@ function createPostLink(postId, postTitle) {
     window.location.href = titleLink.href;
   });
   return titleLink;
-}      
+}   
 	      
 // Get the 5 most viewed posts in descending order
 postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
   const mostViewedPostsList = document.createElement("ul");
+  const postElements = []; // create empty array to hold post elements
   snapshot.forEach((childSnapshot) => {
     const postData = childSnapshot.val();
     const postTitle = postData.postTitle;
     const listItem = document.createElement("li");
     const titleLink = createPostLink(childSnapshot.key, postTitle);
     listItem.appendChild(titleLink);
-    mostViewedPostsList.prepend(listItem); // Add each item to the top of the list
+    postElements.push(listItem); // Add each item to the array
+  });
+  postElements.reverse(); // Reverse the array to add items in descending order
+  postElements.forEach((listItem) => {
+    mostViewedPostsList.appendChild(listItem); // Add each item to the list
   });
   document.body.appendChild(mostViewedPostsList);
 });	      
-	      	
+	      	      	
   // Navigate trough pages with page numbers 	      	      	
 
      </script>	
