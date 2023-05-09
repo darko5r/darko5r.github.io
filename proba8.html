@@ -110,8 +110,9 @@ if (cachedPosts) {
      // Create a div for the post
     const postDiv = document.createElement("div");
     postDiv.className = "post";
-    });
+    });	  
   }
+}
 
     // Check if this is the first post
     if (postData.postNumber === "post1") {
@@ -228,7 +229,6 @@ postList.append(...postElements);
 
 // Save the post data to localStorage
 localStorage.setItem('category1-posts', JSON.stringify(snapshot.val()));
-});
 	      
 	      	      	      	      	        
 // Get all posts from category2
