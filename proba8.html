@@ -100,7 +100,7 @@ function incrementReadCount(postId) {
 const postElements = [];
 
 // Get the cached content from localStorage, if available
-const cachedPosts = localStorage.getItem('category1-posts');
+let cachedPosts = localStorage.getItem('category1-posts');
 
 if (cachedPosts) {
   // Render the cached content
