@@ -110,21 +110,7 @@ if (cachedPosts) {
     const postDiv = document.createElement("div");
     postDiv.className = "post";
 
-// Get the 10 newest posts from category1
-postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
-  // Clear the post list
-  postList.innerHTML = "";
-
-  // Loop through each post
-  snapshot.forEach((childSnapshot) => {
-    // Get the post data
-    const postData = childSnapshot.val();
-
-    // Create a div for the post
-    const postDiv = document.createElement("div");
-    postDiv.className = "post";
-
-// Check if this is the first post
+    // Check if this is the first post
     if (postData.postId === "post1") {
       // Create an image element for the post image
       const image = document.createElement("img");
@@ -240,7 +226,7 @@ postList.append(...postElements);
 // Handle errors
 postsRef.on("error", (error) => {
 console.error(error);
-});	      
+});
 	      
 	      	      	      	      	        
 // Get all posts from category2
