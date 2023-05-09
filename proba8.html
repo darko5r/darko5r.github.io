@@ -105,10 +105,14 @@ let cachedPosts = localStorage.getItem('category1-posts');
 if (cachedPosts) {
   // Render the cached content
   const parsedPosts = JSON.parse(cachedPosts);
-  parsedPosts.forEach(postData => {
-    // Create a div for the post
+  if (Array.isArray(parsedPosts)) {
+    parsedPosts.forEach(postData => {
+     // Create a div for the post
     const postDiv = document.createElement("div");
     postDiv.className = "post";
+    });
+  }
+}
 
     // Check if this is the first post
     if (postData.postNumber === "post1") {
