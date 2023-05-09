@@ -98,21 +98,25 @@ function incrementReadCount(postId) {
 	      
 // Create an array to hold the post elements
 const postElements = [];
-
+	      
+	 
 // Get the cached content from localStorage, if available
 let cachedPosts = localStorage.getItem('category1-posts');
 
+// Render the cached content, if available
 if (cachedPosts) {
-  // Render the cached content
   const parsedPosts = JSON.parse(cachedPosts);
   if (Array.isArray(parsedPosts)) {
-    parsedPosts.forEach(postData => {
+    // Create an array to hold the post elements
+    const postElements = [];
+
+    parsedPosts.forEach((postData, index) => {
       // Create a div for the post
       const postDiv = document.createElement("div");
       postDiv.className = "post";
 
       // Check if this is the first post
-      if (postData.postNumber === "post1") {
+      if (index === 0) {
         // Create an image element for the post image
         const image = document.createElement("img");
         image.className = "post-image";
@@ -157,15 +161,15 @@ if (cachedPosts) {
       postElements.push(postDiv);
     });
 
-    // Append all the post elements to the DOM at once
+    // Append all the post elements to the DOM
     postList.append(...postElements);
   }
 }
 
 // Get the 10 newest posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
-  // Clear the post list
-  postList.innerHTML = "";
+  // Create an array to hold the post elements
+  const postElements = [];
 
   // Loop through each post
   snapshot.forEach((childSnapshot) => {
@@ -227,6 +231,8 @@ postList.append(...postElements);
 // Save the post data to localStorage
 localStorage.setItem('category1-posts', JSON.stringify(snapshot.val()));
 });
+
+
 	      
 	      	      	      	      	        
 // Get all posts from category2
