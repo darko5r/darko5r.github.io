@@ -169,6 +169,7 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
   snapshot.forEach((childSnapshot) => {
     // Get the post data
     const postData = childSnapshot.val();
+  }
 
     // Create a div for the post
     const postDiv = document.createElement("div");
