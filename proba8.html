@@ -296,9 +296,9 @@ function createPostLink(postId, postTitle) {
 	      
 	      
 // Get the 5 most viewed posts in descending order
-const cachedPosts = localStorage.getItem('mostViewedPosts');
-if (cachedPosts) {
-  document.body.appendChild(document.createRange().createContextualFragment(cachedPosts));
+const cachedPosts2 = localStorage.getItem('mostViewedPosts');
+if (cachedPosts2) {
+  document.body.appendChild(document.createRange().createContextualFragment(cachedPosts2));
 } else {
   postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
     const mostViewedPostsList = document.createElement("ul");
