@@ -114,15 +114,30 @@ if (cachedPosts) {
       // Create a div for the post
       const postDiv = document.createElement("div");
       postDiv.className = "post";
-
+	    
+	
       // Check if this is the first post
-      if (index === 0) {
-        // Create an image element for the post image
-        const image = document.createElement("img");
-        image.className = "post-image";
-        image.src = postData.postImage;
-        postDiv.appendChild(image);
-      }
+if (index === 0) {
+  let imageSrc = localStorage.getItem('postImage');
+  if (imageSrc) {
+    // Use cached image
+    const image = document.createElement("img");
+    image.className = "post-image";
+    image.src = imageSrc;
+    postDiv.appendChild(image);
+  } else {
+    // Create an image element for the post image
+    const image = document.createElement("img");
+    image.className = "post-image";
+    image.src = postData.postImage;
+    postDiv.appendChild(image);
+
+    // Cache the image
+    localStorage.setItem('postImage', postData.postImage);
+  }
+}    
+
+      
 	    
       // Create a link element for the post title
       const titleLink = document.createElement("a");
