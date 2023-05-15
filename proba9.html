@@ -135,12 +135,22 @@ if (cachedPosts) {
         window.location.href = titleLink.href;
       });
       postDiv.appendChild(titleLink);
-
+	    
+	    
+	    
       // Create a div element for the post content
-      const content = document.createElement("div");
-      content.className = "post-content";
-      content.innerText = `${postData.postContent.substring(0, 250)}...`;
-      postDiv.appendChild(content);
+const content = document.createElement("div");
+content.className = "post-content";
+const postContent = localStorage.getItem(`postContent_${postData.postId}`); // Retrieve the post content from localStorage
+if (postContent) {
+  content.innerText = postContent.substring(0, 250) + '...'; // Use the cached post content
+} else {
+  content.innerText = postData.postContent.substring(0, 250) + '...'; // Use the original post content
+  localStorage.setItem(`postContent_${postData.postId}`, postData.postContent); // Cache the post content in localStorage
+}
+postDiv.appendChild(content);    
+
+      
 
       // Create a div element for the post date and time
       const postDateTime = document.createElement("div");
