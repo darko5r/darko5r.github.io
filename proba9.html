@@ -136,23 +136,31 @@ if (index === 0) {
     localStorage.setItem('postImage', postData.postImage);
   }
 }    
+	    
+	    
+      const options = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1
+};
 
-      
-      // Create a link element for the post title
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const titleLink = entry.target;
+      const postNumber = titleLink.dataset.postNumber;
+      const postTitle = titleLink.dataset.postTitle;
+      titleLink.innerText = getCachedTitle(postNumber, postTitle);
+      observer.unobserve(titleLink);
+    }
+  });
+}, options);
+
+// Create a link element for the post title
 const titleLink = document.createElement("a");
 titleLink.className = "post-title";
-
-// Check if the post title has been cached in localStorage
-const cachedTitle = localStorage.getItem(`post-${postData.postNumber}-title`);
-if (cachedTitle) {
-  // Use the cached title if available
-  titleLink.innerText = cachedTitle;
-} else {
-  // Use the original title and cache it for future use
-  titleLink.innerText = postData.postTitle;
-  localStorage.setItem(`post-${postData.postNumber}-title`, postData.postTitle);
-}
-
+titleLink.dataset.postNumber = postData.postNumber;
+titleLink.dataset.postTitle = postData.postTitle;
 titleLink.href = `post.html?postId=${postData.postNumber}`;
 titleLink.addEventListener("click", (event) => {
   event.preventDefault();
@@ -160,6 +168,11 @@ titleLink.addEventListener("click", (event) => {
   window.location.href = titleLink.href;
 });
 postDiv.appendChild(titleLink);
+
+observer.observe(titleLink);    
+
+      
+      
 	    
 	    
      	    	    
