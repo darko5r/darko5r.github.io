@@ -138,20 +138,31 @@ if (index === 0) {
 }    
 
       
-	    
       // Create a link element for the post title
-      const titleLink = document.createElement("a");
-      titleLink.className = "post-title";
-      titleLink.innerText = postData.postTitle;
-      titleLink.href = `post.html?postId=${postData.postNumber}`;
-      titleLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        incrementReadCount(postData.postNumber);
-        window.location.href = titleLink.href;
-      });
-      postDiv.appendChild(titleLink);
+const titleLink = document.createElement("a");
+titleLink.className = "post-title";
+
+// Check if the post title has been cached in localStorage
+const cachedTitle = localStorage.getItem(`post-${postData.postNumber}-title`);
+if (cachedTitle) {
+  // Use the cached title if available
+  titleLink.innerText = cachedTitle;
+} else {
+  // Use the original title and cache it for future use
+  titleLink.innerText = postData.postTitle;
+  localStorage.setItem(`post-${postData.postNumber}-title`, postData.postTitle);
+}
+
+titleLink.href = `post.html?postId=${postData.postNumber}`;
+titleLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  incrementReadCount(postData.postNumber);
+  window.location.href = titleLink.href;
+});
+postDiv.appendChild(titleLink);
 	    
 	    
+     	    	    
 	    
       // Create a div element for the post content
 const content = document.createElement("div");
