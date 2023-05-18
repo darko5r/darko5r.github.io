@@ -183,10 +183,10 @@ if (postContent) {
   content.innerText = postData.postContent.substring(0, 250) + '...'; // Use the original post content
   localStorage.setItem(`postContent_${postData.postId}`, postData.postContent); // Cache the post content in localStorage
 }
-postDiv.appendChild(content);    
+postDiv.appendChild(content);  
 	    
 	    
-	    
+	
       // Create a div element for the post date and time
 const postDateTime = document.createElement("div");
 postDateTime.className = "post-date-time";
@@ -217,9 +217,10 @@ if (cachedDate && cachedTime) {
 postDiv.appendChild(postDateTime);
 
 // Add the postDiv to the postElements array
-postElements.push(postDiv);
+postElements.push(postDiv);    
+	    
+	    
       
-
       
 
 // Get the 10 newest posts from category1
