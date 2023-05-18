@@ -185,20 +185,11 @@ if (postContent) {
 }
 postDiv.appendChild(content);  
 	    
-	    
+ 
       // Create a div element for the post date and time
-    const postDateTime = document.createElement("div");
-    postDateTime.className = "post-date-time";
+      const postDateTime = document.createElement("div");
+      postDateTime.className = "post-date-time";
 
-    // Check if the post date and time have been cached in localStorage
-    const cachedDate = localStorage.getItem(`post-${postData.postNumber}-date`);
-    const cachedTime = localStorage.getItem(`post-${postData.postNumber}-time`);
-
-    if (cachedDate && cachedTime) {
-      // Use the cached date and time if available
-      postDateTime.innerText = `${cachedDate} at ${cachedTime}`;
-    } else {
-      // Format the original date and time
       const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
       const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
 
@@ -206,25 +197,20 @@ postDiv.appendChild(content);
         postDateTime.innerText = "Invalid Date/Time";
       } else {
         postDateTime.innerText = `${postDate} at ${postTime}`;
-
-        // Cache the date and time for future use
-        localStorage.setItem(`post-${postData.postNumber}-date`, postDate);
-        localStorage.setItem(`post-${postData.postNumber}-time`, postTime);
       }
-    }
 
-    postDiv.appendChild(postDateTime);
+      postDiv.appendChild(postDateTime);
 
-    // Add the postDiv to the postElements array
-    postElements.push(postDiv);
-  });
+      // Add the postDiv to the postElements array
+      postElements.push(postDiv);
+    });
 
-  // Append all the post elements to the DOM
-  postList.append(...postElements);
-});    
+    // Append all the post elements to the DOM
+    postList.append(...postElements);
+  }
+}    
 	    
-	    
-      	     	    	             
+	          	    	         	     	    	             
 
 // Get the 10 newest posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
