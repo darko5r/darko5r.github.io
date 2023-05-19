@@ -76,7 +76,7 @@
       firebase.initializeApp(firebaseConfig);	     
     </script>
   
-<script>// break betwwen parts ++++++++++++++++++++++++++++++++++++++++++++++++++++</script>
+<script>// break betwwen parts +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</script>
 
       <script>
 	      // add newest posts // Place title before content on post1 --// 
@@ -279,6 +279,7 @@ postList.append(...postElements);
 localStorage.setItem('category1-posts', JSON.stringify(snapshot.val()));
 });
 
+	      	      
 
 // Get all posts from category2
 postsRef.orderByChild("categoryid").equalTo("category2").on("value", (snapshot) => {
