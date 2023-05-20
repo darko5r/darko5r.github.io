@@ -356,12 +356,17 @@ if (cachedPosts2) {
 } else {
   postsRef.orderByChild("readCount").limitToLast(5).on("value", (snapshot) => {
     const mostViewedPostsList = document.createElement("ul");
+    mostViewedPostsList.classList.add("most-viewed-posts"); // Add class "most-viewed-posts" to the <ul> element
     const postElements = []; // create empty array to hold post elements
-    snapshot.forEach((childSnapshot) => {
+    snapshot.forEach((childSnapshot, index) => {
       const postData = childSnapshot.val();
       const postTitle = postData.postTitle;
       const listItem = document.createElement("li");
+      listItem.classList.add("bulletin"); // Add class "bulletin" to the <li> element
       const titleLink = createPostLink(childSnapshot.key, postTitle);
+      titleLink.classList.add("post-link"); // Add class "post-link" to the link element
+      const postTitleClass = `post-title-${index + 1}`; // Generate unique class for each post title
+      titleLink.classList.add(postTitleClass); // Add unique class to the link element for the post title
       listItem.appendChild(titleLink);
       postElements.push(listItem); // Add each item to the array
     });
@@ -373,7 +378,7 @@ if (cachedPosts2) {
     // Save the rendered posts to localStorage
     localStorage.setItem('mostViewedPosts', mostViewedPostsList.innerHTML);
   });
-}	      
+}
 	      	      	
   // TODO: Navigate trough pages with page numbers 	      	      	
   // TODO: completely new CSS design
