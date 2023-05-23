@@ -277,11 +277,11 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
       image.className = "post-image-first"; // Change to post-image-first
       } else {
       // For other posts
-      image.className = "post-image";
-      }    	    
+      image.className = "post-image";  	    
       image.src = postData.postImage;
       postDiv.appendChild(image);
-    }	    
+    }	
+  }
     
 // Create a link element for the post title
 const titleLink = document.createElement("a");
