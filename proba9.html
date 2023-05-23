@@ -5,7 +5,8 @@
 	<title>My Blog</title>
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo="/>
 </head>
-    <style>
+	
+   <style>
     /* Global Styles */
     body {
         font-family: 'Arial', sans-serif;
@@ -58,25 +59,42 @@
         margin-top: 20px;
     }
 
-    /* Post List Styles */
-    #post-list {
+    /* Section Styles */
+    #section-1, #section-2, #section-3 {
+        flex: 1;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #section-2, #section-3 {
+        border-left: 1px solid #ddd;
+    }
+
+    /* Main Section Styles */
+    #main-section {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 20px;
     }
 
-    /* Most Viewed Posts Styles */
-    .most-viewed-posts {
+    /* Related Post Styles */
+    .related-posts {
         list-style-type: none;
         padding: 0;
+        border-top: 1px solid #ddd;
     }
 
-    .most-viewed-posts .post-title {
+    .related-posts .post-title {
         color: #333;
         font-size: 18px;
         margin-bottom: 5px;
+        padding-top: 10px;
     }
     
+    .related-posts .post-title:first-child {
+        padding-top: 0;
+    }
+
     /* Bulletin Styles */
     .bulletin {
         padding: 10px;
@@ -86,9 +104,9 @@
     .bulletin:last-child {
         border-bottom: none;
     }
-</style>
+</style>	
 	
-				    
+						    
 <body>
 <main>
 	<h1>The blog is under construction</h1> 
