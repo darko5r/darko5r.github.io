@@ -135,185 +135,109 @@ function incrementReadCount(postId) {
 // Create an array to hold the post elements
 const postElements = [];
 	      
-	 
-// Get the cached content from localStorage, if available
-let cachedPosts = localStorage.getItem('category1-posts');
+// Helper function to create an element with given attributes
+function createElement(tag, attributes, textContent) {
+    const element = document.createElement(tag);
+    Object.keys(attributes).forEach(key => {
+        element[key] = attributes[key];
+    });
+    if (textContent) {
+        element.textContent = textContent;
+    }
+    return element;
+}
 
-// Render the cached content, if available
-if (cachedPosts) {
-  const parsedPosts = JSON.parse(cachedPosts);
-  if (Array.isArray(parsedPosts)) {
-    // Create an array to hold the post elements
-    const postElements = [];
+// Helper function to get cached data from localStorage
+function getCachedData(key, defaultData) {
+    let cachedData = localStorage.getItem(key);
+    return cachedData ? JSON.parse(cachedData) : defaultData;
+}
 
-    parsedPosts.forEach((postData, index) => {
-      // Create a div for the post
-      const postDiv = document.createElement("div");
-      postDiv.className = "post";
-	    
-	
-      // Check if this is the first post
-if (index === 0) {
-  let imageSrc = localStorage.getItem('postImage');
-  if (imageSrc) {
-    // Use cached image
-    const image = document.createElement("img");
-    image.className = "post-image";
-    image.src = imageSrc;
-    postDiv.appendChild(image);
-  } else {
-    // Create an image element for the post image
-    const image = document.createElement("img");
-    image.className = "post-image";
-    image.src = postData.postImage;
-    postDiv.appendChild(image);
-
-    // Cache the image
-    localStorage.setItem('postImage', postData.postImage);
-  }
-}    
-	    
-	    
-      const options = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 0.1
+// Initialize Intersection Observer for lazy loading
+const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
 };
 
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const titleLink = entry.target;
-      const postNumber = titleLink.dataset.postNumber;
-      const postTitle = titleLink.dataset.postTitle;
-      titleLink.innerText = getCachedTitle(postNumber, postTitle);
-      observer.unobserve(titleLink);
-    }
-  });
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const titleLink = entry.target;
+            const postNumber = titleLink.dataset.postNumber;
+            const postTitle = titleLink.dataset.postTitle;
+            titleLink.innerText = getCachedData(`postTitle_${postNumber}`, postTitle);
+            observer.unobserve(titleLink);
+        }
+    });
 }, options);
 
-// Create a link element for the post title
-const titleLink = document.createElement("a");
-titleLink.className = "post-title";
-titleLink.dataset.postNumber = postData.postNumber;
-titleLink.dataset.postTitle = postData.postTitle;
-titleLink.href = `post.html?postId=${postData.postNumber}`;
-titleLink.addEventListener("click", (event) => {
-  event.preventDefault();
-  incrementReadCount(postData.postNumber);
-  window.location.href = titleLink.href;
-});
-postDiv.appendChild(titleLink);
+// Get the cached content from localStorage, if available
+let cachedPosts = getCachedData('category1-posts', []);
 
-observer.observe(titleLink);    
-
-          	   	         	    	    
-	    
-      // Create a div element for the post content
-const content = document.createElement("div");
-content.className = "post-content";
-const postContent = localStorage.getItem(`postContent_${postData.postId}`); // Retrieve the post content from localStorage
-if (postContent) {
-  content.innerText = postContent.substring(0, 250) + '...'; // Use the cached post content
-} else {
-  content.innerText = postData.postContent.substring(0, 250) + '...'; // Use the original post content
-  localStorage.setItem(`postContent_${postData.postId}`, postData.postContent); // Cache the post content in localStorage
+// Render the cached content, if available
+if (cachedPosts.length > 0) {
+    renderPosts(cachedPosts, true);
 }
-postDiv.appendChild(content);  
-	    
- 
-      // Create a div element for the post date and time
-      const postDateTime = document.createElement("div");
-      postDateTime.className = "post-date-time";
-
-      const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
-      const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
-
-      if (postDate === "Invalid date" || postTime === "Invalid date") {
-        postDateTime.innerText = "Invalid Date/Time";
-      } else {
-        postDateTime.innerText = `${postDate} at ${postTime}`;
-      }
-
-      postDiv.appendChild(postDateTime);
-
-      // Add the postDiv to the postElements array
-      postElements.push(postDiv);
-    });
-
-    // Append all the post elements to the DOM
-    postList.append(...postElements);
-  }
-}    
-	    
-	          	    	         	     	    	             
 
 // Get the 10 newest posts from category1
 postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("value", (snapshot) => {
-  // Create an array to hold the post elements
-  const postElements = [];
-
-  // Loop through each post
-  snapshot.forEach((childSnapshot) => {
-    // Get the post data
-    const postData = childSnapshot.val();
-
-    // Create a div for the post
-    const postDiv = document.createElement("div");
-    postDiv.className = "post";
-	  
-// Check if this is the first post
-    if (childSnapshot.key === "post1") {
-      // Create an image element for the post image
-      const image = document.createElement("img");
-      image.className = "post-image"; // use .post-image {} in CSS
-      image.src = postData.postImage;
-      postDiv.appendChild(image);
-    }	    
-    
-// Create a link element for the post title
-const titleLink = document.createElement("a");
-titleLink.className = "post-title"; // use .post-title {} in CSS
-titleLink.innerText = postData.postTitle;
-titleLink.href = `post.html?postId=${childSnapshot.key}`;
-titleLink.addEventListener("click", (event) => {
-  event.preventDefault();
-  incrementReadCount(childSnapshot.key);
-  window.location.href = titleLink.href;
-});
-postDiv.appendChild(titleLink);
-
-// Create a div element for the post content
-const content = document.createElement("div");
-content.className = "post-content"; // use .post-content {} in CSS
-content.innerText = `${postData.postContent.substring(0, 250)}...`;
-postDiv.appendChild(content);
-
-// Create a div element for the post date and time
-const postDateTime = document.createElement("div");
-postDateTime.className = "post-date-time"; // use .post-date-time {} in CSS
-
-const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
-const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
-
-if (postDate === "Invalid date" || postTime === "Invalid date") {
-  postDateTime.innerText = "Invalid Date/Time";
-} else {
-  postDateTime.innerText = `${postDate} at ${postTime}`;
-}
-
-postDiv.appendChild(postDateTime);
-
-// Add the postDiv to the postElements array
-postElements.push(postDiv);
+    const newPosts = [];
+    snapshot.forEach((childSnapshot) => {
+        newPosts.push(childSnapshot.val());
+    });
+    renderPosts(newPosts);
+    localStorage.setItem('category1-posts', JSON.stringify(newPosts));
 });
 
-// Append all the post elements to the DOM at once
-postList.append(...postElements);
+// Render the posts
+function renderPosts(postsData, fromCache = false) {
+    const postElements = postsData.map((postData, index) => {
+        const postDiv = createElement("div", { className: "post" });
 
-// Save the post data to localStorage
-localStorage.setItem('category1-posts', JSON.stringify(snapshot.val()));
-});
+        if (index === 0) {
+            const imageSrc = fromCache ? postData.postImage : getCachedData('postImage', postData.postImage);
+            const image = createElement("img", { className: "post-image", src: imageSrc, loading: "lazy" });
+            postDiv.appendChild(image);
+            if (!fromCache) {
+                localStorage.setItem('postImage', imageSrc);
+            }
+        }
+
+        const titleLink = createElement("a", {
+            className: "post-title",
+            dataset: { postNumber: postData.postNumber, postTitle: postData.postTitle },
+            href: `post.html?postId=${postData.postNumber}`,
+            onclick: (event) => {
+                event.preventDefault();
+                incrementReadCount(postData.postNumber);
+                window.location.href = titleLink.href;
+            }
+        });
+        postDiv.appendChild(titleLink);
+        observer.observe(titleLink);
+
+        const postContent = fromCache ? postData.postContent : getCachedData(`postContent_${postData.postId}`, postData.postContent);
+        const content = createElement("div", { className: "post-content" }, postContent.substring(0, 250) + '...');
+        postDiv.appendChild(content);
+        if (!fromCache) {
+            localStorage.setItem(`postContent_${postData.postId}`, postData.postContent);
+        }
+
+        const postDate = moment(postData.postDate, "YYYY-MM-DD").format("MMMM D, YYYY");
+        const postTime = moment(postData.postTime, "h:mm A").format("h:mm A");
+        const postDateTime = createElement("div", { className: "post-date-time" },
+            postDate === "Invalid date" || postTime === "Invalid date" ? "Invalid Date/Time" : `${postDate} at ${postTime}`);
+        postDiv.appendChild(postDateTime);
+
+        return postDiv;
+    });
+
+    postList.append(...postElements);
+}	      
+	      
+	 
+
 
 	      	      
 
