@@ -271,22 +271,15 @@ postsRef.orderByChild("categoryid").equalTo("category1").limitToLast(10).on("val
     postDiv.className = "post";
 	  
 	  
-  // Create an image element for the post image
-    const image = document.createElement("img"); 
-
-  // Check if this is the first post
+ // Check if this is the first post
     if (childSnapshot.key === "post1") {
-      image.className = "post-image-first"; // Change to post-image-first
-    } else {
-       // For other posts
-       image.className = "post-image";  
-    }
-
-    image.src = postData.postImage;
-    postDiv.appendChild(image);	  
-	  
-	  
-
+      // Create an image element for the post image
+      const image = document.createElement("img");   
+      image.className = "post-image"; // use .post-image {} in CSS	
+      image.src = postData.postImage;
+      postDiv.appendChild(image);	
+  }
+	  	  
     
 // Create a link element for the post title
 const titleLink = document.createElement("a");
