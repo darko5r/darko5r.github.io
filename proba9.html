@@ -5,63 +5,90 @@
 	<title>My Blog</title>
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo="/>
 </head>
-     <style>
-		/* Style content area, new style */
-		main {
-			max-width: 1366px;
-			margin: 0 auto;
-			padding: 20px;
-		}
+    <style>
+    /* Global Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        background-color: #f0f0f0;
+        line-height: 1.6;
+    }
 
-		.post {
-			margin-bottom: 20px;
-			border: 1px solid #ddd;
-			padding: 10px;
-		}
+    a {
+        color: #333;
+        text-decoration: none;
+    }
 
-		.post-title {
-			font-size: 20px;
-			font-weight: bold;
-			margin-bottom: 10px; 
-			color: red;
-		}
+    a:hover {
+        color: #5D93FF;
+    }
 
-		.post-image {
-			width: 100%;
-			max-width: 500px;
-			margin-bottom: 10px;
-		}
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 
-		.post-content {
-			margin-bottom: 10px;
-		}
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-		.other-posts-list {
-			margin-top: 10px;
-			padding-left: 20px;
-		}
+    /* Post Styles */
+    .post {
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+    }
 
-		#post-list {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			gap: 0px;
-			padding: 0px;
-			background-color: #f9f9f9;
-			max-width: 38%;
-			float: left;
-			margin-right: 6px;
-		}
-	     
-	        .most-viewed-posts .post-title {
-                       list-style-type: none !important;
-                       text-decoration: none !important;
-                       margin-left: 20px !important;
-		       color: blue !important;
-                }
-	     
-	      	    
-	</style>
+    .post-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .post-content {
+        font-size: 18px;
+    }
+
+    .post-date-time {
+        font-size: 14px;
+        color: #999;
+        margin-top: 20px;
+    }
+
+    /* Post List Styles */
+    #post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Most Viewed Posts Styles */
+    .most-viewed-posts {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .most-viewed-posts .post-title {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+    
+    /* Bulletin Styles */
+    .bulletin {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .bulletin:last-child {
+        border-bottom: none;
+    }
+</style>
+	
+				    
 <body>
 <main>
 	<h1>The blog is under construction</h1> 
