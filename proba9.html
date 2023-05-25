@@ -32,6 +32,8 @@
         max-width: 900px;
         margin: 0 auto;
         padding: 20px;
+        display: flex;
+        justify-content: space-between;
     }
 
     /* Post Styles */
@@ -95,7 +97,23 @@
     .bulletin:last-child {
         border-bottom: none;
     }
-</style>	
+
+    /* Layout styles for Post 1, Category2 Post, Most viewed post */
+    #post-list {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    /* Flexbox configuration */
+    .post {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .post:last-child {
+        margin-right: 0;
+    }
+</style>		
     										    
 <body>
 <main>
