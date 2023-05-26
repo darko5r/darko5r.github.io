@@ -6,110 +6,104 @@
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo="/>
 </head>
     <style>
-    /* Global Styles */
-    body {
-        font-family: 'Arial', sans-serif;
-        color: #333;
-        background-color: #f0f0f0;
-        line-height: 1.6;
-    }
-
-    a {
-        color: #333;
-        text-decoration: none;
-    }
-
-    a:hover {
-        color: #5D93FF;
-    }
-
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    main {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    /* Post Styles */
-    .post {
-        background-color: #fff;
-        margin-bottom: 20px;
-        padding: 20px;
-        border-radius: 5px;
-        /* box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15); */
-        display: flex;
-        flex-direction: column;
-	position: relative;
-    }
+	   
+    /* Style content area */
+  main {
+    max-width: 1366px;
+    margin: 0 auto;
+    padding: 20px;
+  }
 	    
-    .post:nth-child(2) {
-        /* Your styles for the second post here */
-        background-color: #efefef; // Example: change background-color
-    }    
-	    
-    .post:nth-child(5) {
-        /* Your styles for the second post here */
-        background-color: #efefef; // Example: change background-color
-	position: absolute;
-        right: 0;
-        top: -30px;
-    }        
-	    
-    .post .post-image {
-        max-width: 50%;  
-        height: auto;  
-        display: block;
-        /* margin: 0 auto; */
-    }
+   /* Style the post list container */
+      
+      
+         .post-list-wrapper {
+          display: flex;        
+       }
+      
+      
+         #post-list {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 0px;
+          padding: 0px;
+          background-color: #f9f9f9;
+          max-width: 38%;
+          float: left;
+          margin-right: 6px;
+       }
 
-    .post-title {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
+         #post-list2 {
+          float: right;
+          width: 28%;
+          position: relative;
+       }
+      
+         #post-list2::before {
+          content: '';
+          position: absolute;
+          top: 20px;
+          bottom: 20px;
+          left: -6px;
+          width: 1px;
+          height: calc(100% - 40px);
+          background-color: #ddd;
+          animation: line-animation 1s ease-in-out infinite;
+       }
+      
+        #post-list2::after {
+         content: '';
+         position: absolute;
+         top: 20px;
+         bottom: 20px;
+         right: -6px;
+         width: 1px;
+         height: calc(100% - 40px);
+         background-color: #ddd;
+         animation: line-animation 1s ease-in-out infinite;
+      }
 
-    .post-content {
-        font-size: 18px;
-    }
+       @keyframes line-animation {
+         0% {
+         height: 0;
+         top: 50%;
+      }
+         50% {
+         height: 50%;
+         top: 25%;
+      }
+         100% {
+         height: 100%;
+         top: 0%;
+      }
+     }
+      
+         #top-posts div {
+          margin-left: 12px;
+        }
 
-    .post-date-time {
-        font-size: 14px;
-        color: #999;
-        margin-top: 20px;
-    }
+               
+      /* Style the hr separator */
+         hr {
+          border: none;
+          border-top: 1px solid red !important;
+          margin: 0;
+        }
+      
+         .post-image {
+          display: block;
+          width: 488px;
+          height: 268px;
+          margin-bottom: 10px;
+        }
 
-    /* Post List Styles */
-    #post-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-	position: relative;
-    }
-
-    /* Most Viewed Posts Styles */
-    .most-viewed-posts {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .most-viewed-posts .post-title {
-        color: #333;
-        font-size: 12px;
-        margin-bottom: 5px;
-    }
-    
-    /* Bulletin Styles */
-    .bulletin {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .bulletin:last-child {
-        border-bottom: none;
-    }
+         .post-title {
+          display: block; /* set the title to display as a block element */
+          font-size: 24px; 
+          font-weight: bold;
+        }     
+	    	       
 </style>
     										    
 <body>
