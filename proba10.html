@@ -29,21 +29,20 @@
     }
 
     main {
-        max-width: 900px;
+        max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
     }    
 	    
-	    
     #post-list {
-    display: grid;
-    grid-template-areas: 
-    "post1 mostviewed"
+  display: grid;
+  grid-template-areas: 
+    "post1 post5"
     "post2 mostviewed"
     "post3 mostviewed"
-    "post4 post5";
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px; /* adjust as needed */
+    "post4 mostviewed";
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px; /* adjust as needed */
 }
 
 #post-list .post:nth-child(1) {
@@ -83,10 +82,8 @@
 
 .most-viewed-posts {
   grid-area: mostviewed;
-}	    
-
-    
-	    	   
+}    
+	    	         	    	   
 </style>
     										    
 <body>
