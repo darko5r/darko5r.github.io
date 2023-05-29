@@ -4,52 +4,95 @@
 	<meta charset="UTF-8"/>
 	<title>My Blog</title>
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo="/>
-</head>  
+</head>
     <style>
-       .container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
-        gap: 20px;
-       }
+      /* Global Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        background-color: #f0f0f0;
+        line-height: 1.6;
+    }
 
-       #top-posts {
-        display: flex;
-        justify-content: space-between;
-        grid-column: span 2;  /* span across all columns */
-       }
+    a {
+        color: #333;
+        text-decoration: none;
+    }
 
-       #middle-posts {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        grid-column: 1 / 2;  /* take up first column */
-       }
+    a:hover {
+        color: #5D93FF;
+    }
 
-       #most-viewed-posts {
-        grid-column: 2 / 3;  /* take up second column */
-       }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 
-    </style>
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+	    
+	    
+    #post-list {
+  display: grid;
+  grid-template-areas: 
+    "post1 mostviewed"
+    "post2 mostviewed"
+    "post3 mostviewed"
+    "post4 post5";
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px; /* adjust as needed */
+}
+
+#post-list .post:nth-child(1) {
+  grid-area: post1;
+}
+
+#post-list .post:nth-child(2) .post-content,
+#post-list .post:nth-child(2) .post-image {
+  display: none;  /* hide content and image, only title remains */
+}
+
+#post-list .post:nth-child(2) {
+  grid-area: post2;
+}
+
+#post-list .post:nth-child(3) .post-content,
+#post-list .post:nth-child(3) .post-image {
+  display: none;  /* hide content and image, only title remains */
+}
+
+#post-list .post:nth-child(3) {
+  grid-area: post3;
+}
+
+#post-list .post:nth-child(4) .post-content,
+#post-list .post:nth-child(4) .post-image {
+  display: none;  /* hide content and image, only title remains */
+}
+
+#post-list .post:nth-child(4) {
+  grid-area: post4;
+}
+
+#post-list .post:nth-child(5) {
+  grid-area: post5;
+}
+
+.most-viewed-posts {
+  grid-area: mostviewed;
+}	    
+
+    
+	    	   
+</style>
     										    
 <body>
 <main>
 	<h1>The blog is under construction</h1> 
-	<div class="container">
-          <div id="top-posts">
-          <div id="post-1"></div>
-          <div id="post-5"></div>
-        </div>
-
-        <div id="middle-posts">
-          <div id="post-2"></div>
-          <div id="post-3"></div>
-          <div id="post-4"></div>
-        </div>
-  
-        <div id="most-viewed-posts"></div>
-        </div>
-
+	<div id="post-list"></div>
 	<!-- Import the Firebase SDK -->
 	<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
@@ -70,6 +113,8 @@
       firebase.initializeApp(firebaseConfig);	     
     </script>
   
+<script>// break betwwen parts +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</script>
+
       <script>
 	      // add newest posts // Place title before content on post1 --// 
 // Get a reference to the posts in the database // add cached posts to localStorage
