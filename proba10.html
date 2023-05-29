@@ -6,16 +6,44 @@
 	<link rel="icon" type="image/x-icon" href="data:;base64,iVBORw0KGgo="/>
 </head>
     <style>
-      /* Global Styles */    	    	    
+      /* Global Styles */
+       body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        background-color: #f0f0f0;
+        line-height: 1.6;
+    }
+
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #5D93FF;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }    
+	    
+	    
     #post-list {
-  display: grid;
-  grid-template-areas: 
+    display: grid;
+    grid-template-areas: 
     "post1 mostviewed"
     "post2 mostviewed"
     "post3 mostviewed"
     "post4 post5";
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 20px; /* adjust as needed */
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px; /* adjust as needed */
 }
 
 #post-list .post:nth-child(1) {
